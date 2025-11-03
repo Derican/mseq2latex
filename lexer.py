@@ -10,6 +10,7 @@ tokens = (
     'CMD_BRACKET',     # \b
     'CMD_DISPLACE',    # \d
     'CMD_INTEGRAL',    # \i
+    'CMD_LIST',        # \l
     'CMD_SUP',         # \s\up 或 \s\up数字
     'CMD_SUB',         # \s\do 或 \s\do数字
     'CMD_ALIGN_INC',   # \s\ai 或 \s\ai数字
@@ -60,6 +61,10 @@ def t_BRACKET_OPTION(t):
 
 def t_CMD_INTEGRAL(t):
     r'\\i'
+    return t
+
+def t_CMD_LIST(t):
+    r'\\l'
     return t
 
 def t_CMD_DISPLACE(t):

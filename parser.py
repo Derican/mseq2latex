@@ -1,6 +1,6 @@
 import ply.yacc as yacc
 from lexer import tokens
-from ast_nodes import EQField, Fraction, Radical, Superscript, Subscript, SpaceCommand, ExpressionSequence, Bracket, Displace, Integral
+from ast_nodes import EQField, Fraction, Radical, Superscript, Subscript, SpaceCommand, ExpressionSequence, Bracket, Displace, Integral, List
 
 # 语法规则
 def p_eq_field(p):
@@ -125,6 +125,23 @@ def p_integral_options(p):
         p[0] = [p[1]]
     else:
         p[1].append(p[2])
+        p[0] = p[1]
+
+def p_expression_list(p):
+    '''expression : CMD_LIST LPAREN list_elements RPAREN'''
+    # 列表 \l(A,B,C,D,E)
+    p[0] = List(p[3])
+
+def p_list_elements(p):
+    '''list_elements : expression
+                    | list_elements COMMA expression
+                    | list_elements SEMICOLON expression'''
+    if len(p) == 2:
+        # 第一个元素
+        p[0] = [p[1]]
+    else:
+        # 添加新元素到列表
+        p[1].append(p[3])
         p[0] = p[1]
 
 def p_expression_text(p):

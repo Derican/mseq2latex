@@ -355,3 +355,29 @@ class Integral(ASTNode):
             return expr.to_latex()
         else:
             return str(expr)
+
+class List(ASTNode):
+    """列表节点"""
+    def __init__(self, elements):
+        self.elements = elements if isinstance(elements, list) else [elements]
+    
+    def add_element(self, element):
+        """添加新元素到列表"""
+        self.elements.append(element)
+    
+    def to_latex(self):
+        """将列表转换为LaTeX格式，简单用逗号连接"""
+        formatted_elements = []
+        for element in self.elements:
+            if isinstance(element, ASTNode):
+                formatted_elements.append(element.to_latex())
+            else:
+                formatted_elements.append(str(element))
+        
+        return ",".join(formatted_elements)
+    
+    def _format_expression(self, expr):
+        if isinstance(expr, ASTNode):
+            return expr.to_latex()
+        else:
+            return str(expr)
