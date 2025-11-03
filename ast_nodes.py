@@ -381,3 +381,51 @@ class List(ASTNode):
             return expr.to_latex()
         else:
             return str(expr)
+
+class Overstrike(ASTNode):
+    """重叠指令节点"""
+    def __init__(self, elements):
+        self.elements = elements if isinstance(elements, list) else [elements]
+        self.options = {}  # 存储选项值：{al: True, ac: True, ar: True}
+        self.alignment = 'ac'  # 默认为居中对齐
+    
+    def add_element(self, element):
+        """添加新元素到重叠列表"""
+        self.elements.append(element)
+    
+    def set_overstrike_options(self, options):
+        """根据重叠选项设置参数"""
+        # 从左到右处理选项，后面的会覆盖前面的
+        for option in options:
+            option_type = self._parse_overstrike_option(option)
+            if option_type:
+                self.options[option_type] = True
+                self.alignment = option_type  # 设置对齐方式
+    
+    def _parse_overstrike_option(self, option):
+        """解析重叠选项"""
+        # option格式：\al、\ac、\ar
+        if option == '\\al':
+            return 'al'  # 左对齐
+        elif option == '\\ac':
+            return 'ac'  # 居中对齐
+        elif option == '\\ar':
+            return 'ar'  # 右对齐
+        return None
+    
+    def to_latex(self):
+        """将重叠元素转换为LaTeX格式，简单用逗号连接"""
+        formatted_elements = []
+        for element in self.elements:
+            if isinstance(element, ASTNode):
+                formatted_elements.append(element.to_latex())
+            else:
+                formatted_elements.append(str(element))
+        
+        return ",".join(formatted_elements)
+    
+    def _format_expression(self, expr):
+        if isinstance(expr, ASTNode):
+            return expr.to_latex()
+        else:
+            return str(expr)

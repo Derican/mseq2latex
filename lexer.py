@@ -11,6 +11,7 @@ tokens = (
     'CMD_DISPLACE',    # \d
     'CMD_INTEGRAL',    # \i
     'CMD_LIST',        # \l
+    'CMD_OVERSTRIKE',  # \o
     'CMD_SUP',         # \s\up 或 \s\up数字
     'CMD_SUB',         # \s\do 或 \s\do数字
     'CMD_ALIGN_INC',   # \s\ai 或 \s\ai数字
@@ -18,6 +19,7 @@ tokens = (
     'BRACKET_OPTION',  # \lc\字符、\rc\字符、\bc\字符
     'DISPLACE_OPTION', # \fon、\ba、\li等置换选项
     'INTEGRAL_OPTION', # \su、\pr、\in、\fc\字符、\vc\字符等积分选项
+    'OVERSTRIKE_OPTION', # \al、\ac、\ar等重叠选项
     'LPAREN',          # (
     'RPAREN',          # )
     'COMMA',           # ,
@@ -44,6 +46,11 @@ def t_EQ(t):
     return t
 
 # 命令 token 规则 - 必须在普通标识符之前定义
+def t_OVERSTRIKE_OPTION(t):
+    r'\\al|\\ac|\\ar'
+    # 匹配 \al、\ac、\ar
+    return t
+
 def t_INTEGRAL_OPTION(t):
     r'\\su|\\pr|\\in|\\fc\\.|\\vc\\.'
     # 匹配 \su、\pr、\in、\fc\字符、\vc\字符
@@ -57,6 +64,10 @@ def t_DISPLACE_OPTION(t):
 def t_BRACKET_OPTION(t):
     r'\\[lr]c\\.|\\bc\\.'
     # 匹配 \lc\字符、\rc\字符、\bc\字符
+    return t
+
+def t_CMD_OVERSTRIKE(t):
+    r'\\o'
     return t
 
 def t_CMD_INTEGRAL(t):

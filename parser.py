@@ -1,6 +1,6 @@
 import ply.yacc as yacc
 from lexer import tokens
-from ast_nodes import EQField, Fraction, Radical, Superscript, Subscript, SpaceCommand, ExpressionSequence, Bracket, Displace, Integral, List
+from ast_nodes import EQField, Fraction, Radical, Superscript, Subscript, SpaceCommand, ExpressionSequence, Bracket, Displace, Integral, List, Overstrike
 
 # 语法规则
 def p_eq_field(p):
@@ -141,6 +141,38 @@ def p_list_elements(p):
         p[0] = [p[1]]
     else:
         # 添加新元素到列表
+        p[1].append(p[3])
+        p[0] = p[1]
+
+def p_expression_overstrike_simple(p):
+    '''expression : CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN'''
+    # 简单重叠 \o(A,B,C)
+    p[0] = Overstrike(p[3])
+
+def p_expression_overstrike_with_options(p):
+    '''expression : CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN'''
+    # 带选项的重叠 \o \al(A,B,C)
+    overstrike = Overstrike(p[4])
+    overstrike.set_overstrike_options(p[2])
+    p[0] = overstrike
+
+def p_overstrike_options(p):
+    '''overstrike_options : OVERSTRIKE_OPTION
+                         | overstrike_options OVERSTRIKE_OPTION'''
+    if len(p) == 2:
+        p[0] = [p[1]]
+    else:
+        p[1].append(p[2])
+        p[0] = p[1]
+
+def p_overstrike_elements(p):
+    '''overstrike_elements : expression
+                          | overstrike_elements COMMA expression'''
+    if len(p) == 2:
+        # 第一个元素
+        p[0] = [p[1]]
+    else:
+        # 添加新元素到重叠列表
         p[1].append(p[3])
         p[0] = p[1]
 
