@@ -429,3 +429,45 @@ class Overstrike(ASTNode):
             return expr.to_latex()
         else:
             return str(expr)
+
+class Box(ASTNode):
+    """边框指令节点"""
+    def __init__(self, content):
+        self.content = content
+        self.options = {}  # 存储选项值：{to: True, bo: True, le: True, ri: True}
+        self.borders = set()  # 存储边框类型
+    
+    def set_box_options(self, options):
+        """根据边框选项设置参数"""
+        # 处理所有选项，可以组合使用
+        for option in options:
+            option_type = self._parse_box_option(option)
+            if option_type:
+                self.options[option_type] = True
+                self.borders.add(option_type)
+    
+    def _parse_box_option(self, option):
+        """解析边框选项"""
+        # option格式：\to、\bo、\le、\ri
+        if option == '\\to':
+            return 'to'  # 上边框
+        elif option == '\\bo':
+            return 'bo'  # 下边框
+        elif option == '\\le':
+            return 'le'  # 左边框
+        elif option == '\\ri':
+            return 'ri'  # 右边框
+        return None
+    
+    def to_latex(self):
+        """将边框元素转换为LaTeX格式，只输出括号内的表达式"""
+        if isinstance(self.content, ASTNode):
+            return self.content.to_latex()
+        else:
+            return str(self.content)
+    
+    def _format_expression(self, expr):
+        if isinstance(expr, ASTNode):
+            return expr.to_latex()
+        else:
+            return str(expr)

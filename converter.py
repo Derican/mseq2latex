@@ -79,6 +79,13 @@ def main():
         "{ EQ \\o \\ar(a,b,c) }",  # 右对齐重叠
         "{ EQ \\o \\al \\ar(X,Y) }",  # 多选项重叠（右侧覆盖）
         "{ EQ \\o \\ar (\\f(1,2),\\r(3,x),\\i(0,1,x) ) }",  # 复杂重叠
+        # Box功能测试用例
+        "{ EQ \\x(a) }",  # 基本Box
+        "{ EQ \\x \\to \\bo(element) }",       # 上下边框
+        "{ EQ \\x \\le(left) }",               # 左边框
+        "{ EQ \\x \\ri(right) }",              # 右边框
+        "{ EQ \\x \\to \\bo \\le \\ri(full) }", # 完整边框
+        "{ EQ \\x \\to(\\f(1,2)) }",           # 边框包含分式
     ]
 
     for test in test_cases:

@@ -1,6 +1,6 @@
 import ply.yacc as yacc
 from lexer import tokens
-from ast_nodes import EQField, Fraction, Radical, Superscript, Subscript, SpaceCommand, ExpressionSequence, Bracket, Displace, Integral, List, Overstrike
+from ast_nodes import EQField, Fraction, Radical, Superscript, Subscript, SpaceCommand, ExpressionSequence, Bracket, Displace, Integral, List, Overstrike, Box
 
 # 语法规则
 def p_eq_field(p):
@@ -174,6 +174,27 @@ def p_overstrike_elements(p):
     else:
         # 添加新元素到重叠列表
         p[1].append(p[3])
+        p[0] = p[1]
+
+def p_expression_box_simple(p):
+    '''expression : CMD_BOX LPAREN expression RPAREN'''
+    # 简单边框 \x(element)
+    p[0] = Box(p[3])
+
+def p_expression_box_with_options(p):
+    '''expression : CMD_BOX box_options LPAREN expression RPAREN'''
+    # 带选项的边框 \x \to \bo(element)
+    box = Box(p[4])
+    box.set_box_options(p[2])
+    p[0] = box
+
+def p_box_options(p):
+    '''box_options : BOX_OPTION
+                  | box_options BOX_OPTION'''
+    if len(p) == 2:
+        p[0] = [p[1]]
+    else:
+        p[1].append(p[2])
         p[0] = p[1]
 
 def p_expression_text(p):

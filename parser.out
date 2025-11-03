@@ -39,14 +39,20 @@ Rule 33    overstrike_options -> OVERSTRIKE_OPTION
 Rule 34    overstrike_options -> overstrike_options OVERSTRIKE_OPTION
 Rule 35    overstrike_elements -> expression
 Rule 36    overstrike_elements -> overstrike_elements COMMA expression
-Rule 37    expression -> TEXT
-Rule 38    expression -> OPERATOR
+Rule 37    expression -> CMD_BOX LPAREN expression RPAREN
+Rule 38    expression -> CMD_BOX box_options LPAREN expression RPAREN
+Rule 39    box_options -> BOX_OPTION
+Rule 40    box_options -> box_options BOX_OPTION
+Rule 41    expression -> TEXT
+Rule 42    expression -> OPERATOR
 
 Terminals, with rules where they appear
 
+BOX_OPTION           : 39 40
 BRACKET_OPTION       : 15 16
 CMD_ALIGN_DEC        : 12
 CMD_ALIGN_INC        : 11
+CMD_BOX              : 37 38
 CMD_BRACKET          : 13 14
 CMD_DISPLACE         : 17 18 19 20
 CMD_FRACTION         : 3 4
@@ -62,22 +68,23 @@ EQ                   : 1
 IDENTIFIER           : 5
 INTEGRAL_OPTION      : 25 26
 LBRACE               : 1
-LPAREN               : 3 4 7 8 9 10 11 12 13 14 17 18 19 20 23 24 27 31 32
+LPAREN               : 3 4 7 8 9 10 11 12 13 14 17 18 19 20 23 24 27 31 32 37 38
 NUMBER               : 6
-OPERATOR             : 38
+OPERATOR             : 42
 OVERSTRIKE_OPTION    : 33 34
 RBRACE               : 1
-RPAREN               : 3 4 7 8 9 10 11 12 13 14 17 18 19 20 23 24 27 31 32
+RPAREN               : 3 4 7 8 9 10 11 12 13 14 17 18 19 20 23 24 27 31 32 37 38
 SEMICOLON            : 4 30
-TEXT                 : 37
+TEXT                 : 41
 error                : 
 
 Nonterminals, with rules where they appear
 
+box_options          : 38 40
 bracket_options      : 14 16
 displace_options     : 19 20 22
 eq_field             : 0
-expression           : 1 2 2 3 3 4 4 7 7 8 9 10 11 12 13 14 18 20 23 23 23 24 24 24 28 29 30 35 36
+expression           : 1 2 2 3 3 4 4 7 7 8 9 10 11 12 13 14 18 20 23 23 23 24 24 24 28 29 30 35 36 37 38
 integral_options     : 24 26
 list_elements        : 27 29 30
 overstrike_elements  : 31 32 36
@@ -132,8 +139,10 @@ state 3
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
@@ -148,8 +157,9 @@ state 3
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
     expression                     shift and go to state 4
 
@@ -179,10 +189,12 @@ state 4
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
-    RBRACE          shift and go to state 21
+    RBRACE          shift and go to state 22
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
@@ -196,17 +208,18 @@ state 4
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 20
+    expression                     shift and go to state 21
 
 state 5
 
     (3) expression -> CMD_FRACTION . LPAREN expression COMMA expression RPAREN
     (4) expression -> CMD_FRACTION . LPAREN expression SEMICOLON expression RPAREN
 
-    LPAREN          shift and go to state 22
+    LPAREN          shift and go to state 23
 
 
 state 6
@@ -227,6 +240,7 @@ state 6
     CMD_INTEGRAL    reduce using rule 5 (expression -> IDENTIFIER .)
     CMD_LIST        reduce using rule 5 (expression -> IDENTIFIER .)
     CMD_OVERSTRIKE  reduce using rule 5 (expression -> IDENTIFIER .)
+    CMD_BOX         reduce using rule 5 (expression -> IDENTIFIER .)
     TEXT            reduce using rule 5 (expression -> IDENTIFIER .)
     OPERATOR        reduce using rule 5 (expression -> IDENTIFIER .)
     COMMA           reduce using rule 5 (expression -> IDENTIFIER .)
@@ -252,6 +266,7 @@ state 7
     CMD_INTEGRAL    reduce using rule 6 (expression -> NUMBER .)
     CMD_LIST        reduce using rule 6 (expression -> NUMBER .)
     CMD_OVERSTRIKE  reduce using rule 6 (expression -> NUMBER .)
+    CMD_BOX         reduce using rule 6 (expression -> NUMBER .)
     TEXT            reduce using rule 6 (expression -> NUMBER .)
     OPERATOR        reduce using rule 6 (expression -> NUMBER .)
     COMMA           reduce using rule 6 (expression -> NUMBER .)
@@ -264,35 +279,35 @@ state 8
     (7) expression -> CMD_RADICAL . LPAREN expression COMMA expression RPAREN
     (8) expression -> CMD_RADICAL . LPAREN expression RPAREN
 
-    LPAREN          shift and go to state 23
+    LPAREN          shift and go to state 24
 
 
 state 9
 
     (9) expression -> CMD_SUP . LPAREN expression RPAREN
 
-    LPAREN          shift and go to state 24
+    LPAREN          shift and go to state 25
 
 
 state 10
 
     (10) expression -> CMD_SUB . LPAREN expression RPAREN
 
-    LPAREN          shift and go to state 25
+    LPAREN          shift and go to state 26
 
 
 state 11
 
     (11) expression -> CMD_ALIGN_INC . LPAREN expression RPAREN
 
-    LPAREN          shift and go to state 26
+    LPAREN          shift and go to state 27
 
 
 state 12
 
     (12) expression -> CMD_ALIGN_DEC . LPAREN expression RPAREN
 
-    LPAREN          shift and go to state 27
+    LPAREN          shift and go to state 28
 
 
 state 13
@@ -302,10 +317,10 @@ state 13
     (15) bracket_options -> . BRACKET_OPTION
     (16) bracket_options -> . bracket_options BRACKET_OPTION
 
-    LPAREN          shift and go to state 28
-    BRACKET_OPTION  shift and go to state 30
+    LPAREN          shift and go to state 29
+    BRACKET_OPTION  shift and go to state 31
 
-    bracket_options                shift and go to state 29
+    bracket_options                shift and go to state 30
 
 state 14
 
@@ -316,10 +331,10 @@ state 14
     (21) displace_options -> . DISPLACE_OPTION
     (22) displace_options -> . displace_options DISPLACE_OPTION
 
-    LPAREN          shift and go to state 31
-    DISPLACE_OPTION shift and go to state 33
+    LPAREN          shift and go to state 32
+    DISPLACE_OPTION shift and go to state 34
 
-    displace_options               shift and go to state 32
+    displace_options               shift and go to state 33
 
 state 15
 
@@ -328,16 +343,16 @@ state 15
     (25) integral_options -> . INTEGRAL_OPTION
     (26) integral_options -> . integral_options INTEGRAL_OPTION
 
-    LPAREN          shift and go to state 34
-    INTEGRAL_OPTION shift and go to state 36
+    LPAREN          shift and go to state 35
+    INTEGRAL_OPTION shift and go to state 37
 
-    integral_options               shift and go to state 35
+    integral_options               shift and go to state 36
 
 state 16
 
     (27) expression -> CMD_LIST . LPAREN list_elements RPAREN
 
-    LPAREN          shift and go to state 37
+    LPAREN          shift and go to state 38
 
 
 state 17
@@ -347,62 +362,76 @@ state 17
     (33) overstrike_options -> . OVERSTRIKE_OPTION
     (34) overstrike_options -> . overstrike_options OVERSTRIKE_OPTION
 
-    LPAREN          shift and go to state 38
-    OVERSTRIKE_OPTION shift and go to state 40
+    LPAREN          shift and go to state 39
+    OVERSTRIKE_OPTION shift and go to state 41
 
-    overstrike_options             shift and go to state 39
+    overstrike_options             shift and go to state 40
 
 state 18
 
-    (37) expression -> TEXT .
+    (37) expression -> CMD_BOX . LPAREN expression RPAREN
+    (38) expression -> CMD_BOX . box_options LPAREN expression RPAREN
+    (39) box_options -> . BOX_OPTION
+    (40) box_options -> . box_options BOX_OPTION
 
-    RBRACE          reduce using rule 37 (expression -> TEXT .)
-    CMD_FRACTION    reduce using rule 37 (expression -> TEXT .)
-    IDENTIFIER      reduce using rule 37 (expression -> TEXT .)
-    NUMBER          reduce using rule 37 (expression -> TEXT .)
-    CMD_RADICAL     reduce using rule 37 (expression -> TEXT .)
-    CMD_SUP         reduce using rule 37 (expression -> TEXT .)
-    CMD_SUB         reduce using rule 37 (expression -> TEXT .)
-    CMD_ALIGN_INC   reduce using rule 37 (expression -> TEXT .)
-    CMD_ALIGN_DEC   reduce using rule 37 (expression -> TEXT .)
-    CMD_BRACKET     reduce using rule 37 (expression -> TEXT .)
-    CMD_DISPLACE    reduce using rule 37 (expression -> TEXT .)
-    CMD_INTEGRAL    reduce using rule 37 (expression -> TEXT .)
-    CMD_LIST        reduce using rule 37 (expression -> TEXT .)
-    CMD_OVERSTRIKE  reduce using rule 37 (expression -> TEXT .)
-    TEXT            reduce using rule 37 (expression -> TEXT .)
-    OPERATOR        reduce using rule 37 (expression -> TEXT .)
-    COMMA           reduce using rule 37 (expression -> TEXT .)
-    SEMICOLON       reduce using rule 37 (expression -> TEXT .)
-    RPAREN          reduce using rule 37 (expression -> TEXT .)
+    LPAREN          shift and go to state 42
+    BOX_OPTION      shift and go to state 44
 
+    box_options                    shift and go to state 43
 
 state 19
 
-    (38) expression -> OPERATOR .
+    (41) expression -> TEXT .
 
-    RBRACE          reduce using rule 38 (expression -> OPERATOR .)
-    CMD_FRACTION    reduce using rule 38 (expression -> OPERATOR .)
-    IDENTIFIER      reduce using rule 38 (expression -> OPERATOR .)
-    NUMBER          reduce using rule 38 (expression -> OPERATOR .)
-    CMD_RADICAL     reduce using rule 38 (expression -> OPERATOR .)
-    CMD_SUP         reduce using rule 38 (expression -> OPERATOR .)
-    CMD_SUB         reduce using rule 38 (expression -> OPERATOR .)
-    CMD_ALIGN_INC   reduce using rule 38 (expression -> OPERATOR .)
-    CMD_ALIGN_DEC   reduce using rule 38 (expression -> OPERATOR .)
-    CMD_BRACKET     reduce using rule 38 (expression -> OPERATOR .)
-    CMD_DISPLACE    reduce using rule 38 (expression -> OPERATOR .)
-    CMD_INTEGRAL    reduce using rule 38 (expression -> OPERATOR .)
-    CMD_LIST        reduce using rule 38 (expression -> OPERATOR .)
-    CMD_OVERSTRIKE  reduce using rule 38 (expression -> OPERATOR .)
-    TEXT            reduce using rule 38 (expression -> OPERATOR .)
-    OPERATOR        reduce using rule 38 (expression -> OPERATOR .)
-    COMMA           reduce using rule 38 (expression -> OPERATOR .)
-    SEMICOLON       reduce using rule 38 (expression -> OPERATOR .)
-    RPAREN          reduce using rule 38 (expression -> OPERATOR .)
+    RBRACE          reduce using rule 41 (expression -> TEXT .)
+    CMD_FRACTION    reduce using rule 41 (expression -> TEXT .)
+    IDENTIFIER      reduce using rule 41 (expression -> TEXT .)
+    NUMBER          reduce using rule 41 (expression -> TEXT .)
+    CMD_RADICAL     reduce using rule 41 (expression -> TEXT .)
+    CMD_SUP         reduce using rule 41 (expression -> TEXT .)
+    CMD_SUB         reduce using rule 41 (expression -> TEXT .)
+    CMD_ALIGN_INC   reduce using rule 41 (expression -> TEXT .)
+    CMD_ALIGN_DEC   reduce using rule 41 (expression -> TEXT .)
+    CMD_BRACKET     reduce using rule 41 (expression -> TEXT .)
+    CMD_DISPLACE    reduce using rule 41 (expression -> TEXT .)
+    CMD_INTEGRAL    reduce using rule 41 (expression -> TEXT .)
+    CMD_LIST        reduce using rule 41 (expression -> TEXT .)
+    CMD_OVERSTRIKE  reduce using rule 41 (expression -> TEXT .)
+    CMD_BOX         reduce using rule 41 (expression -> TEXT .)
+    TEXT            reduce using rule 41 (expression -> TEXT .)
+    OPERATOR        reduce using rule 41 (expression -> TEXT .)
+    COMMA           reduce using rule 41 (expression -> TEXT .)
+    SEMICOLON       reduce using rule 41 (expression -> TEXT .)
+    RPAREN          reduce using rule 41 (expression -> TEXT .)
 
 
 state 20
+
+    (42) expression -> OPERATOR .
+
+    RBRACE          reduce using rule 42 (expression -> OPERATOR .)
+    CMD_FRACTION    reduce using rule 42 (expression -> OPERATOR .)
+    IDENTIFIER      reduce using rule 42 (expression -> OPERATOR .)
+    NUMBER          reduce using rule 42 (expression -> OPERATOR .)
+    CMD_RADICAL     reduce using rule 42 (expression -> OPERATOR .)
+    CMD_SUP         reduce using rule 42 (expression -> OPERATOR .)
+    CMD_SUB         reduce using rule 42 (expression -> OPERATOR .)
+    CMD_ALIGN_INC   reduce using rule 42 (expression -> OPERATOR .)
+    CMD_ALIGN_DEC   reduce using rule 42 (expression -> OPERATOR .)
+    CMD_BRACKET     reduce using rule 42 (expression -> OPERATOR .)
+    CMD_DISPLACE    reduce using rule 42 (expression -> OPERATOR .)
+    CMD_INTEGRAL    reduce using rule 42 (expression -> OPERATOR .)
+    CMD_LIST        reduce using rule 42 (expression -> OPERATOR .)
+    CMD_OVERSTRIKE  reduce using rule 42 (expression -> OPERATOR .)
+    CMD_BOX         reduce using rule 42 (expression -> OPERATOR .)
+    TEXT            reduce using rule 42 (expression -> OPERATOR .)
+    OPERATOR        reduce using rule 42 (expression -> OPERATOR .)
+    COMMA           reduce using rule 42 (expression -> OPERATOR .)
+    SEMICOLON       reduce using rule 42 (expression -> OPERATOR .)
+    RPAREN          reduce using rule 42 (expression -> OPERATOR .)
+
+
+state 21
 
     (2) expression -> expression expression .
     (2) expression -> expression . expression
@@ -428,8 +457,10 @@ state 20
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
   ! shift/reduce conflict for CMD_FRACTION resolved as shift
   ! shift/reduce conflict for IDENTIFIER resolved as shift
@@ -444,6 +475,7 @@ state 20
   ! shift/reduce conflict for CMD_INTEGRAL resolved as shift
   ! shift/reduce conflict for CMD_LIST resolved as shift
   ! shift/reduce conflict for CMD_OVERSTRIKE resolved as shift
+  ! shift/reduce conflict for CMD_BOX resolved as shift
   ! shift/reduce conflict for TEXT resolved as shift
   ! shift/reduce conflict for OPERATOR resolved as shift
     RBRACE          reduce using rule 2 (expression -> expression expression .)
@@ -463,8 +495,9 @@ state 20
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
   ! CMD_FRACTION    [ reduce using rule 2 (expression -> expression expression .) ]
   ! IDENTIFIER      [ reduce using rule 2 (expression -> expression expression .) ]
@@ -479,19 +512,20 @@ state 20
   ! CMD_INTEGRAL    [ reduce using rule 2 (expression -> expression expression .) ]
   ! CMD_LIST        [ reduce using rule 2 (expression -> expression expression .) ]
   ! CMD_OVERSTRIKE  [ reduce using rule 2 (expression -> expression expression .) ]
+  ! CMD_BOX         [ reduce using rule 2 (expression -> expression expression .) ]
   ! TEXT            [ reduce using rule 2 (expression -> expression expression .) ]
   ! OPERATOR        [ reduce using rule 2 (expression -> expression expression .) ]
 
-    expression                     shift and go to state 20
+    expression                     shift and go to state 21
 
-state 21
+state 22
 
     (1) eq_field -> LBRACE EQ expression RBRACE .
 
     $end            reduce using rule 1 (eq_field -> LBRACE EQ expression RBRACE .)
 
 
-state 22
+state 23
 
     (3) expression -> CMD_FRACTION LPAREN . expression COMMA expression RPAREN
     (4) expression -> CMD_FRACTION LPAREN . expression SEMICOLON expression RPAREN
@@ -517,8 +551,10 @@ state 22
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
@@ -533,12 +569,13 @@ state 22
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 41
+    expression                     shift and go to state 45
 
-state 23
+state 24
 
     (7) expression -> CMD_RADICAL LPAREN . expression COMMA expression RPAREN
     (8) expression -> CMD_RADICAL LPAREN . expression RPAREN
@@ -564,8 +601,10 @@ state 23
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
@@ -580,12 +619,13 @@ state 23
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 42
+    expression                     shift and go to state 46
 
-state 24
+state 25
 
     (9) expression -> CMD_SUP LPAREN . expression RPAREN
     (2) expression -> . expression expression
@@ -610,8 +650,10 @@ state 24
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
@@ -626,12 +668,13 @@ state 24
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 43
+    expression                     shift and go to state 47
 
-state 25
+state 26
 
     (10) expression -> CMD_SUB LPAREN . expression RPAREN
     (2) expression -> . expression expression
@@ -656,8 +699,10 @@ state 25
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
@@ -672,12 +717,13 @@ state 25
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 44
+    expression                     shift and go to state 48
 
-state 26
+state 27
 
     (11) expression -> CMD_ALIGN_INC LPAREN . expression RPAREN
     (2) expression -> . expression expression
@@ -702,8 +748,10 @@ state 26
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
@@ -718,12 +766,13 @@ state 26
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 45
+    expression                     shift and go to state 49
 
-state 27
+state 28
 
     (12) expression -> CMD_ALIGN_DEC LPAREN . expression RPAREN
     (2) expression -> . expression expression
@@ -748,8 +797,10 @@ state 27
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
@@ -764,12 +815,13 @@ state 27
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 46
+    expression                     shift and go to state 50
 
-state 28
+state 29
 
     (13) expression -> CMD_BRACKET LPAREN . expression RPAREN
     (2) expression -> . expression expression
@@ -794,8 +846,10 @@ state 28
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
@@ -810,21 +864,22 @@ state 28
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 47
+    expression                     shift and go to state 51
 
-state 29
+state 30
 
     (14) expression -> CMD_BRACKET bracket_options . LPAREN expression RPAREN
     (16) bracket_options -> bracket_options . BRACKET_OPTION
 
-    LPAREN          shift and go to state 48
-    BRACKET_OPTION  shift and go to state 49
+    LPAREN          shift and go to state 52
+    BRACKET_OPTION  shift and go to state 53
 
 
-state 30
+state 31
 
     (15) bracket_options -> BRACKET_OPTION .
 
@@ -832,7 +887,7 @@ state 30
     BRACKET_OPTION  reduce using rule 15 (bracket_options -> BRACKET_OPTION .)
 
 
-state 31
+state 32
 
     (17) expression -> CMD_DISPLACE LPAREN . RPAREN
     (18) expression -> CMD_DISPLACE LPAREN . expression RPAREN
@@ -858,10 +913,12 @@ state 31
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
-    RPAREN          shift and go to state 50
+    RPAREN          shift and go to state 54
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
@@ -875,22 +932,23 @@ state 31
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 51
+    expression                     shift and go to state 55
 
-state 32
+state 33
 
     (19) expression -> CMD_DISPLACE displace_options . LPAREN RPAREN
     (20) expression -> CMD_DISPLACE displace_options . LPAREN expression RPAREN
     (22) displace_options -> displace_options . DISPLACE_OPTION
 
-    LPAREN          shift and go to state 52
-    DISPLACE_OPTION shift and go to state 53
+    LPAREN          shift and go to state 56
+    DISPLACE_OPTION shift and go to state 57
 
 
-state 33
+state 34
 
     (21) displace_options -> DISPLACE_OPTION .
 
@@ -898,7 +956,7 @@ state 33
     DISPLACE_OPTION reduce using rule 21 (displace_options -> DISPLACE_OPTION .)
 
 
-state 34
+state 35
 
     (23) expression -> CMD_INTEGRAL LPAREN . expression COMMA expression COMMA expression RPAREN
     (2) expression -> . expression expression
@@ -923,8 +981,10 @@ state 34
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
@@ -939,21 +999,22 @@ state 34
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 54
+    expression                     shift and go to state 58
 
-state 35
+state 36
 
     (24) expression -> CMD_INTEGRAL integral_options . LPAREN expression COMMA expression COMMA expression RPAREN
     (26) integral_options -> integral_options . INTEGRAL_OPTION
 
-    LPAREN          shift and go to state 55
-    INTEGRAL_OPTION shift and go to state 56
+    LPAREN          shift and go to state 59
+    INTEGRAL_OPTION shift and go to state 60
 
 
-state 36
+state 37
 
     (25) integral_options -> INTEGRAL_OPTION .
 
@@ -961,7 +1022,7 @@ state 36
     INTEGRAL_OPTION reduce using rule 25 (integral_options -> INTEGRAL_OPTION .)
 
 
-state 37
+state 38
 
     (27) expression -> CMD_LIST LPAREN . list_elements RPAREN
     (28) list_elements -> . expression
@@ -989,8 +1050,10 @@ state 37
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
@@ -1005,13 +1068,14 @@ state 37
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    list_elements                  shift and go to state 57
-    expression                     shift and go to state 58
+    list_elements                  shift and go to state 61
+    expression                     shift and go to state 62
 
-state 38
+state 39
 
     (31) expression -> CMD_OVERSTRIKE LPAREN . overstrike_elements RPAREN
     (35) overstrike_elements -> . expression
@@ -1038,8 +1102,10 @@ state 38
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
@@ -1054,22 +1120,23 @@ state 38
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    overstrike_elements            shift and go to state 59
-    expression                     shift and go to state 60
+    overstrike_elements            shift and go to state 63
+    expression                     shift and go to state 64
 
-state 39
+state 40
 
     (32) expression -> CMD_OVERSTRIKE overstrike_options . LPAREN overstrike_elements RPAREN
     (34) overstrike_options -> overstrike_options . OVERSTRIKE_OPTION
 
-    LPAREN          shift and go to state 61
-    OVERSTRIKE_OPTION shift and go to state 62
+    LPAREN          shift and go to state 65
+    OVERSTRIKE_OPTION shift and go to state 66
 
 
-state 40
+state 41
 
     (33) overstrike_options -> OVERSTRIKE_OPTION .
 
@@ -1077,7 +1144,73 @@ state 40
     OVERSTRIKE_OPTION reduce using rule 33 (overstrike_options -> OVERSTRIKE_OPTION .)
 
 
-state 41
+state 42
+
+    (37) expression -> CMD_BOX LPAREN . expression RPAREN
+    (2) expression -> . expression expression
+    (3) expression -> . CMD_FRACTION LPAREN expression COMMA expression RPAREN
+    (4) expression -> . CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN
+    (5) expression -> . IDENTIFIER
+    (6) expression -> . NUMBER
+    (7) expression -> . CMD_RADICAL LPAREN expression COMMA expression RPAREN
+    (8) expression -> . CMD_RADICAL LPAREN expression RPAREN
+    (9) expression -> . CMD_SUP LPAREN expression RPAREN
+    (10) expression -> . CMD_SUB LPAREN expression RPAREN
+    (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
+    (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
+    (13) expression -> . CMD_BRACKET LPAREN expression RPAREN
+    (14) expression -> . CMD_BRACKET bracket_options LPAREN expression RPAREN
+    (17) expression -> . CMD_DISPLACE LPAREN RPAREN
+    (18) expression -> . CMD_DISPLACE LPAREN expression RPAREN
+    (19) expression -> . CMD_DISPLACE displace_options LPAREN RPAREN
+    (20) expression -> . CMD_DISPLACE displace_options LPAREN expression RPAREN
+    (23) expression -> . CMD_INTEGRAL LPAREN expression COMMA expression COMMA expression RPAREN
+    (24) expression -> . CMD_INTEGRAL integral_options LPAREN expression COMMA expression COMMA expression RPAREN
+    (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
+    (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
+    (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
+
+    CMD_FRACTION    shift and go to state 5
+    IDENTIFIER      shift and go to state 6
+    NUMBER          shift and go to state 7
+    CMD_RADICAL     shift and go to state 8
+    CMD_SUP         shift and go to state 9
+    CMD_SUB         shift and go to state 10
+    CMD_ALIGN_INC   shift and go to state 11
+    CMD_ALIGN_DEC   shift and go to state 12
+    CMD_BRACKET     shift and go to state 13
+    CMD_DISPLACE    shift and go to state 14
+    CMD_INTEGRAL    shift and go to state 15
+    CMD_LIST        shift and go to state 16
+    CMD_OVERSTRIKE  shift and go to state 17
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
+
+    expression                     shift and go to state 67
+
+state 43
+
+    (38) expression -> CMD_BOX box_options . LPAREN expression RPAREN
+    (40) box_options -> box_options . BOX_OPTION
+
+    LPAREN          shift and go to state 68
+    BOX_OPTION      shift and go to state 69
+
+
+state 44
+
+    (39) box_options -> BOX_OPTION .
+
+    LPAREN          reduce using rule 39 (box_options -> BOX_OPTION .)
+    BOX_OPTION      reduce using rule 39 (box_options -> BOX_OPTION .)
+
+
+state 45
 
     (3) expression -> CMD_FRACTION LPAREN expression . COMMA expression RPAREN
     (4) expression -> CMD_FRACTION LPAREN expression . SEMICOLON expression RPAREN
@@ -1104,11 +1237,13 @@ state 41
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
-    COMMA           shift and go to state 63
-    SEMICOLON       shift and go to state 64
+    COMMA           shift and go to state 70
+    SEMICOLON       shift and go to state 71
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
@@ -1122,12 +1257,13 @@ state 41
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 20
+    expression                     shift and go to state 21
 
-state 42
+state 46
 
     (7) expression -> CMD_RADICAL LPAREN expression . COMMA expression RPAREN
     (8) expression -> CMD_RADICAL LPAREN expression . RPAREN
@@ -1154,11 +1290,13 @@ state 42
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
-    COMMA           shift and go to state 65
-    RPAREN          shift and go to state 66
+    COMMA           shift and go to state 72
+    RPAREN          shift and go to state 73
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
@@ -1172,12 +1310,13 @@ state 42
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 20
+    expression                     shift and go to state 21
 
-state 43
+state 47
 
     (9) expression -> CMD_SUP LPAREN expression . RPAREN
     (2) expression -> expression . expression
@@ -1203,10 +1342,12 @@ state 43
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
-    RPAREN          shift and go to state 67
+    RPAREN          shift and go to state 74
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
@@ -1220,12 +1361,13 @@ state 43
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 20
+    expression                     shift and go to state 21
 
-state 44
+state 48
 
     (10) expression -> CMD_SUB LPAREN expression . RPAREN
     (2) expression -> expression . expression
@@ -1251,10 +1393,12 @@ state 44
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
-    RPAREN          shift and go to state 68
+    RPAREN          shift and go to state 75
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
@@ -1268,12 +1412,13 @@ state 44
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 20
+    expression                     shift and go to state 21
 
-state 45
+state 49
 
     (11) expression -> CMD_ALIGN_INC LPAREN expression . RPAREN
     (2) expression -> expression . expression
@@ -1299,10 +1444,12 @@ state 45
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
-    RPAREN          shift and go to state 69
+    RPAREN          shift and go to state 76
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
@@ -1316,12 +1463,13 @@ state 45
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 20
+    expression                     shift and go to state 21
 
-state 46
+state 50
 
     (12) expression -> CMD_ALIGN_DEC LPAREN expression . RPAREN
     (2) expression -> expression . expression
@@ -1347,10 +1495,12 @@ state 46
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
-    RPAREN          shift and go to state 70
+    RPAREN          shift and go to state 77
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
@@ -1364,12 +1514,13 @@ state 46
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 20
+    expression                     shift and go to state 21
 
-state 47
+state 51
 
     (13) expression -> CMD_BRACKET LPAREN expression . RPAREN
     (2) expression -> expression . expression
@@ -1395,10 +1546,12 @@ state 47
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
-    RPAREN          shift and go to state 71
+    RPAREN          shift and go to state 78
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
@@ -1412,12 +1565,13 @@ state 47
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 20
+    expression                     shift and go to state 21
 
-state 48
+state 52
 
     (14) expression -> CMD_BRACKET bracket_options LPAREN . expression RPAREN
     (2) expression -> . expression expression
@@ -1442,8 +1596,10 @@ state 48
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
@@ -1458,12 +1614,13 @@ state 48
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 72
+    expression                     shift and go to state 79
 
-state 49
+state 53
 
     (16) bracket_options -> bracket_options BRACKET_OPTION .
 
@@ -1471,7 +1628,7 @@ state 49
     BRACKET_OPTION  reduce using rule 16 (bracket_options -> bracket_options BRACKET_OPTION .)
 
 
-state 50
+state 54
 
     (17) expression -> CMD_DISPLACE LPAREN RPAREN .
 
@@ -1489,6 +1646,7 @@ state 50
     CMD_INTEGRAL    reduce using rule 17 (expression -> CMD_DISPLACE LPAREN RPAREN .)
     CMD_LIST        reduce using rule 17 (expression -> CMD_DISPLACE LPAREN RPAREN .)
     CMD_OVERSTRIKE  reduce using rule 17 (expression -> CMD_DISPLACE LPAREN RPAREN .)
+    CMD_BOX         reduce using rule 17 (expression -> CMD_DISPLACE LPAREN RPAREN .)
     TEXT            reduce using rule 17 (expression -> CMD_DISPLACE LPAREN RPAREN .)
     OPERATOR        reduce using rule 17 (expression -> CMD_DISPLACE LPAREN RPAREN .)
     COMMA           reduce using rule 17 (expression -> CMD_DISPLACE LPAREN RPAREN .)
@@ -1496,7 +1654,7 @@ state 50
     RPAREN          reduce using rule 17 (expression -> CMD_DISPLACE LPAREN RPAREN .)
 
 
-state 51
+state 55
 
     (18) expression -> CMD_DISPLACE LPAREN expression . RPAREN
     (2) expression -> expression . expression
@@ -1522,10 +1680,12 @@ state 51
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
-    RPAREN          shift and go to state 73
+    RPAREN          shift and go to state 80
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
@@ -1539,12 +1699,13 @@ state 51
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 20
+    expression                     shift and go to state 21
 
-state 52
+state 56
 
     (19) expression -> CMD_DISPLACE displace_options LPAREN . RPAREN
     (20) expression -> CMD_DISPLACE displace_options LPAREN . expression RPAREN
@@ -1570,10 +1731,12 @@ state 52
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
-    RPAREN          shift and go to state 74
+    RPAREN          shift and go to state 81
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
@@ -1587,12 +1750,13 @@ state 52
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 75
+    expression                     shift and go to state 82
 
-state 53
+state 57
 
     (22) displace_options -> displace_options DISPLACE_OPTION .
 
@@ -1600,7 +1764,7 @@ state 53
     DISPLACE_OPTION reduce using rule 22 (displace_options -> displace_options DISPLACE_OPTION .)
 
 
-state 54
+state 58
 
     (23) expression -> CMD_INTEGRAL LPAREN expression . COMMA expression COMMA expression RPAREN
     (2) expression -> expression . expression
@@ -1626,10 +1790,12 @@ state 54
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
-    COMMA           shift and go to state 76
+    COMMA           shift and go to state 83
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
@@ -1643,12 +1809,13 @@ state 54
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 20
+    expression                     shift and go to state 21
 
-state 55
+state 59
 
     (24) expression -> CMD_INTEGRAL integral_options LPAREN . expression COMMA expression COMMA expression RPAREN
     (2) expression -> . expression expression
@@ -1673,8 +1840,10 @@ state 55
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
@@ -1689,12 +1858,13 @@ state 55
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 77
+    expression                     shift and go to state 84
 
-state 56
+state 60
 
     (26) integral_options -> integral_options INTEGRAL_OPTION .
 
@@ -1702,18 +1872,18 @@ state 56
     INTEGRAL_OPTION reduce using rule 26 (integral_options -> integral_options INTEGRAL_OPTION .)
 
 
-state 57
+state 61
 
     (27) expression -> CMD_LIST LPAREN list_elements . RPAREN
     (29) list_elements -> list_elements . COMMA expression
     (30) list_elements -> list_elements . SEMICOLON expression
 
-    RPAREN          shift and go to state 78
-    COMMA           shift and go to state 79
-    SEMICOLON       shift and go to state 80
+    RPAREN          shift and go to state 85
+    COMMA           shift and go to state 86
+    SEMICOLON       shift and go to state 87
 
 
-state 58
+state 62
 
     (28) list_elements -> expression .
     (2) expression -> expression . expression
@@ -1739,8 +1909,10 @@ state 58
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
     RPAREN          reduce using rule 28 (list_elements -> expression .)
     COMMA           reduce using rule 28 (list_elements -> expression .)
@@ -1758,21 +1930,22 @@ state 58
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 20
+    expression                     shift and go to state 21
 
-state 59
+state 63
 
     (31) expression -> CMD_OVERSTRIKE LPAREN overstrike_elements . RPAREN
     (36) overstrike_elements -> overstrike_elements . COMMA expression
 
-    RPAREN          shift and go to state 81
-    COMMA           shift and go to state 82
+    RPAREN          shift and go to state 88
+    COMMA           shift and go to state 89
 
 
-state 60
+state 64
 
     (35) overstrike_elements -> expression .
     (2) expression -> expression . expression
@@ -1798,8 +1971,10 @@ state 60
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
     RPAREN          reduce using rule 35 (overstrike_elements -> expression .)
     COMMA           reduce using rule 35 (overstrike_elements -> expression .)
@@ -1816,12 +1991,13 @@ state 60
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 20
+    expression                     shift and go to state 21
 
-state 61
+state 65
 
     (32) expression -> CMD_OVERSTRIKE overstrike_options LPAREN . overstrike_elements RPAREN
     (35) overstrike_elements -> . expression
@@ -1848,8 +2024,10 @@ state 61
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
@@ -1864,13 +2042,14 @@ state 61
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    overstrike_elements            shift and go to state 83
-    expression                     shift and go to state 60
+    overstrike_elements            shift and go to state 90
+    expression                     shift and go to state 64
 
-state 62
+state 66
 
     (34) overstrike_options -> overstrike_options OVERSTRIKE_OPTION .
 
@@ -1878,7 +2057,115 @@ state 62
     OVERSTRIKE_OPTION reduce using rule 34 (overstrike_options -> overstrike_options OVERSTRIKE_OPTION .)
 
 
-state 63
+state 67
+
+    (37) expression -> CMD_BOX LPAREN expression . RPAREN
+    (2) expression -> expression . expression
+    (2) expression -> . expression expression
+    (3) expression -> . CMD_FRACTION LPAREN expression COMMA expression RPAREN
+    (4) expression -> . CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN
+    (5) expression -> . IDENTIFIER
+    (6) expression -> . NUMBER
+    (7) expression -> . CMD_RADICAL LPAREN expression COMMA expression RPAREN
+    (8) expression -> . CMD_RADICAL LPAREN expression RPAREN
+    (9) expression -> . CMD_SUP LPAREN expression RPAREN
+    (10) expression -> . CMD_SUB LPAREN expression RPAREN
+    (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
+    (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
+    (13) expression -> . CMD_BRACKET LPAREN expression RPAREN
+    (14) expression -> . CMD_BRACKET bracket_options LPAREN expression RPAREN
+    (17) expression -> . CMD_DISPLACE LPAREN RPAREN
+    (18) expression -> . CMD_DISPLACE LPAREN expression RPAREN
+    (19) expression -> . CMD_DISPLACE displace_options LPAREN RPAREN
+    (20) expression -> . CMD_DISPLACE displace_options LPAREN expression RPAREN
+    (23) expression -> . CMD_INTEGRAL LPAREN expression COMMA expression COMMA expression RPAREN
+    (24) expression -> . CMD_INTEGRAL integral_options LPAREN expression COMMA expression COMMA expression RPAREN
+    (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
+    (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
+    (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
+
+    RPAREN          shift and go to state 91
+    CMD_FRACTION    shift and go to state 5
+    IDENTIFIER      shift and go to state 6
+    NUMBER          shift and go to state 7
+    CMD_RADICAL     shift and go to state 8
+    CMD_SUP         shift and go to state 9
+    CMD_SUB         shift and go to state 10
+    CMD_ALIGN_INC   shift and go to state 11
+    CMD_ALIGN_DEC   shift and go to state 12
+    CMD_BRACKET     shift and go to state 13
+    CMD_DISPLACE    shift and go to state 14
+    CMD_INTEGRAL    shift and go to state 15
+    CMD_LIST        shift and go to state 16
+    CMD_OVERSTRIKE  shift and go to state 17
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
+
+    expression                     shift and go to state 21
+
+state 68
+
+    (38) expression -> CMD_BOX box_options LPAREN . expression RPAREN
+    (2) expression -> . expression expression
+    (3) expression -> . CMD_FRACTION LPAREN expression COMMA expression RPAREN
+    (4) expression -> . CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN
+    (5) expression -> . IDENTIFIER
+    (6) expression -> . NUMBER
+    (7) expression -> . CMD_RADICAL LPAREN expression COMMA expression RPAREN
+    (8) expression -> . CMD_RADICAL LPAREN expression RPAREN
+    (9) expression -> . CMD_SUP LPAREN expression RPAREN
+    (10) expression -> . CMD_SUB LPAREN expression RPAREN
+    (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
+    (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
+    (13) expression -> . CMD_BRACKET LPAREN expression RPAREN
+    (14) expression -> . CMD_BRACKET bracket_options LPAREN expression RPAREN
+    (17) expression -> . CMD_DISPLACE LPAREN RPAREN
+    (18) expression -> . CMD_DISPLACE LPAREN expression RPAREN
+    (19) expression -> . CMD_DISPLACE displace_options LPAREN RPAREN
+    (20) expression -> . CMD_DISPLACE displace_options LPAREN expression RPAREN
+    (23) expression -> . CMD_INTEGRAL LPAREN expression COMMA expression COMMA expression RPAREN
+    (24) expression -> . CMD_INTEGRAL integral_options LPAREN expression COMMA expression COMMA expression RPAREN
+    (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
+    (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
+    (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
+
+    CMD_FRACTION    shift and go to state 5
+    IDENTIFIER      shift and go to state 6
+    NUMBER          shift and go to state 7
+    CMD_RADICAL     shift and go to state 8
+    CMD_SUP         shift and go to state 9
+    CMD_SUB         shift and go to state 10
+    CMD_ALIGN_INC   shift and go to state 11
+    CMD_ALIGN_DEC   shift and go to state 12
+    CMD_BRACKET     shift and go to state 13
+    CMD_DISPLACE    shift and go to state 14
+    CMD_INTEGRAL    shift and go to state 15
+    CMD_LIST        shift and go to state 16
+    CMD_OVERSTRIKE  shift and go to state 17
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
+
+    expression                     shift and go to state 92
+
+state 69
+
+    (40) box_options -> box_options BOX_OPTION .
+
+    LPAREN          reduce using rule 40 (box_options -> box_options BOX_OPTION .)
+    BOX_OPTION      reduce using rule 40 (box_options -> box_options BOX_OPTION .)
+
+
+state 70
 
     (3) expression -> CMD_FRACTION LPAREN expression COMMA . expression RPAREN
     (2) expression -> . expression expression
@@ -1903,8 +2190,10 @@ state 63
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
@@ -1919,12 +2208,13 @@ state 63
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 84
+    expression                     shift and go to state 93
 
-state 64
+state 71
 
     (4) expression -> CMD_FRACTION LPAREN expression SEMICOLON . expression RPAREN
     (2) expression -> . expression expression
@@ -1949,8 +2239,10 @@ state 64
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
@@ -1965,12 +2257,13 @@ state 64
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 85
+    expression                     shift and go to state 94
 
-state 65
+state 72
 
     (7) expression -> CMD_RADICAL LPAREN expression COMMA . expression RPAREN
     (2) expression -> . expression expression
@@ -1995,8 +2288,10 @@ state 65
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
@@ -2011,12 +2306,13 @@ state 65
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 86
+    expression                     shift and go to state 95
 
-state 66
+state 73
 
     (8) expression -> CMD_RADICAL LPAREN expression RPAREN .
 
@@ -2034,6 +2330,7 @@ state 66
     CMD_INTEGRAL    reduce using rule 8 (expression -> CMD_RADICAL LPAREN expression RPAREN .)
     CMD_LIST        reduce using rule 8 (expression -> CMD_RADICAL LPAREN expression RPAREN .)
     CMD_OVERSTRIKE  reduce using rule 8 (expression -> CMD_RADICAL LPAREN expression RPAREN .)
+    CMD_BOX         reduce using rule 8 (expression -> CMD_RADICAL LPAREN expression RPAREN .)
     TEXT            reduce using rule 8 (expression -> CMD_RADICAL LPAREN expression RPAREN .)
     OPERATOR        reduce using rule 8 (expression -> CMD_RADICAL LPAREN expression RPAREN .)
     COMMA           reduce using rule 8 (expression -> CMD_RADICAL LPAREN expression RPAREN .)
@@ -2041,7 +2338,7 @@ state 66
     RPAREN          reduce using rule 8 (expression -> CMD_RADICAL LPAREN expression RPAREN .)
 
 
-state 67
+state 74
 
     (9) expression -> CMD_SUP LPAREN expression RPAREN .
 
@@ -2059,6 +2356,7 @@ state 67
     CMD_INTEGRAL    reduce using rule 9 (expression -> CMD_SUP LPAREN expression RPAREN .)
     CMD_LIST        reduce using rule 9 (expression -> CMD_SUP LPAREN expression RPAREN .)
     CMD_OVERSTRIKE  reduce using rule 9 (expression -> CMD_SUP LPAREN expression RPAREN .)
+    CMD_BOX         reduce using rule 9 (expression -> CMD_SUP LPAREN expression RPAREN .)
     TEXT            reduce using rule 9 (expression -> CMD_SUP LPAREN expression RPAREN .)
     OPERATOR        reduce using rule 9 (expression -> CMD_SUP LPAREN expression RPAREN .)
     COMMA           reduce using rule 9 (expression -> CMD_SUP LPAREN expression RPAREN .)
@@ -2066,7 +2364,7 @@ state 67
     RPAREN          reduce using rule 9 (expression -> CMD_SUP LPAREN expression RPAREN .)
 
 
-state 68
+state 75
 
     (10) expression -> CMD_SUB LPAREN expression RPAREN .
 
@@ -2084,6 +2382,7 @@ state 68
     CMD_INTEGRAL    reduce using rule 10 (expression -> CMD_SUB LPAREN expression RPAREN .)
     CMD_LIST        reduce using rule 10 (expression -> CMD_SUB LPAREN expression RPAREN .)
     CMD_OVERSTRIKE  reduce using rule 10 (expression -> CMD_SUB LPAREN expression RPAREN .)
+    CMD_BOX         reduce using rule 10 (expression -> CMD_SUB LPAREN expression RPAREN .)
     TEXT            reduce using rule 10 (expression -> CMD_SUB LPAREN expression RPAREN .)
     OPERATOR        reduce using rule 10 (expression -> CMD_SUB LPAREN expression RPAREN .)
     COMMA           reduce using rule 10 (expression -> CMD_SUB LPAREN expression RPAREN .)
@@ -2091,7 +2390,7 @@ state 68
     RPAREN          reduce using rule 10 (expression -> CMD_SUB LPAREN expression RPAREN .)
 
 
-state 69
+state 76
 
     (11) expression -> CMD_ALIGN_INC LPAREN expression RPAREN .
 
@@ -2109,6 +2408,7 @@ state 69
     CMD_INTEGRAL    reduce using rule 11 (expression -> CMD_ALIGN_INC LPAREN expression RPAREN .)
     CMD_LIST        reduce using rule 11 (expression -> CMD_ALIGN_INC LPAREN expression RPAREN .)
     CMD_OVERSTRIKE  reduce using rule 11 (expression -> CMD_ALIGN_INC LPAREN expression RPAREN .)
+    CMD_BOX         reduce using rule 11 (expression -> CMD_ALIGN_INC LPAREN expression RPAREN .)
     TEXT            reduce using rule 11 (expression -> CMD_ALIGN_INC LPAREN expression RPAREN .)
     OPERATOR        reduce using rule 11 (expression -> CMD_ALIGN_INC LPAREN expression RPAREN .)
     COMMA           reduce using rule 11 (expression -> CMD_ALIGN_INC LPAREN expression RPAREN .)
@@ -2116,7 +2416,7 @@ state 69
     RPAREN          reduce using rule 11 (expression -> CMD_ALIGN_INC LPAREN expression RPAREN .)
 
 
-state 70
+state 77
 
     (12) expression -> CMD_ALIGN_DEC LPAREN expression RPAREN .
 
@@ -2134,6 +2434,7 @@ state 70
     CMD_INTEGRAL    reduce using rule 12 (expression -> CMD_ALIGN_DEC LPAREN expression RPAREN .)
     CMD_LIST        reduce using rule 12 (expression -> CMD_ALIGN_DEC LPAREN expression RPAREN .)
     CMD_OVERSTRIKE  reduce using rule 12 (expression -> CMD_ALIGN_DEC LPAREN expression RPAREN .)
+    CMD_BOX         reduce using rule 12 (expression -> CMD_ALIGN_DEC LPAREN expression RPAREN .)
     TEXT            reduce using rule 12 (expression -> CMD_ALIGN_DEC LPAREN expression RPAREN .)
     OPERATOR        reduce using rule 12 (expression -> CMD_ALIGN_DEC LPAREN expression RPAREN .)
     COMMA           reduce using rule 12 (expression -> CMD_ALIGN_DEC LPAREN expression RPAREN .)
@@ -2141,7 +2442,7 @@ state 70
     RPAREN          reduce using rule 12 (expression -> CMD_ALIGN_DEC LPAREN expression RPAREN .)
 
 
-state 71
+state 78
 
     (13) expression -> CMD_BRACKET LPAREN expression RPAREN .
 
@@ -2159,6 +2460,7 @@ state 71
     CMD_INTEGRAL    reduce using rule 13 (expression -> CMD_BRACKET LPAREN expression RPAREN .)
     CMD_LIST        reduce using rule 13 (expression -> CMD_BRACKET LPAREN expression RPAREN .)
     CMD_OVERSTRIKE  reduce using rule 13 (expression -> CMD_BRACKET LPAREN expression RPAREN .)
+    CMD_BOX         reduce using rule 13 (expression -> CMD_BRACKET LPAREN expression RPAREN .)
     TEXT            reduce using rule 13 (expression -> CMD_BRACKET LPAREN expression RPAREN .)
     OPERATOR        reduce using rule 13 (expression -> CMD_BRACKET LPAREN expression RPAREN .)
     COMMA           reduce using rule 13 (expression -> CMD_BRACKET LPAREN expression RPAREN .)
@@ -2166,7 +2468,7 @@ state 71
     RPAREN          reduce using rule 13 (expression -> CMD_BRACKET LPAREN expression RPAREN .)
 
 
-state 72
+state 79
 
     (14) expression -> CMD_BRACKET bracket_options LPAREN expression . RPAREN
     (2) expression -> expression . expression
@@ -2192,10 +2494,12 @@ state 72
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
-    RPAREN          shift and go to state 87
+    RPAREN          shift and go to state 96
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
@@ -2209,12 +2513,13 @@ state 72
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 20
+    expression                     shift and go to state 21
 
-state 73
+state 80
 
     (18) expression -> CMD_DISPLACE LPAREN expression RPAREN .
 
@@ -2232,6 +2537,7 @@ state 73
     CMD_INTEGRAL    reduce using rule 18 (expression -> CMD_DISPLACE LPAREN expression RPAREN .)
     CMD_LIST        reduce using rule 18 (expression -> CMD_DISPLACE LPAREN expression RPAREN .)
     CMD_OVERSTRIKE  reduce using rule 18 (expression -> CMD_DISPLACE LPAREN expression RPAREN .)
+    CMD_BOX         reduce using rule 18 (expression -> CMD_DISPLACE LPAREN expression RPAREN .)
     TEXT            reduce using rule 18 (expression -> CMD_DISPLACE LPAREN expression RPAREN .)
     OPERATOR        reduce using rule 18 (expression -> CMD_DISPLACE LPAREN expression RPAREN .)
     COMMA           reduce using rule 18 (expression -> CMD_DISPLACE LPAREN expression RPAREN .)
@@ -2239,7 +2545,7 @@ state 73
     RPAREN          reduce using rule 18 (expression -> CMD_DISPLACE LPAREN expression RPAREN .)
 
 
-state 74
+state 81
 
     (19) expression -> CMD_DISPLACE displace_options LPAREN RPAREN .
 
@@ -2257,6 +2563,7 @@ state 74
     CMD_INTEGRAL    reduce using rule 19 (expression -> CMD_DISPLACE displace_options LPAREN RPAREN .)
     CMD_LIST        reduce using rule 19 (expression -> CMD_DISPLACE displace_options LPAREN RPAREN .)
     CMD_OVERSTRIKE  reduce using rule 19 (expression -> CMD_DISPLACE displace_options LPAREN RPAREN .)
+    CMD_BOX         reduce using rule 19 (expression -> CMD_DISPLACE displace_options LPAREN RPAREN .)
     TEXT            reduce using rule 19 (expression -> CMD_DISPLACE displace_options LPAREN RPAREN .)
     OPERATOR        reduce using rule 19 (expression -> CMD_DISPLACE displace_options LPAREN RPAREN .)
     COMMA           reduce using rule 19 (expression -> CMD_DISPLACE displace_options LPAREN RPAREN .)
@@ -2264,7 +2571,7 @@ state 74
     RPAREN          reduce using rule 19 (expression -> CMD_DISPLACE displace_options LPAREN RPAREN .)
 
 
-state 75
+state 82
 
     (20) expression -> CMD_DISPLACE displace_options LPAREN expression . RPAREN
     (2) expression -> expression . expression
@@ -2290,10 +2597,12 @@ state 75
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
-    RPAREN          shift and go to state 88
+    RPAREN          shift and go to state 97
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
@@ -2307,12 +2616,13 @@ state 75
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 20
+    expression                     shift and go to state 21
 
-state 76
+state 83
 
     (23) expression -> CMD_INTEGRAL LPAREN expression COMMA . expression COMMA expression RPAREN
     (2) expression -> . expression expression
@@ -2337,8 +2647,10 @@ state 76
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
@@ -2353,12 +2665,13 @@ state 76
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 89
+    expression                     shift and go to state 98
 
-state 77
+state 84
 
     (24) expression -> CMD_INTEGRAL integral_options LPAREN expression . COMMA expression COMMA expression RPAREN
     (2) expression -> expression . expression
@@ -2384,10 +2697,12 @@ state 77
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
-    COMMA           shift and go to state 90
+    COMMA           shift and go to state 99
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
@@ -2401,12 +2716,13 @@ state 77
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 20
+    expression                     shift and go to state 21
 
-state 78
+state 85
 
     (27) expression -> CMD_LIST LPAREN list_elements RPAREN .
 
@@ -2424,6 +2740,7 @@ state 78
     CMD_INTEGRAL    reduce using rule 27 (expression -> CMD_LIST LPAREN list_elements RPAREN .)
     CMD_LIST        reduce using rule 27 (expression -> CMD_LIST LPAREN list_elements RPAREN .)
     CMD_OVERSTRIKE  reduce using rule 27 (expression -> CMD_LIST LPAREN list_elements RPAREN .)
+    CMD_BOX         reduce using rule 27 (expression -> CMD_LIST LPAREN list_elements RPAREN .)
     TEXT            reduce using rule 27 (expression -> CMD_LIST LPAREN list_elements RPAREN .)
     OPERATOR        reduce using rule 27 (expression -> CMD_LIST LPAREN list_elements RPAREN .)
     COMMA           reduce using rule 27 (expression -> CMD_LIST LPAREN list_elements RPAREN .)
@@ -2431,7 +2748,7 @@ state 78
     RPAREN          reduce using rule 27 (expression -> CMD_LIST LPAREN list_elements RPAREN .)
 
 
-state 79
+state 86
 
     (29) list_elements -> list_elements COMMA . expression
     (2) expression -> . expression expression
@@ -2456,8 +2773,10 @@ state 79
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
@@ -2472,12 +2791,13 @@ state 79
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 91
+    expression                     shift and go to state 100
 
-state 80
+state 87
 
     (30) list_elements -> list_elements SEMICOLON . expression
     (2) expression -> . expression expression
@@ -2502,8 +2822,10 @@ state 80
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
@@ -2518,12 +2840,13 @@ state 80
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 92
+    expression                     shift and go to state 101
 
-state 81
+state 88
 
     (31) expression -> CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN .
 
@@ -2541,6 +2864,7 @@ state 81
     CMD_INTEGRAL    reduce using rule 31 (expression -> CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN .)
     CMD_LIST        reduce using rule 31 (expression -> CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN .)
     CMD_OVERSTRIKE  reduce using rule 31 (expression -> CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN .)
+    CMD_BOX         reduce using rule 31 (expression -> CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN .)
     TEXT            reduce using rule 31 (expression -> CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN .)
     OPERATOR        reduce using rule 31 (expression -> CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN .)
     COMMA           reduce using rule 31 (expression -> CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN .)
@@ -2548,7 +2872,7 @@ state 81
     RPAREN          reduce using rule 31 (expression -> CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN .)
 
 
-state 82
+state 89
 
     (36) overstrike_elements -> overstrike_elements COMMA . expression
     (2) expression -> . expression expression
@@ -2573,8 +2897,10 @@ state 82
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
@@ -2589,21 +2915,99 @@ state 82
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 93
+    expression                     shift and go to state 102
 
-state 83
+state 90
 
     (32) expression -> CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements . RPAREN
     (36) overstrike_elements -> overstrike_elements . COMMA expression
 
-    RPAREN          shift and go to state 94
-    COMMA           shift and go to state 82
+    RPAREN          shift and go to state 103
+    COMMA           shift and go to state 89
 
 
-state 84
+state 91
+
+    (37) expression -> CMD_BOX LPAREN expression RPAREN .
+
+    RBRACE          reduce using rule 37 (expression -> CMD_BOX LPAREN expression RPAREN .)
+    CMD_FRACTION    reduce using rule 37 (expression -> CMD_BOX LPAREN expression RPAREN .)
+    IDENTIFIER      reduce using rule 37 (expression -> CMD_BOX LPAREN expression RPAREN .)
+    NUMBER          reduce using rule 37 (expression -> CMD_BOX LPAREN expression RPAREN .)
+    CMD_RADICAL     reduce using rule 37 (expression -> CMD_BOX LPAREN expression RPAREN .)
+    CMD_SUP         reduce using rule 37 (expression -> CMD_BOX LPAREN expression RPAREN .)
+    CMD_SUB         reduce using rule 37 (expression -> CMD_BOX LPAREN expression RPAREN .)
+    CMD_ALIGN_INC   reduce using rule 37 (expression -> CMD_BOX LPAREN expression RPAREN .)
+    CMD_ALIGN_DEC   reduce using rule 37 (expression -> CMD_BOX LPAREN expression RPAREN .)
+    CMD_BRACKET     reduce using rule 37 (expression -> CMD_BOX LPAREN expression RPAREN .)
+    CMD_DISPLACE    reduce using rule 37 (expression -> CMD_BOX LPAREN expression RPAREN .)
+    CMD_INTEGRAL    reduce using rule 37 (expression -> CMD_BOX LPAREN expression RPAREN .)
+    CMD_LIST        reduce using rule 37 (expression -> CMD_BOX LPAREN expression RPAREN .)
+    CMD_OVERSTRIKE  reduce using rule 37 (expression -> CMD_BOX LPAREN expression RPAREN .)
+    CMD_BOX         reduce using rule 37 (expression -> CMD_BOX LPAREN expression RPAREN .)
+    TEXT            reduce using rule 37 (expression -> CMD_BOX LPAREN expression RPAREN .)
+    OPERATOR        reduce using rule 37 (expression -> CMD_BOX LPAREN expression RPAREN .)
+    COMMA           reduce using rule 37 (expression -> CMD_BOX LPAREN expression RPAREN .)
+    SEMICOLON       reduce using rule 37 (expression -> CMD_BOX LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 37 (expression -> CMD_BOX LPAREN expression RPAREN .)
+
+
+state 92
+
+    (38) expression -> CMD_BOX box_options LPAREN expression . RPAREN
+    (2) expression -> expression . expression
+    (2) expression -> . expression expression
+    (3) expression -> . CMD_FRACTION LPAREN expression COMMA expression RPAREN
+    (4) expression -> . CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN
+    (5) expression -> . IDENTIFIER
+    (6) expression -> . NUMBER
+    (7) expression -> . CMD_RADICAL LPAREN expression COMMA expression RPAREN
+    (8) expression -> . CMD_RADICAL LPAREN expression RPAREN
+    (9) expression -> . CMD_SUP LPAREN expression RPAREN
+    (10) expression -> . CMD_SUB LPAREN expression RPAREN
+    (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
+    (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
+    (13) expression -> . CMD_BRACKET LPAREN expression RPAREN
+    (14) expression -> . CMD_BRACKET bracket_options LPAREN expression RPAREN
+    (17) expression -> . CMD_DISPLACE LPAREN RPAREN
+    (18) expression -> . CMD_DISPLACE LPAREN expression RPAREN
+    (19) expression -> . CMD_DISPLACE displace_options LPAREN RPAREN
+    (20) expression -> . CMD_DISPLACE displace_options LPAREN expression RPAREN
+    (23) expression -> . CMD_INTEGRAL LPAREN expression COMMA expression COMMA expression RPAREN
+    (24) expression -> . CMD_INTEGRAL integral_options LPAREN expression COMMA expression COMMA expression RPAREN
+    (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
+    (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
+    (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
+
+    RPAREN          shift and go to state 104
+    CMD_FRACTION    shift and go to state 5
+    IDENTIFIER      shift and go to state 6
+    NUMBER          shift and go to state 7
+    CMD_RADICAL     shift and go to state 8
+    CMD_SUP         shift and go to state 9
+    CMD_SUB         shift and go to state 10
+    CMD_ALIGN_INC   shift and go to state 11
+    CMD_ALIGN_DEC   shift and go to state 12
+    CMD_BRACKET     shift and go to state 13
+    CMD_DISPLACE    shift and go to state 14
+    CMD_INTEGRAL    shift and go to state 15
+    CMD_LIST        shift and go to state 16
+    CMD_OVERSTRIKE  shift and go to state 17
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
+
+    expression                     shift and go to state 21
+
+state 93
 
     (3) expression -> CMD_FRACTION LPAREN expression COMMA expression . RPAREN
     (2) expression -> expression . expression
@@ -2629,10 +3033,12 @@ state 84
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
-    RPAREN          shift and go to state 95
+    RPAREN          shift and go to state 105
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
@@ -2646,12 +3052,13 @@ state 84
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 20
+    expression                     shift and go to state 21
 
-state 85
+state 94
 
     (4) expression -> CMD_FRACTION LPAREN expression SEMICOLON expression . RPAREN
     (2) expression -> expression . expression
@@ -2677,10 +3084,12 @@ state 85
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
-    RPAREN          shift and go to state 96
+    RPAREN          shift and go to state 106
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
@@ -2694,12 +3103,13 @@ state 85
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 20
+    expression                     shift and go to state 21
 
-state 86
+state 95
 
     (7) expression -> CMD_RADICAL LPAREN expression COMMA expression . RPAREN
     (2) expression -> expression . expression
@@ -2725,10 +3135,12 @@ state 86
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
-    RPAREN          shift and go to state 97
+    RPAREN          shift and go to state 107
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
@@ -2742,12 +3154,13 @@ state 86
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 20
+    expression                     shift and go to state 21
 
-state 87
+state 96
 
     (14) expression -> CMD_BRACKET bracket_options LPAREN expression RPAREN .
 
@@ -2765,6 +3178,7 @@ state 87
     CMD_INTEGRAL    reduce using rule 14 (expression -> CMD_BRACKET bracket_options LPAREN expression RPAREN .)
     CMD_LIST        reduce using rule 14 (expression -> CMD_BRACKET bracket_options LPAREN expression RPAREN .)
     CMD_OVERSTRIKE  reduce using rule 14 (expression -> CMD_BRACKET bracket_options LPAREN expression RPAREN .)
+    CMD_BOX         reduce using rule 14 (expression -> CMD_BRACKET bracket_options LPAREN expression RPAREN .)
     TEXT            reduce using rule 14 (expression -> CMD_BRACKET bracket_options LPAREN expression RPAREN .)
     OPERATOR        reduce using rule 14 (expression -> CMD_BRACKET bracket_options LPAREN expression RPAREN .)
     COMMA           reduce using rule 14 (expression -> CMD_BRACKET bracket_options LPAREN expression RPAREN .)
@@ -2772,7 +3186,7 @@ state 87
     RPAREN          reduce using rule 14 (expression -> CMD_BRACKET bracket_options LPAREN expression RPAREN .)
 
 
-state 88
+state 97
 
     (20) expression -> CMD_DISPLACE displace_options LPAREN expression RPAREN .
 
@@ -2790,6 +3204,7 @@ state 88
     CMD_INTEGRAL    reduce using rule 20 (expression -> CMD_DISPLACE displace_options LPAREN expression RPAREN .)
     CMD_LIST        reduce using rule 20 (expression -> CMD_DISPLACE displace_options LPAREN expression RPAREN .)
     CMD_OVERSTRIKE  reduce using rule 20 (expression -> CMD_DISPLACE displace_options LPAREN expression RPAREN .)
+    CMD_BOX         reduce using rule 20 (expression -> CMD_DISPLACE displace_options LPAREN expression RPAREN .)
     TEXT            reduce using rule 20 (expression -> CMD_DISPLACE displace_options LPAREN expression RPAREN .)
     OPERATOR        reduce using rule 20 (expression -> CMD_DISPLACE displace_options LPAREN expression RPAREN .)
     COMMA           reduce using rule 20 (expression -> CMD_DISPLACE displace_options LPAREN expression RPAREN .)
@@ -2797,7 +3212,7 @@ state 88
     RPAREN          reduce using rule 20 (expression -> CMD_DISPLACE displace_options LPAREN expression RPAREN .)
 
 
-state 89
+state 98
 
     (23) expression -> CMD_INTEGRAL LPAREN expression COMMA expression . COMMA expression RPAREN
     (2) expression -> expression . expression
@@ -2823,10 +3238,12 @@ state 89
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
-    COMMA           shift and go to state 98
+    COMMA           shift and go to state 108
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
@@ -2840,12 +3257,13 @@ state 89
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 20
+    expression                     shift and go to state 21
 
-state 90
+state 99
 
     (24) expression -> CMD_INTEGRAL integral_options LPAREN expression COMMA . expression COMMA expression RPAREN
     (2) expression -> . expression expression
@@ -2870,8 +3288,10 @@ state 90
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
@@ -2886,12 +3306,13 @@ state 90
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 99
+    expression                     shift and go to state 109
 
-state 91
+state 100
 
     (29) list_elements -> list_elements COMMA expression .
     (2) expression -> expression . expression
@@ -2917,8 +3338,10 @@ state 91
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
     RPAREN          reduce using rule 29 (list_elements -> list_elements COMMA expression .)
     COMMA           reduce using rule 29 (list_elements -> list_elements COMMA expression .)
@@ -2936,12 +3359,13 @@ state 91
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 20
+    expression                     shift and go to state 21
 
-state 92
+state 101
 
     (30) list_elements -> list_elements SEMICOLON expression .
     (2) expression -> expression . expression
@@ -2967,8 +3391,10 @@ state 92
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
     RPAREN          reduce using rule 30 (list_elements -> list_elements SEMICOLON expression .)
     COMMA           reduce using rule 30 (list_elements -> list_elements SEMICOLON expression .)
@@ -2986,12 +3412,13 @@ state 92
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 20
+    expression                     shift and go to state 21
 
-state 93
+state 102
 
     (36) overstrike_elements -> overstrike_elements COMMA expression .
     (2) expression -> expression . expression
@@ -3017,8 +3444,10 @@ state 93
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
     RPAREN          reduce using rule 36 (overstrike_elements -> overstrike_elements COMMA expression .)
     COMMA           reduce using rule 36 (overstrike_elements -> overstrike_elements COMMA expression .)
@@ -3035,12 +3464,13 @@ state 93
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 20
+    expression                     shift and go to state 21
 
-state 94
+state 103
 
     (32) expression -> CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN .
 
@@ -3058,6 +3488,7 @@ state 94
     CMD_INTEGRAL    reduce using rule 32 (expression -> CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN .)
     CMD_LIST        reduce using rule 32 (expression -> CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN .)
     CMD_OVERSTRIKE  reduce using rule 32 (expression -> CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN .)
+    CMD_BOX         reduce using rule 32 (expression -> CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN .)
     TEXT            reduce using rule 32 (expression -> CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN .)
     OPERATOR        reduce using rule 32 (expression -> CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN .)
     COMMA           reduce using rule 32 (expression -> CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN .)
@@ -3065,7 +3496,33 @@ state 94
     RPAREN          reduce using rule 32 (expression -> CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN .)
 
 
-state 95
+state 104
+
+    (38) expression -> CMD_BOX box_options LPAREN expression RPAREN .
+
+    RBRACE          reduce using rule 38 (expression -> CMD_BOX box_options LPAREN expression RPAREN .)
+    CMD_FRACTION    reduce using rule 38 (expression -> CMD_BOX box_options LPAREN expression RPAREN .)
+    IDENTIFIER      reduce using rule 38 (expression -> CMD_BOX box_options LPAREN expression RPAREN .)
+    NUMBER          reduce using rule 38 (expression -> CMD_BOX box_options LPAREN expression RPAREN .)
+    CMD_RADICAL     reduce using rule 38 (expression -> CMD_BOX box_options LPAREN expression RPAREN .)
+    CMD_SUP         reduce using rule 38 (expression -> CMD_BOX box_options LPAREN expression RPAREN .)
+    CMD_SUB         reduce using rule 38 (expression -> CMD_BOX box_options LPAREN expression RPAREN .)
+    CMD_ALIGN_INC   reduce using rule 38 (expression -> CMD_BOX box_options LPAREN expression RPAREN .)
+    CMD_ALIGN_DEC   reduce using rule 38 (expression -> CMD_BOX box_options LPAREN expression RPAREN .)
+    CMD_BRACKET     reduce using rule 38 (expression -> CMD_BOX box_options LPAREN expression RPAREN .)
+    CMD_DISPLACE    reduce using rule 38 (expression -> CMD_BOX box_options LPAREN expression RPAREN .)
+    CMD_INTEGRAL    reduce using rule 38 (expression -> CMD_BOX box_options LPAREN expression RPAREN .)
+    CMD_LIST        reduce using rule 38 (expression -> CMD_BOX box_options LPAREN expression RPAREN .)
+    CMD_OVERSTRIKE  reduce using rule 38 (expression -> CMD_BOX box_options LPAREN expression RPAREN .)
+    CMD_BOX         reduce using rule 38 (expression -> CMD_BOX box_options LPAREN expression RPAREN .)
+    TEXT            reduce using rule 38 (expression -> CMD_BOX box_options LPAREN expression RPAREN .)
+    OPERATOR        reduce using rule 38 (expression -> CMD_BOX box_options LPAREN expression RPAREN .)
+    COMMA           reduce using rule 38 (expression -> CMD_BOX box_options LPAREN expression RPAREN .)
+    SEMICOLON       reduce using rule 38 (expression -> CMD_BOX box_options LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 38 (expression -> CMD_BOX box_options LPAREN expression RPAREN .)
+
+
+state 105
 
     (3) expression -> CMD_FRACTION LPAREN expression COMMA expression RPAREN .
 
@@ -3083,6 +3540,7 @@ state 95
     CMD_INTEGRAL    reduce using rule 3 (expression -> CMD_FRACTION LPAREN expression COMMA expression RPAREN .)
     CMD_LIST        reduce using rule 3 (expression -> CMD_FRACTION LPAREN expression COMMA expression RPAREN .)
     CMD_OVERSTRIKE  reduce using rule 3 (expression -> CMD_FRACTION LPAREN expression COMMA expression RPAREN .)
+    CMD_BOX         reduce using rule 3 (expression -> CMD_FRACTION LPAREN expression COMMA expression RPAREN .)
     TEXT            reduce using rule 3 (expression -> CMD_FRACTION LPAREN expression COMMA expression RPAREN .)
     OPERATOR        reduce using rule 3 (expression -> CMD_FRACTION LPAREN expression COMMA expression RPAREN .)
     COMMA           reduce using rule 3 (expression -> CMD_FRACTION LPAREN expression COMMA expression RPAREN .)
@@ -3090,7 +3548,7 @@ state 95
     RPAREN          reduce using rule 3 (expression -> CMD_FRACTION LPAREN expression COMMA expression RPAREN .)
 
 
-state 96
+state 106
 
     (4) expression -> CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN .
 
@@ -3108,6 +3566,7 @@ state 96
     CMD_INTEGRAL    reduce using rule 4 (expression -> CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN .)
     CMD_LIST        reduce using rule 4 (expression -> CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN .)
     CMD_OVERSTRIKE  reduce using rule 4 (expression -> CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN .)
+    CMD_BOX         reduce using rule 4 (expression -> CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN .)
     TEXT            reduce using rule 4 (expression -> CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN .)
     OPERATOR        reduce using rule 4 (expression -> CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN .)
     COMMA           reduce using rule 4 (expression -> CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN .)
@@ -3115,7 +3574,7 @@ state 96
     RPAREN          reduce using rule 4 (expression -> CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN .)
 
 
-state 97
+state 107
 
     (7) expression -> CMD_RADICAL LPAREN expression COMMA expression RPAREN .
 
@@ -3133,6 +3592,7 @@ state 97
     CMD_INTEGRAL    reduce using rule 7 (expression -> CMD_RADICAL LPAREN expression COMMA expression RPAREN .)
     CMD_LIST        reduce using rule 7 (expression -> CMD_RADICAL LPAREN expression COMMA expression RPAREN .)
     CMD_OVERSTRIKE  reduce using rule 7 (expression -> CMD_RADICAL LPAREN expression COMMA expression RPAREN .)
+    CMD_BOX         reduce using rule 7 (expression -> CMD_RADICAL LPAREN expression COMMA expression RPAREN .)
     TEXT            reduce using rule 7 (expression -> CMD_RADICAL LPAREN expression COMMA expression RPAREN .)
     OPERATOR        reduce using rule 7 (expression -> CMD_RADICAL LPAREN expression COMMA expression RPAREN .)
     COMMA           reduce using rule 7 (expression -> CMD_RADICAL LPAREN expression COMMA expression RPAREN .)
@@ -3140,7 +3600,7 @@ state 97
     RPAREN          reduce using rule 7 (expression -> CMD_RADICAL LPAREN expression COMMA expression RPAREN .)
 
 
-state 98
+state 108
 
     (23) expression -> CMD_INTEGRAL LPAREN expression COMMA expression COMMA . expression RPAREN
     (2) expression -> . expression expression
@@ -3165,8 +3625,10 @@ state 98
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
@@ -3181,12 +3643,13 @@ state 98
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 100
+    expression                     shift and go to state 110
 
-state 99
+state 109
 
     (24) expression -> CMD_INTEGRAL integral_options LPAREN expression COMMA expression . COMMA expression RPAREN
     (2) expression -> expression . expression
@@ -3212,10 +3675,12 @@ state 99
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
-    COMMA           shift and go to state 101
+    COMMA           shift and go to state 111
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
@@ -3229,12 +3694,13 @@ state 99
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 20
+    expression                     shift and go to state 21
 
-state 100
+state 110
 
     (23) expression -> CMD_INTEGRAL LPAREN expression COMMA expression COMMA expression . RPAREN
     (2) expression -> expression . expression
@@ -3260,10 +3726,12 @@ state 100
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
-    RPAREN          shift and go to state 102
+    RPAREN          shift and go to state 112
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
@@ -3277,12 +3745,13 @@ state 100
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 20
+    expression                     shift and go to state 21
 
-state 101
+state 111
 
     (24) expression -> CMD_INTEGRAL integral_options LPAREN expression COMMA expression COMMA . expression RPAREN
     (2) expression -> . expression expression
@@ -3307,8 +3776,10 @@ state 101
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
@@ -3323,12 +3794,13 @@ state 101
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 103
+    expression                     shift and go to state 113
 
-state 102
+state 112
 
     (23) expression -> CMD_INTEGRAL LPAREN expression COMMA expression COMMA expression RPAREN .
 
@@ -3346,6 +3818,7 @@ state 102
     CMD_INTEGRAL    reduce using rule 23 (expression -> CMD_INTEGRAL LPAREN expression COMMA expression COMMA expression RPAREN .)
     CMD_LIST        reduce using rule 23 (expression -> CMD_INTEGRAL LPAREN expression COMMA expression COMMA expression RPAREN .)
     CMD_OVERSTRIKE  reduce using rule 23 (expression -> CMD_INTEGRAL LPAREN expression COMMA expression COMMA expression RPAREN .)
+    CMD_BOX         reduce using rule 23 (expression -> CMD_INTEGRAL LPAREN expression COMMA expression COMMA expression RPAREN .)
     TEXT            reduce using rule 23 (expression -> CMD_INTEGRAL LPAREN expression COMMA expression COMMA expression RPAREN .)
     OPERATOR        reduce using rule 23 (expression -> CMD_INTEGRAL LPAREN expression COMMA expression COMMA expression RPAREN .)
     COMMA           reduce using rule 23 (expression -> CMD_INTEGRAL LPAREN expression COMMA expression COMMA expression RPAREN .)
@@ -3353,7 +3826,7 @@ state 102
     RPAREN          reduce using rule 23 (expression -> CMD_INTEGRAL LPAREN expression COMMA expression COMMA expression RPAREN .)
 
 
-state 103
+state 113
 
     (24) expression -> CMD_INTEGRAL integral_options LPAREN expression COMMA expression COMMA expression . RPAREN
     (2) expression -> expression . expression
@@ -3379,10 +3852,12 @@ state 103
     (27) expression -> . CMD_LIST LPAREN list_elements RPAREN
     (31) expression -> . CMD_OVERSTRIKE LPAREN overstrike_elements RPAREN
     (32) expression -> . CMD_OVERSTRIKE overstrike_options LPAREN overstrike_elements RPAREN
-    (37) expression -> . TEXT
-    (38) expression -> . OPERATOR
+    (37) expression -> . CMD_BOX LPAREN expression RPAREN
+    (38) expression -> . CMD_BOX box_options LPAREN expression RPAREN
+    (41) expression -> . TEXT
+    (42) expression -> . OPERATOR
 
-    RPAREN          shift and go to state 104
+    RPAREN          shift and go to state 114
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
@@ -3396,12 +3871,13 @@ state 103
     CMD_INTEGRAL    shift and go to state 15
     CMD_LIST        shift and go to state 16
     CMD_OVERSTRIKE  shift and go to state 17
-    TEXT            shift and go to state 18
-    OPERATOR        shift and go to state 19
+    CMD_BOX         shift and go to state 18
+    TEXT            shift and go to state 19
+    OPERATOR        shift and go to state 20
 
-    expression                     shift and go to state 20
+    expression                     shift and go to state 21
 
-state 104
+state 114
 
     (24) expression -> CMD_INTEGRAL integral_options LPAREN expression COMMA expression COMMA expression RPAREN .
 
@@ -3419,6 +3895,7 @@ state 104
     CMD_INTEGRAL    reduce using rule 24 (expression -> CMD_INTEGRAL integral_options LPAREN expression COMMA expression COMMA expression RPAREN .)
     CMD_LIST        reduce using rule 24 (expression -> CMD_INTEGRAL integral_options LPAREN expression COMMA expression COMMA expression RPAREN .)
     CMD_OVERSTRIKE  reduce using rule 24 (expression -> CMD_INTEGRAL integral_options LPAREN expression COMMA expression COMMA expression RPAREN .)
+    CMD_BOX         reduce using rule 24 (expression -> CMD_INTEGRAL integral_options LPAREN expression COMMA expression COMMA expression RPAREN .)
     TEXT            reduce using rule 24 (expression -> CMD_INTEGRAL integral_options LPAREN expression COMMA expression COMMA expression RPAREN .)
     OPERATOR        reduce using rule 24 (expression -> CMD_INTEGRAL integral_options LPAREN expression COMMA expression COMMA expression RPAREN .)
     COMMA           reduce using rule 24 (expression -> CMD_INTEGRAL integral_options LPAREN expression COMMA expression COMMA expression RPAREN .)
@@ -3428,18 +3905,19 @@ state 104
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for CMD_FRACTION in state 20 resolved as shift
-WARNING: shift/reduce conflict for IDENTIFIER in state 20 resolved as shift
-WARNING: shift/reduce conflict for NUMBER in state 20 resolved as shift
-WARNING: shift/reduce conflict for CMD_RADICAL in state 20 resolved as shift
-WARNING: shift/reduce conflict for CMD_SUP in state 20 resolved as shift
-WARNING: shift/reduce conflict for CMD_SUB in state 20 resolved as shift
-WARNING: shift/reduce conflict for CMD_ALIGN_INC in state 20 resolved as shift
-WARNING: shift/reduce conflict for CMD_ALIGN_DEC in state 20 resolved as shift
-WARNING: shift/reduce conflict for CMD_BRACKET in state 20 resolved as shift
-WARNING: shift/reduce conflict for CMD_DISPLACE in state 20 resolved as shift
-WARNING: shift/reduce conflict for CMD_INTEGRAL in state 20 resolved as shift
-WARNING: shift/reduce conflict for CMD_LIST in state 20 resolved as shift
-WARNING: shift/reduce conflict for CMD_OVERSTRIKE in state 20 resolved as shift
-WARNING: shift/reduce conflict for TEXT in state 20 resolved as shift
-WARNING: shift/reduce conflict for OPERATOR in state 20 resolved as shift
+WARNING: shift/reduce conflict for CMD_FRACTION in state 21 resolved as shift
+WARNING: shift/reduce conflict for IDENTIFIER in state 21 resolved as shift
+WARNING: shift/reduce conflict for NUMBER in state 21 resolved as shift
+WARNING: shift/reduce conflict for CMD_RADICAL in state 21 resolved as shift
+WARNING: shift/reduce conflict for CMD_SUP in state 21 resolved as shift
+WARNING: shift/reduce conflict for CMD_SUB in state 21 resolved as shift
+WARNING: shift/reduce conflict for CMD_ALIGN_INC in state 21 resolved as shift
+WARNING: shift/reduce conflict for CMD_ALIGN_DEC in state 21 resolved as shift
+WARNING: shift/reduce conflict for CMD_BRACKET in state 21 resolved as shift
+WARNING: shift/reduce conflict for CMD_DISPLACE in state 21 resolved as shift
+WARNING: shift/reduce conflict for CMD_INTEGRAL in state 21 resolved as shift
+WARNING: shift/reduce conflict for CMD_LIST in state 21 resolved as shift
+WARNING: shift/reduce conflict for CMD_OVERSTRIKE in state 21 resolved as shift
+WARNING: shift/reduce conflict for CMD_BOX in state 21 resolved as shift
+WARNING: shift/reduce conflict for TEXT in state 21 resolved as shift
+WARNING: shift/reduce conflict for OPERATOR in state 21 resolved as shift
