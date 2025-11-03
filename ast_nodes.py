@@ -220,3 +220,49 @@ class Bracket(ASTNode):
             return expr.to_latex()
         else:
             return str(expr)
+
+class Displace(ASTNode):
+    """置换指令节点"""
+    def __init__(self, content):
+        self.content = content
+        self.options = {}  # 存储选项值：{fo: n, ba: n, li: True}
+    
+    def set_displace_options(self, options):
+        """根据置换选项设置参数"""
+        # 从左到右处理选项，后面的会覆盖前面的
+        for option in options:
+            option_type, value = self._parse_displace_option(option)
+            if option_type:
+                self.options[option_type] = value
+    
+    def _parse_displace_option(self, option):
+        """解析置换选项"""
+        # option格式：\fo数字、\ba数字、\li
+        if option.startswith('\\fo'):
+            # 提取数字
+            try:
+                value = int(option[3:])
+                return 'fo', value
+            except ValueError:
+                return None, None
+        elif option.startswith('\\ba'):
+            # 提取数字
+            try:
+                value = int(option[3:])
+                return 'ba', value
+            except ValueError:
+                return None, None
+        elif option == '\\li':
+            return 'li', True
+        return None, None
+    
+    def to_latex(self):
+        """将内容转换为\text{}格式，忽略选项效果"""
+        content = self._format_expression(self.content)
+        return f"\\text{{{content}}}"
+    
+    def _format_expression(self, expr):
+        if isinstance(expr, ASTNode):
+            return expr.to_latex()
+        else:
+            return str(expr)

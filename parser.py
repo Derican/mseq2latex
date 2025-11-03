@@ -1,6 +1,6 @@
 import ply.yacc as yacc
 from lexer import tokens
-from ast_nodes import EQField, Fraction, Radical, Superscript, Subscript, SpaceCommand, ExpressionSequence, Bracket
+from ast_nodes import EQField, Fraction, Radical, Superscript, Subscript, SpaceCommand, ExpressionSequence, Bracket, Displace
 
 # 语法规则
 def p_eq_field(p):
@@ -68,6 +68,38 @@ def p_expression_bracket_with_options(p):
 def p_bracket_options(p):
     '''bracket_options : BRACKET_OPTION
                       | bracket_options BRACKET_OPTION'''
+    if len(p) == 2:
+        p[0] = [p[1]]
+    else:
+        p[1].append(p[2])
+        p[0] = p[1]
+
+def p_expression_displace_simple(p):
+    '''expression : CMD_DISPLACE LPAREN RPAREN'''
+    # 简单置换 \d()
+    p[0] = Displace("")
+
+def p_expression_displace_with_content(p):
+    '''expression : CMD_DISPLACE LPAREN expression RPAREN'''
+    # 带内容的置换 \d(content)
+    p[0] = Displace(p[3])
+
+def p_expression_displace_with_options(p):
+    '''expression : CMD_DISPLACE displace_options LPAREN RPAREN
+                  | CMD_DISPLACE displace_options LPAREN expression RPAREN'''
+    # 带选项的置换 \d \fo10 \li() 或 \d \fo10 \li(content)
+    if len(p) == 5:
+        # 空内容
+        displace = Displace("")
+    else:
+        # 有内容
+        displace = Displace(p[4])
+    displace.set_displace_options(p[2])
+    p[0] = displace
+
+def p_displace_options(p):
+    '''displace_options : DISPLACE_OPTION
+                       | displace_options DISPLACE_OPTION'''
     if len(p) == 2:
         p[0] = [p[1]]
     else:

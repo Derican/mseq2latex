@@ -54,6 +54,12 @@ def main():
         "{ EQ \\b \\lc\\{ \\rc\\) (a) }",       # 左大括号，右圆括号
         "{ EQ \\b \\bc\\{ (a) }",                # 两边都是大括号
         "{ EQ \\b \\bc\\{ \\lc\\( \\rc\\| (b) }", # 复杂选项，右侧会覆盖
+        # 置换功能测试用例
+        "{ EQ \\d() }",                          # 空置换
+        "{ EQ \\d(hello) }",                    # 简单置换
+        "{ EQ \\d \\fo10 \\li() }",             # 带选项的空置换
+        "{ EQ \\d \\fo10 \\ba5 (world) }",     # 带选项的置换
+        "{ EQ \\d \\li(underline) }",          # 下划线选项
     ]
     
     for test in test_cases:
