@@ -60,6 +60,12 @@ def main():
         "{ EQ \\d \\fo10 \\li() }",             # 带选项的空置换
         "{ EQ \\d \\fo10 \\ba5 (world) }",     # 带选项的置换
         "{ EQ \\d \\li(underline) }",          # 下划线选项
+        # 积分功能测试用例
+        "{ EQ \\i(0,1,x) }",                    # 基本积分
+        "{ EQ \\i \\su(1,5,3) }",              # 求和
+        "{ EQ \\i \\pr(1,n,i) }",              # 乘积
+        "{ EQ \\i \\su \\in(i,j,k) }",   # 内联求和
+        "{ EQ \\i \\fc\\S(x,\\f(\\r(2,x),3),x + 3) }",           # 自定义符号（存储选项）
     ]
     
     for test in test_cases:

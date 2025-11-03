@@ -266,3 +266,92 @@ class Displace(ASTNode):
             return expr.to_latex()
         else:
             return str(expr)
+
+class Integral(ASTNode):
+    """积分指令节点"""
+    def __init__(self, lower_limit=None, upper_limit=None, integrand=None):
+        self.lower_limit = lower_limit
+        self.upper_limit = upper_limit
+        self.integrand = integrand
+        self.options = {}  # 存储选项值：{su: True, pr: True, in: True, fc: char, vc: char}
+        self.symbol_type = 'integral'  # 默认为积分符号
+        self.is_inline = False  # 是否为内联格式
+    
+    def set_integral_options(self, options):
+        """根据积分选项设置参数"""
+        # 从左到右处理选项，后面的会覆盖前面的
+        for option in options:
+            option_type, value = self._parse_integral_option(option)
+            if option_type:
+                self.options[option_type] = value
+                # 根据选项设置符号类型
+                if option_type == 'su':
+                    self.symbol_type = 'sum'
+                elif option_type == 'pr':
+                    self.symbol_type = 'product'
+                elif option_type == 'in':
+                    self.is_inline = True
+                elif option_type in ['fc', 'vc']:
+                    self.symbol_type = 'custom'
+    
+    def _parse_integral_option(self, option):
+        """解析积分选项"""
+        # option格式：\su、\pr、\in、\fc\字符、\vc\字符
+        if option == '\\su':
+            return 'su', True
+        elif option == '\\pr':
+            return 'pr', True
+        elif option == '\\in':
+            return 'in', True
+        elif option.startswith('\\fc\\'):
+            return 'fc', option[4]  # 提取字符
+        elif option.startswith('\\vc\\'):
+            return 'vc', option[4]  # 提取字符
+        return None, None
+    
+    def to_latex(self):
+        """将积分转换为LaTeX格式"""
+        lower = self._format_expression(self.lower_limit) if self.lower_limit is not None else ""
+        upper = self._format_expression(self.upper_limit) if self.upper_limit is not None else ""
+        integrand = self._format_expression(self.integrand)
+        
+        # 根据符号类型选择符号
+        if self.symbol_type == 'sum':
+            symbol = '\\sum'
+        elif self.symbol_type == 'product':
+            symbol = '\\prod'
+        elif self.symbol_type == 'custom':
+            # 对于自定义符号，暂时使用默认积分符号
+            symbol = '\\int'
+        else:
+            symbol = '\\int'
+        
+        # 根据是否内联格式决定上下限位置
+        if self.is_inline and self.symbol_type in ['sum', 'product']:
+            # 内联格式：限制显示在右侧
+            if upper and lower:
+                return f"{symbol}_{{{lower}}}^{{{upper}}} {{{integrand}}}"
+            elif lower:
+                return f"{symbol}_{{{lower}}} {{{integrand}}}"
+            elif upper:
+                return f"{symbol}^{{{upper}}} {{{integrand}}}"
+            else:
+                return f"{symbol} {{{integrand}}}"
+        else:
+            # 标准格式：限制显示在上下方
+            if upper and lower:
+                return f"{symbol}_{{{lower}}}^{{{upper}}} {{{integrand}}}"
+            elif lower:
+                return f"{symbol}_{{{lower}}} {{{integrand}}}"
+            elif upper:
+                return f"{symbol}^{{{upper}}} {{{integrand}}}"
+            else:
+                return f"{symbol} {{{integrand}}}"
+    
+    def _format_expression(self, expr):
+        if expr is None:
+            return ""
+        if isinstance(expr, ASTNode):
+            return expr.to_latex()
+        else:
+            return str(expr)

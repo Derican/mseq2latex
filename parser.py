@@ -1,6 +1,6 @@
 import ply.yacc as yacc
 from lexer import tokens
-from ast_nodes import EQField, Fraction, Radical, Superscript, Subscript, SpaceCommand, ExpressionSequence, Bracket, Displace
+from ast_nodes import EQField, Fraction, Radical, Superscript, Subscript, SpaceCommand, ExpressionSequence, Bracket, Displace, Integral
 
 # 语法规则
 def p_eq_field(p):
@@ -100,6 +100,27 @@ def p_expression_displace_with_options(p):
 def p_displace_options(p):
     '''displace_options : DISPLACE_OPTION
                        | displace_options DISPLACE_OPTION'''
+    if len(p) == 2:
+        p[0] = [p[1]]
+    else:
+        p[1].append(p[2])
+        p[0] = p[1]
+
+def p_expression_integral_simple(p):
+    '''expression : CMD_INTEGRAL LPAREN expression COMMA expression COMMA expression RPAREN'''
+    # 简单积分 \i(lower,upper,integrand)
+    p[0] = Integral(p[3], p[5], p[7])
+
+def p_expression_integral_with_options(p):
+    '''expression : CMD_INTEGRAL integral_options LPAREN expression COMMA expression COMMA expression RPAREN'''
+    # 带选项的积分 \i \su(1,5,3)
+    integral = Integral(p[4], p[6], p[8])
+    integral.set_integral_options(p[2])
+    p[0] = integral
+
+def p_integral_options(p):
+    '''integral_options : INTEGRAL_OPTION
+                       | integral_options INTEGRAL_OPTION'''
     if len(p) == 2:
         p[0] = [p[1]]
     else:
