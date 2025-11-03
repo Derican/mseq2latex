@@ -15,13 +15,19 @@ Rule 9     expression -> CMD_SUP LPAREN expression RPAREN
 Rule 10    expression -> CMD_SUB LPAREN expression RPAREN
 Rule 11    expression -> CMD_ALIGN_INC LPAREN expression RPAREN
 Rule 12    expression -> CMD_ALIGN_DEC LPAREN expression RPAREN
-Rule 13    expression -> TEXT
-Rule 14    expression -> OPERATOR
+Rule 13    expression -> CMD_BRACKET LPAREN expression RPAREN
+Rule 14    expression -> CMD_BRACKET bracket_options LPAREN expression RPAREN
+Rule 15    bracket_options -> BRACKET_OPTION
+Rule 16    bracket_options -> bracket_options BRACKET_OPTION
+Rule 17    expression -> TEXT
+Rule 18    expression -> OPERATOR
 
 Terminals, with rules where they appear
 
+BRACKET_OPTION       : 15 16
 CMD_ALIGN_DEC        : 12
 CMD_ALIGN_INC        : 11
+CMD_BRACKET          : 13 14
 CMD_FRACTION         : 3 4
 CMD_RADICAL          : 7 8
 CMD_SUB              : 10
@@ -30,19 +36,20 @@ COMMA                : 3 7
 EQ                   : 1
 IDENTIFIER           : 5
 LBRACE               : 1
-LPAREN               : 3 4 7 8 9 10 11 12
+LPAREN               : 3 4 7 8 9 10 11 12 13 14
 NUMBER               : 6
-OPERATOR             : 14
+OPERATOR             : 18
 RBRACE               : 1
-RPAREN               : 3 4 7 8 9 10 11 12
+RPAREN               : 3 4 7 8 9 10 11 12 13 14
 SEMICOLON            : 4
-TEXT                 : 13
+TEXT                 : 17
 error                : 
 
 Nonterminals, with rules where they appear
 
+bracket_options      : 14 16
 eq_field             : 0
-expression           : 1 2 2 3 3 4 4 7 7 8 9 10 11 12
+expression           : 1 2 2 3 3 4 4 7 7 8 9 10 11 12 13 14
 
 Parsing method: LALR
 
@@ -82,8 +89,10 @@ state 3
     (10) expression -> . CMD_SUB LPAREN expression RPAREN
     (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
     (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
-    (13) expression -> . TEXT
-    (14) expression -> . OPERATOR
+    (13) expression -> . CMD_BRACKET LPAREN expression RPAREN
+    (14) expression -> . CMD_BRACKET bracket_options LPAREN expression RPAREN
+    (17) expression -> . TEXT
+    (18) expression -> . OPERATOR
 
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
@@ -93,8 +102,9 @@ state 3
     CMD_SUB         shift and go to state 10
     CMD_ALIGN_INC   shift and go to state 11
     CMD_ALIGN_DEC   shift and go to state 12
-    TEXT            shift and go to state 13
-    OPERATOR        shift and go to state 14
+    CMD_BRACKET     shift and go to state 13
+    TEXT            shift and go to state 14
+    OPERATOR        shift and go to state 15
 
     expression                     shift and go to state 4
 
@@ -113,10 +123,12 @@ state 4
     (10) expression -> . CMD_SUB LPAREN expression RPAREN
     (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
     (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
-    (13) expression -> . TEXT
-    (14) expression -> . OPERATOR
+    (13) expression -> . CMD_BRACKET LPAREN expression RPAREN
+    (14) expression -> . CMD_BRACKET bracket_options LPAREN expression RPAREN
+    (17) expression -> . TEXT
+    (18) expression -> . OPERATOR
 
-    RBRACE          shift and go to state 16
+    RBRACE          shift and go to state 17
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
@@ -125,17 +137,18 @@ state 4
     CMD_SUB         shift and go to state 10
     CMD_ALIGN_INC   shift and go to state 11
     CMD_ALIGN_DEC   shift and go to state 12
-    TEXT            shift and go to state 13
-    OPERATOR        shift and go to state 14
+    CMD_BRACKET     shift and go to state 13
+    TEXT            shift and go to state 14
+    OPERATOR        shift and go to state 15
 
-    expression                     shift and go to state 15
+    expression                     shift and go to state 16
 
 state 5
 
     (3) expression -> CMD_FRACTION . LPAREN expression COMMA expression RPAREN
     (4) expression -> CMD_FRACTION . LPAREN expression SEMICOLON expression RPAREN
 
-    LPAREN          shift and go to state 17
+    LPAREN          shift and go to state 18
 
 
 state 6
@@ -151,6 +164,7 @@ state 6
     CMD_SUB         reduce using rule 5 (expression -> IDENTIFIER .)
     CMD_ALIGN_INC   reduce using rule 5 (expression -> IDENTIFIER .)
     CMD_ALIGN_DEC   reduce using rule 5 (expression -> IDENTIFIER .)
+    CMD_BRACKET     reduce using rule 5 (expression -> IDENTIFIER .)
     TEXT            reduce using rule 5 (expression -> IDENTIFIER .)
     OPERATOR        reduce using rule 5 (expression -> IDENTIFIER .)
     COMMA           reduce using rule 5 (expression -> IDENTIFIER .)
@@ -171,6 +185,7 @@ state 7
     CMD_SUB         reduce using rule 6 (expression -> NUMBER .)
     CMD_ALIGN_INC   reduce using rule 6 (expression -> NUMBER .)
     CMD_ALIGN_DEC   reduce using rule 6 (expression -> NUMBER .)
+    CMD_BRACKET     reduce using rule 6 (expression -> NUMBER .)
     TEXT            reduce using rule 6 (expression -> NUMBER .)
     OPERATOR        reduce using rule 6 (expression -> NUMBER .)
     COMMA           reduce using rule 6 (expression -> NUMBER .)
@@ -183,78 +198,92 @@ state 8
     (7) expression -> CMD_RADICAL . LPAREN expression COMMA expression RPAREN
     (8) expression -> CMD_RADICAL . LPAREN expression RPAREN
 
-    LPAREN          shift and go to state 18
+    LPAREN          shift and go to state 19
 
 
 state 9
 
     (9) expression -> CMD_SUP . LPAREN expression RPAREN
 
-    LPAREN          shift and go to state 19
+    LPAREN          shift and go to state 20
 
 
 state 10
 
     (10) expression -> CMD_SUB . LPAREN expression RPAREN
 
-    LPAREN          shift and go to state 20
+    LPAREN          shift and go to state 21
 
 
 state 11
 
     (11) expression -> CMD_ALIGN_INC . LPAREN expression RPAREN
 
-    LPAREN          shift and go to state 21
+    LPAREN          shift and go to state 22
 
 
 state 12
 
     (12) expression -> CMD_ALIGN_DEC . LPAREN expression RPAREN
 
-    LPAREN          shift and go to state 22
+    LPAREN          shift and go to state 23
 
 
 state 13
 
-    (13) expression -> TEXT .
+    (13) expression -> CMD_BRACKET . LPAREN expression RPAREN
+    (14) expression -> CMD_BRACKET . bracket_options LPAREN expression RPAREN
+    (15) bracket_options -> . BRACKET_OPTION
+    (16) bracket_options -> . bracket_options BRACKET_OPTION
 
-    RBRACE          reduce using rule 13 (expression -> TEXT .)
-    CMD_FRACTION    reduce using rule 13 (expression -> TEXT .)
-    IDENTIFIER      reduce using rule 13 (expression -> TEXT .)
-    NUMBER          reduce using rule 13 (expression -> TEXT .)
-    CMD_RADICAL     reduce using rule 13 (expression -> TEXT .)
-    CMD_SUP         reduce using rule 13 (expression -> TEXT .)
-    CMD_SUB         reduce using rule 13 (expression -> TEXT .)
-    CMD_ALIGN_INC   reduce using rule 13 (expression -> TEXT .)
-    CMD_ALIGN_DEC   reduce using rule 13 (expression -> TEXT .)
-    TEXT            reduce using rule 13 (expression -> TEXT .)
-    OPERATOR        reduce using rule 13 (expression -> TEXT .)
-    COMMA           reduce using rule 13 (expression -> TEXT .)
-    SEMICOLON       reduce using rule 13 (expression -> TEXT .)
-    RPAREN          reduce using rule 13 (expression -> TEXT .)
+    LPAREN          shift and go to state 24
+    BRACKET_OPTION  shift and go to state 26
 
+    bracket_options                shift and go to state 25
 
 state 14
 
-    (14) expression -> OPERATOR .
+    (17) expression -> TEXT .
 
-    RBRACE          reduce using rule 14 (expression -> OPERATOR .)
-    CMD_FRACTION    reduce using rule 14 (expression -> OPERATOR .)
-    IDENTIFIER      reduce using rule 14 (expression -> OPERATOR .)
-    NUMBER          reduce using rule 14 (expression -> OPERATOR .)
-    CMD_RADICAL     reduce using rule 14 (expression -> OPERATOR .)
-    CMD_SUP         reduce using rule 14 (expression -> OPERATOR .)
-    CMD_SUB         reduce using rule 14 (expression -> OPERATOR .)
-    CMD_ALIGN_INC   reduce using rule 14 (expression -> OPERATOR .)
-    CMD_ALIGN_DEC   reduce using rule 14 (expression -> OPERATOR .)
-    TEXT            reduce using rule 14 (expression -> OPERATOR .)
-    OPERATOR        reduce using rule 14 (expression -> OPERATOR .)
-    COMMA           reduce using rule 14 (expression -> OPERATOR .)
-    SEMICOLON       reduce using rule 14 (expression -> OPERATOR .)
-    RPAREN          reduce using rule 14 (expression -> OPERATOR .)
+    RBRACE          reduce using rule 17 (expression -> TEXT .)
+    CMD_FRACTION    reduce using rule 17 (expression -> TEXT .)
+    IDENTIFIER      reduce using rule 17 (expression -> TEXT .)
+    NUMBER          reduce using rule 17 (expression -> TEXT .)
+    CMD_RADICAL     reduce using rule 17 (expression -> TEXT .)
+    CMD_SUP         reduce using rule 17 (expression -> TEXT .)
+    CMD_SUB         reduce using rule 17 (expression -> TEXT .)
+    CMD_ALIGN_INC   reduce using rule 17 (expression -> TEXT .)
+    CMD_ALIGN_DEC   reduce using rule 17 (expression -> TEXT .)
+    CMD_BRACKET     reduce using rule 17 (expression -> TEXT .)
+    TEXT            reduce using rule 17 (expression -> TEXT .)
+    OPERATOR        reduce using rule 17 (expression -> TEXT .)
+    COMMA           reduce using rule 17 (expression -> TEXT .)
+    SEMICOLON       reduce using rule 17 (expression -> TEXT .)
+    RPAREN          reduce using rule 17 (expression -> TEXT .)
 
 
 state 15
+
+    (18) expression -> OPERATOR .
+
+    RBRACE          reduce using rule 18 (expression -> OPERATOR .)
+    CMD_FRACTION    reduce using rule 18 (expression -> OPERATOR .)
+    IDENTIFIER      reduce using rule 18 (expression -> OPERATOR .)
+    NUMBER          reduce using rule 18 (expression -> OPERATOR .)
+    CMD_RADICAL     reduce using rule 18 (expression -> OPERATOR .)
+    CMD_SUP         reduce using rule 18 (expression -> OPERATOR .)
+    CMD_SUB         reduce using rule 18 (expression -> OPERATOR .)
+    CMD_ALIGN_INC   reduce using rule 18 (expression -> OPERATOR .)
+    CMD_ALIGN_DEC   reduce using rule 18 (expression -> OPERATOR .)
+    CMD_BRACKET     reduce using rule 18 (expression -> OPERATOR .)
+    TEXT            reduce using rule 18 (expression -> OPERATOR .)
+    OPERATOR        reduce using rule 18 (expression -> OPERATOR .)
+    COMMA           reduce using rule 18 (expression -> OPERATOR .)
+    SEMICOLON       reduce using rule 18 (expression -> OPERATOR .)
+    RPAREN          reduce using rule 18 (expression -> OPERATOR .)
+
+
+state 16
 
     (2) expression -> expression expression .
     (2) expression -> expression . expression
@@ -269,8 +298,10 @@ state 15
     (10) expression -> . CMD_SUB LPAREN expression RPAREN
     (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
     (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
-    (13) expression -> . TEXT
-    (14) expression -> . OPERATOR
+    (13) expression -> . CMD_BRACKET LPAREN expression RPAREN
+    (14) expression -> . CMD_BRACKET bracket_options LPAREN expression RPAREN
+    (17) expression -> . TEXT
+    (18) expression -> . OPERATOR
 
   ! shift/reduce conflict for CMD_FRACTION resolved as shift
   ! shift/reduce conflict for IDENTIFIER resolved as shift
@@ -280,6 +311,7 @@ state 15
   ! shift/reduce conflict for CMD_SUB resolved as shift
   ! shift/reduce conflict for CMD_ALIGN_INC resolved as shift
   ! shift/reduce conflict for CMD_ALIGN_DEC resolved as shift
+  ! shift/reduce conflict for CMD_BRACKET resolved as shift
   ! shift/reduce conflict for TEXT resolved as shift
   ! shift/reduce conflict for OPERATOR resolved as shift
     RBRACE          reduce using rule 2 (expression -> expression expression .)
@@ -294,8 +326,9 @@ state 15
     CMD_SUB         shift and go to state 10
     CMD_ALIGN_INC   shift and go to state 11
     CMD_ALIGN_DEC   shift and go to state 12
-    TEXT            shift and go to state 13
-    OPERATOR        shift and go to state 14
+    CMD_BRACKET     shift and go to state 13
+    TEXT            shift and go to state 14
+    OPERATOR        shift and go to state 15
 
   ! CMD_FRACTION    [ reduce using rule 2 (expression -> expression expression .) ]
   ! IDENTIFIER      [ reduce using rule 2 (expression -> expression expression .) ]
@@ -305,19 +338,20 @@ state 15
   ! CMD_SUB         [ reduce using rule 2 (expression -> expression expression .) ]
   ! CMD_ALIGN_INC   [ reduce using rule 2 (expression -> expression expression .) ]
   ! CMD_ALIGN_DEC   [ reduce using rule 2 (expression -> expression expression .) ]
+  ! CMD_BRACKET     [ reduce using rule 2 (expression -> expression expression .) ]
   ! TEXT            [ reduce using rule 2 (expression -> expression expression .) ]
   ! OPERATOR        [ reduce using rule 2 (expression -> expression expression .) ]
 
-    expression                     shift and go to state 15
+    expression                     shift and go to state 16
 
-state 16
+state 17
 
     (1) eq_field -> LBRACE EQ expression RBRACE .
 
     $end            reduce using rule 1 (eq_field -> LBRACE EQ expression RBRACE .)
 
 
-state 17
+state 18
 
     (3) expression -> CMD_FRACTION LPAREN . expression COMMA expression RPAREN
     (4) expression -> CMD_FRACTION LPAREN . expression SEMICOLON expression RPAREN
@@ -332,8 +366,10 @@ state 17
     (10) expression -> . CMD_SUB LPAREN expression RPAREN
     (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
     (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
-    (13) expression -> . TEXT
-    (14) expression -> . OPERATOR
+    (13) expression -> . CMD_BRACKET LPAREN expression RPAREN
+    (14) expression -> . CMD_BRACKET bracket_options LPAREN expression RPAREN
+    (17) expression -> . TEXT
+    (18) expression -> . OPERATOR
 
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
@@ -343,12 +379,13 @@ state 17
     CMD_SUB         shift and go to state 10
     CMD_ALIGN_INC   shift and go to state 11
     CMD_ALIGN_DEC   shift and go to state 12
-    TEXT            shift and go to state 13
-    OPERATOR        shift and go to state 14
+    CMD_BRACKET     shift and go to state 13
+    TEXT            shift and go to state 14
+    OPERATOR        shift and go to state 15
 
-    expression                     shift and go to state 23
+    expression                     shift and go to state 27
 
-state 18
+state 19
 
     (7) expression -> CMD_RADICAL LPAREN . expression COMMA expression RPAREN
     (8) expression -> CMD_RADICAL LPAREN . expression RPAREN
@@ -363,8 +400,10 @@ state 18
     (10) expression -> . CMD_SUB LPAREN expression RPAREN
     (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
     (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
-    (13) expression -> . TEXT
-    (14) expression -> . OPERATOR
+    (13) expression -> . CMD_BRACKET LPAREN expression RPAREN
+    (14) expression -> . CMD_BRACKET bracket_options LPAREN expression RPAREN
+    (17) expression -> . TEXT
+    (18) expression -> . OPERATOR
 
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
@@ -374,12 +413,13 @@ state 18
     CMD_SUB         shift and go to state 10
     CMD_ALIGN_INC   shift and go to state 11
     CMD_ALIGN_DEC   shift and go to state 12
-    TEXT            shift and go to state 13
-    OPERATOR        shift and go to state 14
+    CMD_BRACKET     shift and go to state 13
+    TEXT            shift and go to state 14
+    OPERATOR        shift and go to state 15
 
-    expression                     shift and go to state 24
+    expression                     shift and go to state 28
 
-state 19
+state 20
 
     (9) expression -> CMD_SUP LPAREN . expression RPAREN
     (2) expression -> . expression expression
@@ -393,8 +433,10 @@ state 19
     (10) expression -> . CMD_SUB LPAREN expression RPAREN
     (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
     (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
-    (13) expression -> . TEXT
-    (14) expression -> . OPERATOR
+    (13) expression -> . CMD_BRACKET LPAREN expression RPAREN
+    (14) expression -> . CMD_BRACKET bracket_options LPAREN expression RPAREN
+    (17) expression -> . TEXT
+    (18) expression -> . OPERATOR
 
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
@@ -404,12 +446,13 @@ state 19
     CMD_SUB         shift and go to state 10
     CMD_ALIGN_INC   shift and go to state 11
     CMD_ALIGN_DEC   shift and go to state 12
-    TEXT            shift and go to state 13
-    OPERATOR        shift and go to state 14
+    CMD_BRACKET     shift and go to state 13
+    TEXT            shift and go to state 14
+    OPERATOR        shift and go to state 15
 
-    expression                     shift and go to state 25
+    expression                     shift and go to state 29
 
-state 20
+state 21
 
     (10) expression -> CMD_SUB LPAREN . expression RPAREN
     (2) expression -> . expression expression
@@ -423,8 +466,10 @@ state 20
     (10) expression -> . CMD_SUB LPAREN expression RPAREN
     (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
     (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
-    (13) expression -> . TEXT
-    (14) expression -> . OPERATOR
+    (13) expression -> . CMD_BRACKET LPAREN expression RPAREN
+    (14) expression -> . CMD_BRACKET bracket_options LPAREN expression RPAREN
+    (17) expression -> . TEXT
+    (18) expression -> . OPERATOR
 
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
@@ -434,12 +479,13 @@ state 20
     CMD_SUB         shift and go to state 10
     CMD_ALIGN_INC   shift and go to state 11
     CMD_ALIGN_DEC   shift and go to state 12
-    TEXT            shift and go to state 13
-    OPERATOR        shift and go to state 14
+    CMD_BRACKET     shift and go to state 13
+    TEXT            shift and go to state 14
+    OPERATOR        shift and go to state 15
 
-    expression                     shift and go to state 26
+    expression                     shift and go to state 30
 
-state 21
+state 22
 
     (11) expression -> CMD_ALIGN_INC LPAREN . expression RPAREN
     (2) expression -> . expression expression
@@ -453,8 +499,10 @@ state 21
     (10) expression -> . CMD_SUB LPAREN expression RPAREN
     (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
     (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
-    (13) expression -> . TEXT
-    (14) expression -> . OPERATOR
+    (13) expression -> . CMD_BRACKET LPAREN expression RPAREN
+    (14) expression -> . CMD_BRACKET bracket_options LPAREN expression RPAREN
+    (17) expression -> . TEXT
+    (18) expression -> . OPERATOR
 
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
@@ -464,12 +512,13 @@ state 21
     CMD_SUB         shift and go to state 10
     CMD_ALIGN_INC   shift and go to state 11
     CMD_ALIGN_DEC   shift and go to state 12
-    TEXT            shift and go to state 13
-    OPERATOR        shift and go to state 14
+    CMD_BRACKET     shift and go to state 13
+    TEXT            shift and go to state 14
+    OPERATOR        shift and go to state 15
 
-    expression                     shift and go to state 27
+    expression                     shift and go to state 31
 
-state 22
+state 23
 
     (12) expression -> CMD_ALIGN_DEC LPAREN . expression RPAREN
     (2) expression -> . expression expression
@@ -483,8 +532,10 @@ state 22
     (10) expression -> . CMD_SUB LPAREN expression RPAREN
     (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
     (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
-    (13) expression -> . TEXT
-    (14) expression -> . OPERATOR
+    (13) expression -> . CMD_BRACKET LPAREN expression RPAREN
+    (14) expression -> . CMD_BRACKET bracket_options LPAREN expression RPAREN
+    (17) expression -> . TEXT
+    (18) expression -> . OPERATOR
 
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
@@ -494,12 +545,63 @@ state 22
     CMD_SUB         shift and go to state 10
     CMD_ALIGN_INC   shift and go to state 11
     CMD_ALIGN_DEC   shift and go to state 12
-    TEXT            shift and go to state 13
-    OPERATOR        shift and go to state 14
+    CMD_BRACKET     shift and go to state 13
+    TEXT            shift and go to state 14
+    OPERATOR        shift and go to state 15
 
-    expression                     shift and go to state 28
+    expression                     shift and go to state 32
 
-state 23
+state 24
+
+    (13) expression -> CMD_BRACKET LPAREN . expression RPAREN
+    (2) expression -> . expression expression
+    (3) expression -> . CMD_FRACTION LPAREN expression COMMA expression RPAREN
+    (4) expression -> . CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN
+    (5) expression -> . IDENTIFIER
+    (6) expression -> . NUMBER
+    (7) expression -> . CMD_RADICAL LPAREN expression COMMA expression RPAREN
+    (8) expression -> . CMD_RADICAL LPAREN expression RPAREN
+    (9) expression -> . CMD_SUP LPAREN expression RPAREN
+    (10) expression -> . CMD_SUB LPAREN expression RPAREN
+    (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
+    (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
+    (13) expression -> . CMD_BRACKET LPAREN expression RPAREN
+    (14) expression -> . CMD_BRACKET bracket_options LPAREN expression RPAREN
+    (17) expression -> . TEXT
+    (18) expression -> . OPERATOR
+
+    CMD_FRACTION    shift and go to state 5
+    IDENTIFIER      shift and go to state 6
+    NUMBER          shift and go to state 7
+    CMD_RADICAL     shift and go to state 8
+    CMD_SUP         shift and go to state 9
+    CMD_SUB         shift and go to state 10
+    CMD_ALIGN_INC   shift and go to state 11
+    CMD_ALIGN_DEC   shift and go to state 12
+    CMD_BRACKET     shift and go to state 13
+    TEXT            shift and go to state 14
+    OPERATOR        shift and go to state 15
+
+    expression                     shift and go to state 33
+
+state 25
+
+    (14) expression -> CMD_BRACKET bracket_options . LPAREN expression RPAREN
+    (16) bracket_options -> bracket_options . BRACKET_OPTION
+
+    LPAREN          shift and go to state 34
+    BRACKET_OPTION  shift and go to state 35
+
+
+state 26
+
+    (15) bracket_options -> BRACKET_OPTION .
+
+    LPAREN          reduce using rule 15 (bracket_options -> BRACKET_OPTION .)
+    BRACKET_OPTION  reduce using rule 15 (bracket_options -> BRACKET_OPTION .)
+
+
+state 27
 
     (3) expression -> CMD_FRACTION LPAREN expression . COMMA expression RPAREN
     (4) expression -> CMD_FRACTION LPAREN expression . SEMICOLON expression RPAREN
@@ -515,11 +617,13 @@ state 23
     (10) expression -> . CMD_SUB LPAREN expression RPAREN
     (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
     (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
-    (13) expression -> . TEXT
-    (14) expression -> . OPERATOR
+    (13) expression -> . CMD_BRACKET LPAREN expression RPAREN
+    (14) expression -> . CMD_BRACKET bracket_options LPAREN expression RPAREN
+    (17) expression -> . TEXT
+    (18) expression -> . OPERATOR
 
-    COMMA           shift and go to state 29
-    SEMICOLON       shift and go to state 30
+    COMMA           shift and go to state 36
+    SEMICOLON       shift and go to state 37
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
@@ -528,12 +632,13 @@ state 23
     CMD_SUB         shift and go to state 10
     CMD_ALIGN_INC   shift and go to state 11
     CMD_ALIGN_DEC   shift and go to state 12
-    TEXT            shift and go to state 13
-    OPERATOR        shift and go to state 14
+    CMD_BRACKET     shift and go to state 13
+    TEXT            shift and go to state 14
+    OPERATOR        shift and go to state 15
 
-    expression                     shift and go to state 15
+    expression                     shift and go to state 16
 
-state 24
+state 28
 
     (7) expression -> CMD_RADICAL LPAREN expression . COMMA expression RPAREN
     (8) expression -> CMD_RADICAL LPAREN expression . RPAREN
@@ -549,11 +654,13 @@ state 24
     (10) expression -> . CMD_SUB LPAREN expression RPAREN
     (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
     (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
-    (13) expression -> . TEXT
-    (14) expression -> . OPERATOR
+    (13) expression -> . CMD_BRACKET LPAREN expression RPAREN
+    (14) expression -> . CMD_BRACKET bracket_options LPAREN expression RPAREN
+    (17) expression -> . TEXT
+    (18) expression -> . OPERATOR
 
-    COMMA           shift and go to state 31
-    RPAREN          shift and go to state 32
+    COMMA           shift and go to state 38
+    RPAREN          shift and go to state 39
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
@@ -562,12 +669,13 @@ state 24
     CMD_SUB         shift and go to state 10
     CMD_ALIGN_INC   shift and go to state 11
     CMD_ALIGN_DEC   shift and go to state 12
-    TEXT            shift and go to state 13
-    OPERATOR        shift and go to state 14
+    CMD_BRACKET     shift and go to state 13
+    TEXT            shift and go to state 14
+    OPERATOR        shift and go to state 15
 
-    expression                     shift and go to state 15
+    expression                     shift and go to state 16
 
-state 25
+state 29
 
     (9) expression -> CMD_SUP LPAREN expression . RPAREN
     (2) expression -> expression . expression
@@ -582,10 +690,12 @@ state 25
     (10) expression -> . CMD_SUB LPAREN expression RPAREN
     (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
     (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
-    (13) expression -> . TEXT
-    (14) expression -> . OPERATOR
+    (13) expression -> . CMD_BRACKET LPAREN expression RPAREN
+    (14) expression -> . CMD_BRACKET bracket_options LPAREN expression RPAREN
+    (17) expression -> . TEXT
+    (18) expression -> . OPERATOR
 
-    RPAREN          shift and go to state 33
+    RPAREN          shift and go to state 40
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
@@ -594,12 +704,13 @@ state 25
     CMD_SUB         shift and go to state 10
     CMD_ALIGN_INC   shift and go to state 11
     CMD_ALIGN_DEC   shift and go to state 12
-    TEXT            shift and go to state 13
-    OPERATOR        shift and go to state 14
+    CMD_BRACKET     shift and go to state 13
+    TEXT            shift and go to state 14
+    OPERATOR        shift and go to state 15
 
-    expression                     shift and go to state 15
+    expression                     shift and go to state 16
 
-state 26
+state 30
 
     (10) expression -> CMD_SUB LPAREN expression . RPAREN
     (2) expression -> expression . expression
@@ -614,10 +725,12 @@ state 26
     (10) expression -> . CMD_SUB LPAREN expression RPAREN
     (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
     (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
-    (13) expression -> . TEXT
-    (14) expression -> . OPERATOR
+    (13) expression -> . CMD_BRACKET LPAREN expression RPAREN
+    (14) expression -> . CMD_BRACKET bracket_options LPAREN expression RPAREN
+    (17) expression -> . TEXT
+    (18) expression -> . OPERATOR
 
-    RPAREN          shift and go to state 34
+    RPAREN          shift and go to state 41
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
@@ -626,12 +739,13 @@ state 26
     CMD_SUB         shift and go to state 10
     CMD_ALIGN_INC   shift and go to state 11
     CMD_ALIGN_DEC   shift and go to state 12
-    TEXT            shift and go to state 13
-    OPERATOR        shift and go to state 14
+    CMD_BRACKET     shift and go to state 13
+    TEXT            shift and go to state 14
+    OPERATOR        shift and go to state 15
 
-    expression                     shift and go to state 15
+    expression                     shift and go to state 16
 
-state 27
+state 31
 
     (11) expression -> CMD_ALIGN_INC LPAREN expression . RPAREN
     (2) expression -> expression . expression
@@ -646,10 +760,12 @@ state 27
     (10) expression -> . CMD_SUB LPAREN expression RPAREN
     (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
     (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
-    (13) expression -> . TEXT
-    (14) expression -> . OPERATOR
+    (13) expression -> . CMD_BRACKET LPAREN expression RPAREN
+    (14) expression -> . CMD_BRACKET bracket_options LPAREN expression RPAREN
+    (17) expression -> . TEXT
+    (18) expression -> . OPERATOR
 
-    RPAREN          shift and go to state 35
+    RPAREN          shift and go to state 42
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
@@ -658,12 +774,13 @@ state 27
     CMD_SUB         shift and go to state 10
     CMD_ALIGN_INC   shift and go to state 11
     CMD_ALIGN_DEC   shift and go to state 12
-    TEXT            shift and go to state 13
-    OPERATOR        shift and go to state 14
+    CMD_BRACKET     shift and go to state 13
+    TEXT            shift and go to state 14
+    OPERATOR        shift and go to state 15
 
-    expression                     shift and go to state 15
+    expression                     shift and go to state 16
 
-state 28
+state 32
 
     (12) expression -> CMD_ALIGN_DEC LPAREN expression . RPAREN
     (2) expression -> expression . expression
@@ -678,10 +795,12 @@ state 28
     (10) expression -> . CMD_SUB LPAREN expression RPAREN
     (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
     (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
-    (13) expression -> . TEXT
-    (14) expression -> . OPERATOR
+    (13) expression -> . CMD_BRACKET LPAREN expression RPAREN
+    (14) expression -> . CMD_BRACKET bracket_options LPAREN expression RPAREN
+    (17) expression -> . TEXT
+    (18) expression -> . OPERATOR
 
-    RPAREN          shift and go to state 36
+    RPAREN          shift and go to state 43
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
@@ -690,12 +809,89 @@ state 28
     CMD_SUB         shift and go to state 10
     CMD_ALIGN_INC   shift and go to state 11
     CMD_ALIGN_DEC   shift and go to state 12
-    TEXT            shift and go to state 13
-    OPERATOR        shift and go to state 14
+    CMD_BRACKET     shift and go to state 13
+    TEXT            shift and go to state 14
+    OPERATOR        shift and go to state 15
 
-    expression                     shift and go to state 15
+    expression                     shift and go to state 16
 
-state 29
+state 33
+
+    (13) expression -> CMD_BRACKET LPAREN expression . RPAREN
+    (2) expression -> expression . expression
+    (2) expression -> . expression expression
+    (3) expression -> . CMD_FRACTION LPAREN expression COMMA expression RPAREN
+    (4) expression -> . CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN
+    (5) expression -> . IDENTIFIER
+    (6) expression -> . NUMBER
+    (7) expression -> . CMD_RADICAL LPAREN expression COMMA expression RPAREN
+    (8) expression -> . CMD_RADICAL LPAREN expression RPAREN
+    (9) expression -> . CMD_SUP LPAREN expression RPAREN
+    (10) expression -> . CMD_SUB LPAREN expression RPAREN
+    (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
+    (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
+    (13) expression -> . CMD_BRACKET LPAREN expression RPAREN
+    (14) expression -> . CMD_BRACKET bracket_options LPAREN expression RPAREN
+    (17) expression -> . TEXT
+    (18) expression -> . OPERATOR
+
+    RPAREN          shift and go to state 44
+    CMD_FRACTION    shift and go to state 5
+    IDENTIFIER      shift and go to state 6
+    NUMBER          shift and go to state 7
+    CMD_RADICAL     shift and go to state 8
+    CMD_SUP         shift and go to state 9
+    CMD_SUB         shift and go to state 10
+    CMD_ALIGN_INC   shift and go to state 11
+    CMD_ALIGN_DEC   shift and go to state 12
+    CMD_BRACKET     shift and go to state 13
+    TEXT            shift and go to state 14
+    OPERATOR        shift and go to state 15
+
+    expression                     shift and go to state 16
+
+state 34
+
+    (14) expression -> CMD_BRACKET bracket_options LPAREN . expression RPAREN
+    (2) expression -> . expression expression
+    (3) expression -> . CMD_FRACTION LPAREN expression COMMA expression RPAREN
+    (4) expression -> . CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN
+    (5) expression -> . IDENTIFIER
+    (6) expression -> . NUMBER
+    (7) expression -> . CMD_RADICAL LPAREN expression COMMA expression RPAREN
+    (8) expression -> . CMD_RADICAL LPAREN expression RPAREN
+    (9) expression -> . CMD_SUP LPAREN expression RPAREN
+    (10) expression -> . CMD_SUB LPAREN expression RPAREN
+    (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
+    (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
+    (13) expression -> . CMD_BRACKET LPAREN expression RPAREN
+    (14) expression -> . CMD_BRACKET bracket_options LPAREN expression RPAREN
+    (17) expression -> . TEXT
+    (18) expression -> . OPERATOR
+
+    CMD_FRACTION    shift and go to state 5
+    IDENTIFIER      shift and go to state 6
+    NUMBER          shift and go to state 7
+    CMD_RADICAL     shift and go to state 8
+    CMD_SUP         shift and go to state 9
+    CMD_SUB         shift and go to state 10
+    CMD_ALIGN_INC   shift and go to state 11
+    CMD_ALIGN_DEC   shift and go to state 12
+    CMD_BRACKET     shift and go to state 13
+    TEXT            shift and go to state 14
+    OPERATOR        shift and go to state 15
+
+    expression                     shift and go to state 45
+
+state 35
+
+    (16) bracket_options -> bracket_options BRACKET_OPTION .
+
+    LPAREN          reduce using rule 16 (bracket_options -> bracket_options BRACKET_OPTION .)
+    BRACKET_OPTION  reduce using rule 16 (bracket_options -> bracket_options BRACKET_OPTION .)
+
+
+state 36
 
     (3) expression -> CMD_FRACTION LPAREN expression COMMA . expression RPAREN
     (2) expression -> . expression expression
@@ -709,8 +905,10 @@ state 29
     (10) expression -> . CMD_SUB LPAREN expression RPAREN
     (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
     (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
-    (13) expression -> . TEXT
-    (14) expression -> . OPERATOR
+    (13) expression -> . CMD_BRACKET LPAREN expression RPAREN
+    (14) expression -> . CMD_BRACKET bracket_options LPAREN expression RPAREN
+    (17) expression -> . TEXT
+    (18) expression -> . OPERATOR
 
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
@@ -720,12 +918,13 @@ state 29
     CMD_SUB         shift and go to state 10
     CMD_ALIGN_INC   shift and go to state 11
     CMD_ALIGN_DEC   shift and go to state 12
-    TEXT            shift and go to state 13
-    OPERATOR        shift and go to state 14
+    CMD_BRACKET     shift and go to state 13
+    TEXT            shift and go to state 14
+    OPERATOR        shift and go to state 15
 
-    expression                     shift and go to state 37
+    expression                     shift and go to state 46
 
-state 30
+state 37
 
     (4) expression -> CMD_FRACTION LPAREN expression SEMICOLON . expression RPAREN
     (2) expression -> . expression expression
@@ -739,8 +938,10 @@ state 30
     (10) expression -> . CMD_SUB LPAREN expression RPAREN
     (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
     (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
-    (13) expression -> . TEXT
-    (14) expression -> . OPERATOR
+    (13) expression -> . CMD_BRACKET LPAREN expression RPAREN
+    (14) expression -> . CMD_BRACKET bracket_options LPAREN expression RPAREN
+    (17) expression -> . TEXT
+    (18) expression -> . OPERATOR
 
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
@@ -750,12 +951,13 @@ state 30
     CMD_SUB         shift and go to state 10
     CMD_ALIGN_INC   shift and go to state 11
     CMD_ALIGN_DEC   shift and go to state 12
-    TEXT            shift and go to state 13
-    OPERATOR        shift and go to state 14
+    CMD_BRACKET     shift and go to state 13
+    TEXT            shift and go to state 14
+    OPERATOR        shift and go to state 15
 
-    expression                     shift and go to state 38
+    expression                     shift and go to state 47
 
-state 31
+state 38
 
     (7) expression -> CMD_RADICAL LPAREN expression COMMA . expression RPAREN
     (2) expression -> . expression expression
@@ -769,8 +971,10 @@ state 31
     (10) expression -> . CMD_SUB LPAREN expression RPAREN
     (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
     (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
-    (13) expression -> . TEXT
-    (14) expression -> . OPERATOR
+    (13) expression -> . CMD_BRACKET LPAREN expression RPAREN
+    (14) expression -> . CMD_BRACKET bracket_options LPAREN expression RPAREN
+    (17) expression -> . TEXT
+    (18) expression -> . OPERATOR
 
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
@@ -780,12 +984,13 @@ state 31
     CMD_SUB         shift and go to state 10
     CMD_ALIGN_INC   shift and go to state 11
     CMD_ALIGN_DEC   shift and go to state 12
-    TEXT            shift and go to state 13
-    OPERATOR        shift and go to state 14
+    CMD_BRACKET     shift and go to state 13
+    TEXT            shift and go to state 14
+    OPERATOR        shift and go to state 15
 
-    expression                     shift and go to state 39
+    expression                     shift and go to state 48
 
-state 32
+state 39
 
     (8) expression -> CMD_RADICAL LPAREN expression RPAREN .
 
@@ -798,6 +1003,7 @@ state 32
     CMD_SUB         reduce using rule 8 (expression -> CMD_RADICAL LPAREN expression RPAREN .)
     CMD_ALIGN_INC   reduce using rule 8 (expression -> CMD_RADICAL LPAREN expression RPAREN .)
     CMD_ALIGN_DEC   reduce using rule 8 (expression -> CMD_RADICAL LPAREN expression RPAREN .)
+    CMD_BRACKET     reduce using rule 8 (expression -> CMD_RADICAL LPAREN expression RPAREN .)
     TEXT            reduce using rule 8 (expression -> CMD_RADICAL LPAREN expression RPAREN .)
     OPERATOR        reduce using rule 8 (expression -> CMD_RADICAL LPAREN expression RPAREN .)
     COMMA           reduce using rule 8 (expression -> CMD_RADICAL LPAREN expression RPAREN .)
@@ -805,7 +1011,7 @@ state 32
     RPAREN          reduce using rule 8 (expression -> CMD_RADICAL LPAREN expression RPAREN .)
 
 
-state 33
+state 40
 
     (9) expression -> CMD_SUP LPAREN expression RPAREN .
 
@@ -818,6 +1024,7 @@ state 33
     CMD_SUB         reduce using rule 9 (expression -> CMD_SUP LPAREN expression RPAREN .)
     CMD_ALIGN_INC   reduce using rule 9 (expression -> CMD_SUP LPAREN expression RPAREN .)
     CMD_ALIGN_DEC   reduce using rule 9 (expression -> CMD_SUP LPAREN expression RPAREN .)
+    CMD_BRACKET     reduce using rule 9 (expression -> CMD_SUP LPAREN expression RPAREN .)
     TEXT            reduce using rule 9 (expression -> CMD_SUP LPAREN expression RPAREN .)
     OPERATOR        reduce using rule 9 (expression -> CMD_SUP LPAREN expression RPAREN .)
     COMMA           reduce using rule 9 (expression -> CMD_SUP LPAREN expression RPAREN .)
@@ -825,7 +1032,7 @@ state 33
     RPAREN          reduce using rule 9 (expression -> CMD_SUP LPAREN expression RPAREN .)
 
 
-state 34
+state 41
 
     (10) expression -> CMD_SUB LPAREN expression RPAREN .
 
@@ -838,6 +1045,7 @@ state 34
     CMD_SUB         reduce using rule 10 (expression -> CMD_SUB LPAREN expression RPAREN .)
     CMD_ALIGN_INC   reduce using rule 10 (expression -> CMD_SUB LPAREN expression RPAREN .)
     CMD_ALIGN_DEC   reduce using rule 10 (expression -> CMD_SUB LPAREN expression RPAREN .)
+    CMD_BRACKET     reduce using rule 10 (expression -> CMD_SUB LPAREN expression RPAREN .)
     TEXT            reduce using rule 10 (expression -> CMD_SUB LPAREN expression RPAREN .)
     OPERATOR        reduce using rule 10 (expression -> CMD_SUB LPAREN expression RPAREN .)
     COMMA           reduce using rule 10 (expression -> CMD_SUB LPAREN expression RPAREN .)
@@ -845,7 +1053,7 @@ state 34
     RPAREN          reduce using rule 10 (expression -> CMD_SUB LPAREN expression RPAREN .)
 
 
-state 35
+state 42
 
     (11) expression -> CMD_ALIGN_INC LPAREN expression RPAREN .
 
@@ -858,6 +1066,7 @@ state 35
     CMD_SUB         reduce using rule 11 (expression -> CMD_ALIGN_INC LPAREN expression RPAREN .)
     CMD_ALIGN_INC   reduce using rule 11 (expression -> CMD_ALIGN_INC LPAREN expression RPAREN .)
     CMD_ALIGN_DEC   reduce using rule 11 (expression -> CMD_ALIGN_INC LPAREN expression RPAREN .)
+    CMD_BRACKET     reduce using rule 11 (expression -> CMD_ALIGN_INC LPAREN expression RPAREN .)
     TEXT            reduce using rule 11 (expression -> CMD_ALIGN_INC LPAREN expression RPAREN .)
     OPERATOR        reduce using rule 11 (expression -> CMD_ALIGN_INC LPAREN expression RPAREN .)
     COMMA           reduce using rule 11 (expression -> CMD_ALIGN_INC LPAREN expression RPAREN .)
@@ -865,7 +1074,7 @@ state 35
     RPAREN          reduce using rule 11 (expression -> CMD_ALIGN_INC LPAREN expression RPAREN .)
 
 
-state 36
+state 43
 
     (12) expression -> CMD_ALIGN_DEC LPAREN expression RPAREN .
 
@@ -878,6 +1087,7 @@ state 36
     CMD_SUB         reduce using rule 12 (expression -> CMD_ALIGN_DEC LPAREN expression RPAREN .)
     CMD_ALIGN_INC   reduce using rule 12 (expression -> CMD_ALIGN_DEC LPAREN expression RPAREN .)
     CMD_ALIGN_DEC   reduce using rule 12 (expression -> CMD_ALIGN_DEC LPAREN expression RPAREN .)
+    CMD_BRACKET     reduce using rule 12 (expression -> CMD_ALIGN_DEC LPAREN expression RPAREN .)
     TEXT            reduce using rule 12 (expression -> CMD_ALIGN_DEC LPAREN expression RPAREN .)
     OPERATOR        reduce using rule 12 (expression -> CMD_ALIGN_DEC LPAREN expression RPAREN .)
     COMMA           reduce using rule 12 (expression -> CMD_ALIGN_DEC LPAREN expression RPAREN .)
@@ -885,7 +1095,63 @@ state 36
     RPAREN          reduce using rule 12 (expression -> CMD_ALIGN_DEC LPAREN expression RPAREN .)
 
 
-state 37
+state 44
+
+    (13) expression -> CMD_BRACKET LPAREN expression RPAREN .
+
+    RBRACE          reduce using rule 13 (expression -> CMD_BRACKET LPAREN expression RPAREN .)
+    CMD_FRACTION    reduce using rule 13 (expression -> CMD_BRACKET LPAREN expression RPAREN .)
+    IDENTIFIER      reduce using rule 13 (expression -> CMD_BRACKET LPAREN expression RPAREN .)
+    NUMBER          reduce using rule 13 (expression -> CMD_BRACKET LPAREN expression RPAREN .)
+    CMD_RADICAL     reduce using rule 13 (expression -> CMD_BRACKET LPAREN expression RPAREN .)
+    CMD_SUP         reduce using rule 13 (expression -> CMD_BRACKET LPAREN expression RPAREN .)
+    CMD_SUB         reduce using rule 13 (expression -> CMD_BRACKET LPAREN expression RPAREN .)
+    CMD_ALIGN_INC   reduce using rule 13 (expression -> CMD_BRACKET LPAREN expression RPAREN .)
+    CMD_ALIGN_DEC   reduce using rule 13 (expression -> CMD_BRACKET LPAREN expression RPAREN .)
+    CMD_BRACKET     reduce using rule 13 (expression -> CMD_BRACKET LPAREN expression RPAREN .)
+    TEXT            reduce using rule 13 (expression -> CMD_BRACKET LPAREN expression RPAREN .)
+    OPERATOR        reduce using rule 13 (expression -> CMD_BRACKET LPAREN expression RPAREN .)
+    COMMA           reduce using rule 13 (expression -> CMD_BRACKET LPAREN expression RPAREN .)
+    SEMICOLON       reduce using rule 13 (expression -> CMD_BRACKET LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 13 (expression -> CMD_BRACKET LPAREN expression RPAREN .)
+
+
+state 45
+
+    (14) expression -> CMD_BRACKET bracket_options LPAREN expression . RPAREN
+    (2) expression -> expression . expression
+    (2) expression -> . expression expression
+    (3) expression -> . CMD_FRACTION LPAREN expression COMMA expression RPAREN
+    (4) expression -> . CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN
+    (5) expression -> . IDENTIFIER
+    (6) expression -> . NUMBER
+    (7) expression -> . CMD_RADICAL LPAREN expression COMMA expression RPAREN
+    (8) expression -> . CMD_RADICAL LPAREN expression RPAREN
+    (9) expression -> . CMD_SUP LPAREN expression RPAREN
+    (10) expression -> . CMD_SUB LPAREN expression RPAREN
+    (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
+    (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
+    (13) expression -> . CMD_BRACKET LPAREN expression RPAREN
+    (14) expression -> . CMD_BRACKET bracket_options LPAREN expression RPAREN
+    (17) expression -> . TEXT
+    (18) expression -> . OPERATOR
+
+    RPAREN          shift and go to state 49
+    CMD_FRACTION    shift and go to state 5
+    IDENTIFIER      shift and go to state 6
+    NUMBER          shift and go to state 7
+    CMD_RADICAL     shift and go to state 8
+    CMD_SUP         shift and go to state 9
+    CMD_SUB         shift and go to state 10
+    CMD_ALIGN_INC   shift and go to state 11
+    CMD_ALIGN_DEC   shift and go to state 12
+    CMD_BRACKET     shift and go to state 13
+    TEXT            shift and go to state 14
+    OPERATOR        shift and go to state 15
+
+    expression                     shift and go to state 16
+
+state 46
 
     (3) expression -> CMD_FRACTION LPAREN expression COMMA expression . RPAREN
     (2) expression -> expression . expression
@@ -900,10 +1166,12 @@ state 37
     (10) expression -> . CMD_SUB LPAREN expression RPAREN
     (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
     (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
-    (13) expression -> . TEXT
-    (14) expression -> . OPERATOR
+    (13) expression -> . CMD_BRACKET LPAREN expression RPAREN
+    (14) expression -> . CMD_BRACKET bracket_options LPAREN expression RPAREN
+    (17) expression -> . TEXT
+    (18) expression -> . OPERATOR
 
-    RPAREN          shift and go to state 40
+    RPAREN          shift and go to state 50
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
@@ -912,12 +1180,13 @@ state 37
     CMD_SUB         shift and go to state 10
     CMD_ALIGN_INC   shift and go to state 11
     CMD_ALIGN_DEC   shift and go to state 12
-    TEXT            shift and go to state 13
-    OPERATOR        shift and go to state 14
+    CMD_BRACKET     shift and go to state 13
+    TEXT            shift and go to state 14
+    OPERATOR        shift and go to state 15
 
-    expression                     shift and go to state 15
+    expression                     shift and go to state 16
 
-state 38
+state 47
 
     (4) expression -> CMD_FRACTION LPAREN expression SEMICOLON expression . RPAREN
     (2) expression -> expression . expression
@@ -932,10 +1201,12 @@ state 38
     (10) expression -> . CMD_SUB LPAREN expression RPAREN
     (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
     (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
-    (13) expression -> . TEXT
-    (14) expression -> . OPERATOR
+    (13) expression -> . CMD_BRACKET LPAREN expression RPAREN
+    (14) expression -> . CMD_BRACKET bracket_options LPAREN expression RPAREN
+    (17) expression -> . TEXT
+    (18) expression -> . OPERATOR
 
-    RPAREN          shift and go to state 41
+    RPAREN          shift and go to state 51
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
@@ -944,12 +1215,13 @@ state 38
     CMD_SUB         shift and go to state 10
     CMD_ALIGN_INC   shift and go to state 11
     CMD_ALIGN_DEC   shift and go to state 12
-    TEXT            shift and go to state 13
-    OPERATOR        shift and go to state 14
+    CMD_BRACKET     shift and go to state 13
+    TEXT            shift and go to state 14
+    OPERATOR        shift and go to state 15
 
-    expression                     shift and go to state 15
+    expression                     shift and go to state 16
 
-state 39
+state 48
 
     (7) expression -> CMD_RADICAL LPAREN expression COMMA expression . RPAREN
     (2) expression -> expression . expression
@@ -964,10 +1236,12 @@ state 39
     (10) expression -> . CMD_SUB LPAREN expression RPAREN
     (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
     (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
-    (13) expression -> . TEXT
-    (14) expression -> . OPERATOR
+    (13) expression -> . CMD_BRACKET LPAREN expression RPAREN
+    (14) expression -> . CMD_BRACKET bracket_options LPAREN expression RPAREN
+    (17) expression -> . TEXT
+    (18) expression -> . OPERATOR
 
-    RPAREN          shift and go to state 42
+    RPAREN          shift and go to state 52
     CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
@@ -976,12 +1250,34 @@ state 39
     CMD_SUB         shift and go to state 10
     CMD_ALIGN_INC   shift and go to state 11
     CMD_ALIGN_DEC   shift and go to state 12
-    TEXT            shift and go to state 13
-    OPERATOR        shift and go to state 14
+    CMD_BRACKET     shift and go to state 13
+    TEXT            shift and go to state 14
+    OPERATOR        shift and go to state 15
 
-    expression                     shift and go to state 15
+    expression                     shift and go to state 16
 
-state 40
+state 49
+
+    (14) expression -> CMD_BRACKET bracket_options LPAREN expression RPAREN .
+
+    RBRACE          reduce using rule 14 (expression -> CMD_BRACKET bracket_options LPAREN expression RPAREN .)
+    CMD_FRACTION    reduce using rule 14 (expression -> CMD_BRACKET bracket_options LPAREN expression RPAREN .)
+    IDENTIFIER      reduce using rule 14 (expression -> CMD_BRACKET bracket_options LPAREN expression RPAREN .)
+    NUMBER          reduce using rule 14 (expression -> CMD_BRACKET bracket_options LPAREN expression RPAREN .)
+    CMD_RADICAL     reduce using rule 14 (expression -> CMD_BRACKET bracket_options LPAREN expression RPAREN .)
+    CMD_SUP         reduce using rule 14 (expression -> CMD_BRACKET bracket_options LPAREN expression RPAREN .)
+    CMD_SUB         reduce using rule 14 (expression -> CMD_BRACKET bracket_options LPAREN expression RPAREN .)
+    CMD_ALIGN_INC   reduce using rule 14 (expression -> CMD_BRACKET bracket_options LPAREN expression RPAREN .)
+    CMD_ALIGN_DEC   reduce using rule 14 (expression -> CMD_BRACKET bracket_options LPAREN expression RPAREN .)
+    CMD_BRACKET     reduce using rule 14 (expression -> CMD_BRACKET bracket_options LPAREN expression RPAREN .)
+    TEXT            reduce using rule 14 (expression -> CMD_BRACKET bracket_options LPAREN expression RPAREN .)
+    OPERATOR        reduce using rule 14 (expression -> CMD_BRACKET bracket_options LPAREN expression RPAREN .)
+    COMMA           reduce using rule 14 (expression -> CMD_BRACKET bracket_options LPAREN expression RPAREN .)
+    SEMICOLON       reduce using rule 14 (expression -> CMD_BRACKET bracket_options LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 14 (expression -> CMD_BRACKET bracket_options LPAREN expression RPAREN .)
+
+
+state 50
 
     (3) expression -> CMD_FRACTION LPAREN expression COMMA expression RPAREN .
 
@@ -994,6 +1290,7 @@ state 40
     CMD_SUB         reduce using rule 3 (expression -> CMD_FRACTION LPAREN expression COMMA expression RPAREN .)
     CMD_ALIGN_INC   reduce using rule 3 (expression -> CMD_FRACTION LPAREN expression COMMA expression RPAREN .)
     CMD_ALIGN_DEC   reduce using rule 3 (expression -> CMD_FRACTION LPAREN expression COMMA expression RPAREN .)
+    CMD_BRACKET     reduce using rule 3 (expression -> CMD_FRACTION LPAREN expression COMMA expression RPAREN .)
     TEXT            reduce using rule 3 (expression -> CMD_FRACTION LPAREN expression COMMA expression RPAREN .)
     OPERATOR        reduce using rule 3 (expression -> CMD_FRACTION LPAREN expression COMMA expression RPAREN .)
     COMMA           reduce using rule 3 (expression -> CMD_FRACTION LPAREN expression COMMA expression RPAREN .)
@@ -1001,7 +1298,7 @@ state 40
     RPAREN          reduce using rule 3 (expression -> CMD_FRACTION LPAREN expression COMMA expression RPAREN .)
 
 
-state 41
+state 51
 
     (4) expression -> CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN .
 
@@ -1014,6 +1311,7 @@ state 41
     CMD_SUB         reduce using rule 4 (expression -> CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN .)
     CMD_ALIGN_INC   reduce using rule 4 (expression -> CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN .)
     CMD_ALIGN_DEC   reduce using rule 4 (expression -> CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN .)
+    CMD_BRACKET     reduce using rule 4 (expression -> CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN .)
     TEXT            reduce using rule 4 (expression -> CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN .)
     OPERATOR        reduce using rule 4 (expression -> CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN .)
     COMMA           reduce using rule 4 (expression -> CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN .)
@@ -1021,7 +1319,7 @@ state 41
     RPAREN          reduce using rule 4 (expression -> CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN .)
 
 
-state 42
+state 52
 
     (7) expression -> CMD_RADICAL LPAREN expression COMMA expression RPAREN .
 
@@ -1034,6 +1332,7 @@ state 42
     CMD_SUB         reduce using rule 7 (expression -> CMD_RADICAL LPAREN expression COMMA expression RPAREN .)
     CMD_ALIGN_INC   reduce using rule 7 (expression -> CMD_RADICAL LPAREN expression COMMA expression RPAREN .)
     CMD_ALIGN_DEC   reduce using rule 7 (expression -> CMD_RADICAL LPAREN expression COMMA expression RPAREN .)
+    CMD_BRACKET     reduce using rule 7 (expression -> CMD_RADICAL LPAREN expression COMMA expression RPAREN .)
     TEXT            reduce using rule 7 (expression -> CMD_RADICAL LPAREN expression COMMA expression RPAREN .)
     OPERATOR        reduce using rule 7 (expression -> CMD_RADICAL LPAREN expression COMMA expression RPAREN .)
     COMMA           reduce using rule 7 (expression -> CMD_RADICAL LPAREN expression COMMA expression RPAREN .)
@@ -1043,13 +1342,14 @@ state 42
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for CMD_FRACTION in state 15 resolved as shift
-WARNING: shift/reduce conflict for IDENTIFIER in state 15 resolved as shift
-WARNING: shift/reduce conflict for NUMBER in state 15 resolved as shift
-WARNING: shift/reduce conflict for CMD_RADICAL in state 15 resolved as shift
-WARNING: shift/reduce conflict for CMD_SUP in state 15 resolved as shift
-WARNING: shift/reduce conflict for CMD_SUB in state 15 resolved as shift
-WARNING: shift/reduce conflict for CMD_ALIGN_INC in state 15 resolved as shift
-WARNING: shift/reduce conflict for CMD_ALIGN_DEC in state 15 resolved as shift
-WARNING: shift/reduce conflict for TEXT in state 15 resolved as shift
-WARNING: shift/reduce conflict for OPERATOR in state 15 resolved as shift
+WARNING: shift/reduce conflict for CMD_FRACTION in state 16 resolved as shift
+WARNING: shift/reduce conflict for IDENTIFIER in state 16 resolved as shift
+WARNING: shift/reduce conflict for NUMBER in state 16 resolved as shift
+WARNING: shift/reduce conflict for CMD_RADICAL in state 16 resolved as shift
+WARNING: shift/reduce conflict for CMD_SUP in state 16 resolved as shift
+WARNING: shift/reduce conflict for CMD_SUB in state 16 resolved as shift
+WARNING: shift/reduce conflict for CMD_ALIGN_INC in state 16 resolved as shift
+WARNING: shift/reduce conflict for CMD_ALIGN_DEC in state 16 resolved as shift
+WARNING: shift/reduce conflict for CMD_BRACKET in state 16 resolved as shift
+WARNING: shift/reduce conflict for TEXT in state 16 resolved as shift
+WARNING: shift/reduce conflict for OPERATOR in state 16 resolved as shift

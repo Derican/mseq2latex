@@ -139,3 +139,84 @@ class ExpressionSequence(ASTNode):
                     result += " "
         
         return result
+
+class Bracket(ASTNode):
+    """括号节点"""
+    def __init__(self, content, left_bracket='(', right_bracket=')'):
+        self.content = content
+        self.left_bracket = left_bracket
+        self.right_bracket = right_bracket
+    
+    def set_bracket_options(self, options):
+        """根据括号选项设置左右括号"""
+        # 从左到右处理选项，后面的会覆盖前面的
+        for option in options:
+            option_type, char = self._parse_bracket_option(option)
+            if option_type == 'lc':
+                self.left_bracket = char
+            elif option_type == 'rc':
+                self.right_bracket = char
+            elif option_type == 'bc':
+                self.left_bracket = char
+                self.right_bracket = self._get_corresponding_bracket(char)
+    
+    def _get_corresponding_bracket(self, char):
+        """获取对应的右括号"""
+        bracket_pairs = {
+            '(': ')',
+            '[': ']',
+            '{': '}',
+            '<': '>',
+        }
+        return bracket_pairs.get(char, char)
+    
+    def _parse_bracket_option(self, option):
+        """解析括号选项"""
+        # option格式：\lc\字符、\rc\字符、\bc\字符
+        if option.startswith('\\lc\\'):
+            return 'lc', option[4]
+        elif option.startswith('\\rc\\'):
+            return 'rc', option[4]
+        elif option.startswith('\\bc\\'):
+            return 'bc', option[4]
+        return None, None
+    
+    def _get_latex_bracket(self, char):
+        """将字符转换为LaTeX括号格式"""
+        bracket_map = {
+            '(': '(',
+            ')': ')',
+            '[': '[',
+            ']': ']',
+            '{': '\\{',
+            '}': '\\}',
+            '<': '\\langle',
+            '>': '\\rangle',
+            '|': '|',
+            '\\': '\\backslash'
+        }
+        return bracket_map.get(char, char)
+    
+    def to_latex(self):
+        content = self._format_expression(self.content)
+        left = self._get_latex_bracket(self.left_bracket)
+        right = self._get_latex_bracket(self.right_bracket)
+        
+        # 如果左右括号相同且不是常见的配对括号，使用相同的符号
+        if self.left_bracket == self.right_bracket and self.left_bracket not in '()[]{}<>':
+            return f"\\left{left} {content} \\right{right}"
+        
+        # 处理配对括号
+        if self.left_bracket in '{[(<':
+            # 自动配对
+            pair_map = {'{': '}', '[': ']', '(': ')', '<': '>'}
+            if self.right_bracket == pair_map.get(self.left_bracket, ')'):
+                return f"\\left{left} {content} \\right{right}"
+        
+        return f"\\left{left} {content} \\right{right}"
+    
+    def _format_expression(self, expr):
+        if isinstance(expr, ASTNode):
+            return expr.to_latex()
+        else:
+            return str(expr)

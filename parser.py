@@ -1,6 +1,6 @@
 import ply.yacc as yacc
 from lexer import tokens
-from ast_nodes import EQField, Fraction, Radical, Superscript, Subscript, SpaceCommand, ExpressionSequence
+from ast_nodes import EQField, Fraction, Radical, Superscript, Subscript, SpaceCommand, ExpressionSequence, Bracket
 
 # 语法规则
 def p_eq_field(p):
@@ -52,6 +52,27 @@ def p_expression_space_ai(p):
 def p_expression_space_di(p):
     '''expression : CMD_ALIGN_DEC LPAREN expression RPAREN'''
     p[0] = SpaceCommand('di', p[3])
+
+def p_expression_bracket_simple(p):
+    '''expression : CMD_BRACKET LPAREN expression RPAREN'''
+    # 简单括号 \b(expression)
+    p[0] = Bracket(p[3])
+
+def p_expression_bracket_with_options(p):
+    '''expression : CMD_BRACKET bracket_options LPAREN expression RPAREN'''
+    # 带选项的括号 \b \lc\{ \rc\) (expression)
+    bracket = Bracket(p[4])
+    bracket.set_bracket_options(p[2])
+    p[0] = bracket
+
+def p_bracket_options(p):
+    '''bracket_options : BRACKET_OPTION
+                      | bracket_options BRACKET_OPTION'''
+    if len(p) == 2:
+        p[0] = [p[1]]
+    else:
+        p[1].append(p[2])
+        p[0] = p[1]
 
 def p_expression_text(p):
     '''expression : TEXT'''

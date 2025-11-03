@@ -7,10 +7,12 @@ tokens = (
     'EQ',              # EQ
     'CMD_FRACTION',    # \f
     'CMD_RADICAL',     # \r
+    'CMD_BRACKET',     # \b
     'CMD_SUP',         # \s\up 或 \s\up数字
     'CMD_SUB',         # \s\do 或 \s\do数字
     'CMD_ALIGN_INC',   # \s\ai 或 \s\ai数字
     'CMD_ALIGN_DEC',   # \s\di 或 \s\di数字
+    'BRACKET_OPTION',  # \lc\字符、\rc\字符、\bc\字符
     'LPAREN',          # (
     'RPAREN',          # )
     'COMMA',           # ,
@@ -37,6 +39,15 @@ def t_EQ(t):
     return t
 
 # 命令 token 规则 - 必须在普通标识符之前定义
+def t_BRACKET_OPTION(t):
+    r'\\[lr]c\\.|\\bc\\.'
+    # 匹配 \lc\字符、\rc\字符、\bc\字符
+    return t
+
+def t_CMD_BRACKET(t):
+    r'\\b'
+    return t
+
 def t_CMD_FRACTION(t):
     r'\\f'
     return t
