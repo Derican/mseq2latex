@@ -19,6 +19,8 @@ tokens = (
     'SEMICOLON',   # ;
     'IDENTIFIER',  # 标识符
     'NUMBER',      # 数字
+    'TEXT',        # 其他文本字符（包括中文）
+    'OPERATOR',    # 操作符（+, -, 等）
 )
 
 # 标记规则
@@ -72,6 +74,24 @@ def t_NUMBER(t):
 
 def t_IDENTIFIER(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'
+    # 检查是否是保留字
+    if t.value == 'EQ':
+        t.type = 'EQ'
+    elif t.value == 'f':
+        t.type = 'F'
+    elif t.value == 'r':
+        t.type = 'R'
+    elif t.value == 's':
+        t.type = 'S'
+    return t
+
+def t_OPERATOR(t):
+    r'[+\-*/=<>]'
+    return t
+
+def t_TEXT(t):
+    r'[^\{\}\\(),;+\-*/=<>\s\d]+'
+    # 匹配除了特殊符号、空白、数字之外的所有字符（包括中文）
     return t
 
 def t_newline(t):

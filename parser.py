@@ -53,6 +53,14 @@ def p_expression_space_di(p):
     '''expression : BACKSLASH S BACKSLASH DI LPAREN expression RPAREN'''
     p[0] = SpaceCommand('di', p[6])
 
+def p_expression_text(p):
+    '''expression : TEXT'''
+    p[0] = p[1]
+
+def p_expression_operator(p):
+    '''expression : OPERATOR'''
+    p[0] = p[1]
+
 def p_error(p):
     if p:
         print(f"语法错误在标记 {p.type}")

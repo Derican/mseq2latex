@@ -15,6 +15,8 @@ Rule 9     expression -> BACKSLASH S BACKSLASH UP LPAREN expression RPAREN
 Rule 10    expression -> BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
 Rule 11    expression -> BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
 Rule 12    expression -> BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+Rule 13    expression -> TEXT
+Rule 14    expression -> OPERATOR
 
 Terminals, with rules where they appear
 
@@ -29,11 +31,13 @@ IDENTIFIER           : 5
 LBRACE               : 1
 LPAREN               : 3 4 7 8 9 10 11 12
 NUMBER               : 6
+OPERATOR             : 14
 R                    : 7 8
 RBRACE               : 1
 RPAREN               : 3 4 7 8 9 10 11 12
 S                    : 9 10 11 12
 SEMICOLON            : 4
+TEXT                 : 13
 UP                   : 9
 error                : 
 
@@ -80,10 +84,14 @@ state 3
     (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
     (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
     (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+    (13) expression -> . TEXT
+    (14) expression -> . OPERATOR
 
     BACKSLASH       shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
+    TEXT            shift and go to state 8
+    OPERATOR        shift and go to state 9
 
     expression                     shift and go to state 4
 
@@ -102,13 +110,17 @@ state 4
     (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
     (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
     (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+    (13) expression -> . TEXT
+    (14) expression -> . OPERATOR
 
-    RBRACE          shift and go to state 9
+    RBRACE          shift and go to state 11
     BACKSLASH       shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
+    TEXT            shift and go to state 8
+    OPERATOR        shift and go to state 9
 
-    expression                     shift and go to state 8
+    expression                     shift and go to state 10
 
 state 5
 
@@ -121,9 +133,9 @@ state 5
     (11) expression -> BACKSLASH . S BACKSLASH AI LPAREN expression RPAREN
     (12) expression -> BACKSLASH . S BACKSLASH DI LPAREN expression RPAREN
 
-    F               shift and go to state 10
-    R               shift and go to state 11
-    S               shift and go to state 12
+    F               shift and go to state 12
+    R               shift and go to state 13
+    S               shift and go to state 14
 
 
 state 6
@@ -134,6 +146,8 @@ state 6
     BACKSLASH       reduce using rule 5 (expression -> IDENTIFIER .)
     IDENTIFIER      reduce using rule 5 (expression -> IDENTIFIER .)
     NUMBER          reduce using rule 5 (expression -> IDENTIFIER .)
+    TEXT            reduce using rule 5 (expression -> IDENTIFIER .)
+    OPERATOR        reduce using rule 5 (expression -> IDENTIFIER .)
     COMMA           reduce using rule 5 (expression -> IDENTIFIER .)
     SEMICOLON       reduce using rule 5 (expression -> IDENTIFIER .)
     RPAREN          reduce using rule 5 (expression -> IDENTIFIER .)
@@ -147,12 +161,44 @@ state 7
     BACKSLASH       reduce using rule 6 (expression -> NUMBER .)
     IDENTIFIER      reduce using rule 6 (expression -> NUMBER .)
     NUMBER          reduce using rule 6 (expression -> NUMBER .)
+    TEXT            reduce using rule 6 (expression -> NUMBER .)
+    OPERATOR        reduce using rule 6 (expression -> NUMBER .)
     COMMA           reduce using rule 6 (expression -> NUMBER .)
     SEMICOLON       reduce using rule 6 (expression -> NUMBER .)
     RPAREN          reduce using rule 6 (expression -> NUMBER .)
 
 
 state 8
+
+    (13) expression -> TEXT .
+
+    RBRACE          reduce using rule 13 (expression -> TEXT .)
+    BACKSLASH       reduce using rule 13 (expression -> TEXT .)
+    IDENTIFIER      reduce using rule 13 (expression -> TEXT .)
+    NUMBER          reduce using rule 13 (expression -> TEXT .)
+    TEXT            reduce using rule 13 (expression -> TEXT .)
+    OPERATOR        reduce using rule 13 (expression -> TEXT .)
+    COMMA           reduce using rule 13 (expression -> TEXT .)
+    SEMICOLON       reduce using rule 13 (expression -> TEXT .)
+    RPAREN          reduce using rule 13 (expression -> TEXT .)
+
+
+state 9
+
+    (14) expression -> OPERATOR .
+
+    RBRACE          reduce using rule 14 (expression -> OPERATOR .)
+    BACKSLASH       reduce using rule 14 (expression -> OPERATOR .)
+    IDENTIFIER      reduce using rule 14 (expression -> OPERATOR .)
+    NUMBER          reduce using rule 14 (expression -> OPERATOR .)
+    TEXT            reduce using rule 14 (expression -> OPERATOR .)
+    OPERATOR        reduce using rule 14 (expression -> OPERATOR .)
+    COMMA           reduce using rule 14 (expression -> OPERATOR .)
+    SEMICOLON       reduce using rule 14 (expression -> OPERATOR .)
+    RPAREN          reduce using rule 14 (expression -> OPERATOR .)
+
+
+state 10
 
     (2) expression -> expression expression .
     (2) expression -> expression . expression
@@ -167,10 +213,14 @@ state 8
     (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
     (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
     (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+    (13) expression -> . TEXT
+    (14) expression -> . OPERATOR
 
   ! shift/reduce conflict for BACKSLASH resolved as shift
   ! shift/reduce conflict for IDENTIFIER resolved as shift
   ! shift/reduce conflict for NUMBER resolved as shift
+  ! shift/reduce conflict for TEXT resolved as shift
+  ! shift/reduce conflict for OPERATOR resolved as shift
     RBRACE          reduce using rule 2 (expression -> expression expression .)
     COMMA           reduce using rule 2 (expression -> expression expression .)
     SEMICOLON       reduce using rule 2 (expression -> expression expression .)
@@ -178,47 +228,51 @@ state 8
     BACKSLASH       shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
+    TEXT            shift and go to state 8
+    OPERATOR        shift and go to state 9
 
   ! BACKSLASH       [ reduce using rule 2 (expression -> expression expression .) ]
   ! IDENTIFIER      [ reduce using rule 2 (expression -> expression expression .) ]
   ! NUMBER          [ reduce using rule 2 (expression -> expression expression .) ]
+  ! TEXT            [ reduce using rule 2 (expression -> expression expression .) ]
+  ! OPERATOR        [ reduce using rule 2 (expression -> expression expression .) ]
 
-    expression                     shift and go to state 8
+    expression                     shift and go to state 10
 
-state 9
+state 11
 
     (1) eq_field -> LBRACE EQ expression RBRACE .
 
     $end            reduce using rule 1 (eq_field -> LBRACE EQ expression RBRACE .)
 
 
-state 10
+state 12
 
     (3) expression -> BACKSLASH F . LPAREN expression COMMA expression RPAREN
     (4) expression -> BACKSLASH F . LPAREN expression SEMICOLON expression RPAREN
 
-    LPAREN          shift and go to state 13
+    LPAREN          shift and go to state 15
 
 
-state 11
+state 13
 
     (7) expression -> BACKSLASH R . LPAREN expression COMMA expression RPAREN
     (8) expression -> BACKSLASH R . LPAREN expression RPAREN
 
-    LPAREN          shift and go to state 14
+    LPAREN          shift and go to state 16
 
 
-state 12
+state 14
 
     (9) expression -> BACKSLASH S . BACKSLASH UP LPAREN expression RPAREN
     (10) expression -> BACKSLASH S . BACKSLASH DO LPAREN expression RPAREN
     (11) expression -> BACKSLASH S . BACKSLASH AI LPAREN expression RPAREN
     (12) expression -> BACKSLASH S . BACKSLASH DI LPAREN expression RPAREN
 
-    BACKSLASH       shift and go to state 15
+    BACKSLASH       shift and go to state 17
 
 
-state 13
+state 15
 
     (3) expression -> BACKSLASH F LPAREN . expression COMMA expression RPAREN
     (4) expression -> BACKSLASH F LPAREN . expression SEMICOLON expression RPAREN
@@ -233,14 +287,18 @@ state 13
     (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
     (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
     (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+    (13) expression -> . TEXT
+    (14) expression -> . OPERATOR
 
     BACKSLASH       shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
+    TEXT            shift and go to state 8
+    OPERATOR        shift and go to state 9
 
-    expression                     shift and go to state 16
+    expression                     shift and go to state 18
 
-state 14
+state 16
 
     (7) expression -> BACKSLASH R LPAREN . expression COMMA expression RPAREN
     (8) expression -> BACKSLASH R LPAREN . expression RPAREN
@@ -255,27 +313,31 @@ state 14
     (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
     (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
     (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+    (13) expression -> . TEXT
+    (14) expression -> . OPERATOR
 
     BACKSLASH       shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
+    TEXT            shift and go to state 8
+    OPERATOR        shift and go to state 9
 
-    expression                     shift and go to state 17
+    expression                     shift and go to state 19
 
-state 15
+state 17
 
     (9) expression -> BACKSLASH S BACKSLASH . UP LPAREN expression RPAREN
     (10) expression -> BACKSLASH S BACKSLASH . DO LPAREN expression RPAREN
     (11) expression -> BACKSLASH S BACKSLASH . AI LPAREN expression RPAREN
     (12) expression -> BACKSLASH S BACKSLASH . DI LPAREN expression RPAREN
 
-    UP              shift and go to state 18
-    DO              shift and go to state 19
-    AI              shift and go to state 20
-    DI              shift and go to state 21
+    UP              shift and go to state 20
+    DO              shift and go to state 21
+    AI              shift and go to state 22
+    DI              shift and go to state 23
 
 
-state 16
+state 18
 
     (3) expression -> BACKSLASH F LPAREN expression . COMMA expression RPAREN
     (4) expression -> BACKSLASH F LPAREN expression . SEMICOLON expression RPAREN
@@ -291,16 +353,20 @@ state 16
     (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
     (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
     (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+    (13) expression -> . TEXT
+    (14) expression -> . OPERATOR
 
-    COMMA           shift and go to state 22
-    SEMICOLON       shift and go to state 23
+    COMMA           shift and go to state 24
+    SEMICOLON       shift and go to state 25
     BACKSLASH       shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
+    TEXT            shift and go to state 8
+    OPERATOR        shift and go to state 9
 
-    expression                     shift and go to state 8
+    expression                     shift and go to state 10
 
-state 17
+state 19
 
     (7) expression -> BACKSLASH R LPAREN expression . COMMA expression RPAREN
     (8) expression -> BACKSLASH R LPAREN expression . RPAREN
@@ -316,44 +382,48 @@ state 17
     (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
     (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
     (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+    (13) expression -> . TEXT
+    (14) expression -> . OPERATOR
 
-    COMMA           shift and go to state 24
-    RPAREN          shift and go to state 25
+    COMMA           shift and go to state 26
+    RPAREN          shift and go to state 27
     BACKSLASH       shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
+    TEXT            shift and go to state 8
+    OPERATOR        shift and go to state 9
 
-    expression                     shift and go to state 8
-
-state 18
-
-    (9) expression -> BACKSLASH S BACKSLASH UP . LPAREN expression RPAREN
-
-    LPAREN          shift and go to state 26
-
-
-state 19
-
-    (10) expression -> BACKSLASH S BACKSLASH DO . LPAREN expression RPAREN
-
-    LPAREN          shift and go to state 27
-
+    expression                     shift and go to state 10
 
 state 20
 
-    (11) expression -> BACKSLASH S BACKSLASH AI . LPAREN expression RPAREN
+    (9) expression -> BACKSLASH S BACKSLASH UP . LPAREN expression RPAREN
 
     LPAREN          shift and go to state 28
 
 
 state 21
 
-    (12) expression -> BACKSLASH S BACKSLASH DI . LPAREN expression RPAREN
+    (10) expression -> BACKSLASH S BACKSLASH DO . LPAREN expression RPAREN
 
     LPAREN          shift and go to state 29
 
 
 state 22
+
+    (11) expression -> BACKSLASH S BACKSLASH AI . LPAREN expression RPAREN
+
+    LPAREN          shift and go to state 30
+
+
+state 23
+
+    (12) expression -> BACKSLASH S BACKSLASH DI . LPAREN expression RPAREN
+
+    LPAREN          shift and go to state 31
+
+
+state 24
 
     (3) expression -> BACKSLASH F LPAREN expression COMMA . expression RPAREN
     (2) expression -> . expression expression
@@ -367,14 +437,18 @@ state 22
     (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
     (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
     (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+    (13) expression -> . TEXT
+    (14) expression -> . OPERATOR
 
     BACKSLASH       shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
+    TEXT            shift and go to state 8
+    OPERATOR        shift and go to state 9
 
-    expression                     shift and go to state 30
+    expression                     shift and go to state 32
 
-state 23
+state 25
 
     (4) expression -> BACKSLASH F LPAREN expression SEMICOLON . expression RPAREN
     (2) expression -> . expression expression
@@ -388,14 +462,18 @@ state 23
     (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
     (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
     (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+    (13) expression -> . TEXT
+    (14) expression -> . OPERATOR
 
     BACKSLASH       shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
+    TEXT            shift and go to state 8
+    OPERATOR        shift and go to state 9
 
-    expression                     shift and go to state 31
+    expression                     shift and go to state 33
 
-state 24
+state 26
 
     (7) expression -> BACKSLASH R LPAREN expression COMMA . expression RPAREN
     (2) expression -> . expression expression
@@ -409,14 +487,18 @@ state 24
     (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
     (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
     (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+    (13) expression -> . TEXT
+    (14) expression -> . OPERATOR
 
     BACKSLASH       shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
+    TEXT            shift and go to state 8
+    OPERATOR        shift and go to state 9
 
-    expression                     shift and go to state 32
+    expression                     shift and go to state 34
 
-state 25
+state 27
 
     (8) expression -> BACKSLASH R LPAREN expression RPAREN .
 
@@ -424,12 +506,14 @@ state 25
     BACKSLASH       reduce using rule 8 (expression -> BACKSLASH R LPAREN expression RPAREN .)
     IDENTIFIER      reduce using rule 8 (expression -> BACKSLASH R LPAREN expression RPAREN .)
     NUMBER          reduce using rule 8 (expression -> BACKSLASH R LPAREN expression RPAREN .)
+    TEXT            reduce using rule 8 (expression -> BACKSLASH R LPAREN expression RPAREN .)
+    OPERATOR        reduce using rule 8 (expression -> BACKSLASH R LPAREN expression RPAREN .)
     COMMA           reduce using rule 8 (expression -> BACKSLASH R LPAREN expression RPAREN .)
     SEMICOLON       reduce using rule 8 (expression -> BACKSLASH R LPAREN expression RPAREN .)
     RPAREN          reduce using rule 8 (expression -> BACKSLASH R LPAREN expression RPAREN .)
 
 
-state 26
+state 28
 
     (9) expression -> BACKSLASH S BACKSLASH UP LPAREN . expression RPAREN
     (2) expression -> . expression expression
@@ -443,14 +527,18 @@ state 26
     (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
     (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
     (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+    (13) expression -> . TEXT
+    (14) expression -> . OPERATOR
 
     BACKSLASH       shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
+    TEXT            shift and go to state 8
+    OPERATOR        shift and go to state 9
 
-    expression                     shift and go to state 33
+    expression                     shift and go to state 35
 
-state 27
+state 29
 
     (10) expression -> BACKSLASH S BACKSLASH DO LPAREN . expression RPAREN
     (2) expression -> . expression expression
@@ -464,14 +552,18 @@ state 27
     (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
     (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
     (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+    (13) expression -> . TEXT
+    (14) expression -> . OPERATOR
 
     BACKSLASH       shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
+    TEXT            shift and go to state 8
+    OPERATOR        shift and go to state 9
 
-    expression                     shift and go to state 34
+    expression                     shift and go to state 36
 
-state 28
+state 30
 
     (11) expression -> BACKSLASH S BACKSLASH AI LPAREN . expression RPAREN
     (2) expression -> . expression expression
@@ -485,14 +577,18 @@ state 28
     (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
     (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
     (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+    (13) expression -> . TEXT
+    (14) expression -> . OPERATOR
 
     BACKSLASH       shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
+    TEXT            shift and go to state 8
+    OPERATOR        shift and go to state 9
 
-    expression                     shift and go to state 35
+    expression                     shift and go to state 37
 
-state 29
+state 31
 
     (12) expression -> BACKSLASH S BACKSLASH DI LPAREN . expression RPAREN
     (2) expression -> . expression expression
@@ -506,14 +602,18 @@ state 29
     (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
     (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
     (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+    (13) expression -> . TEXT
+    (14) expression -> . OPERATOR
 
     BACKSLASH       shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
+    TEXT            shift and go to state 8
+    OPERATOR        shift and go to state 9
 
-    expression                     shift and go to state 36
+    expression                     shift and go to state 38
 
-state 30
+state 32
 
     (3) expression -> BACKSLASH F LPAREN expression COMMA expression . RPAREN
     (2) expression -> expression . expression
@@ -528,15 +628,19 @@ state 30
     (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
     (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
     (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+    (13) expression -> . TEXT
+    (14) expression -> . OPERATOR
 
-    RPAREN          shift and go to state 37
+    RPAREN          shift and go to state 39
     BACKSLASH       shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
+    TEXT            shift and go to state 8
+    OPERATOR        shift and go to state 9
 
-    expression                     shift and go to state 8
+    expression                     shift and go to state 10
 
-state 31
+state 33
 
     (4) expression -> BACKSLASH F LPAREN expression SEMICOLON expression . RPAREN
     (2) expression -> expression . expression
@@ -551,15 +655,19 @@ state 31
     (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
     (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
     (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+    (13) expression -> . TEXT
+    (14) expression -> . OPERATOR
 
-    RPAREN          shift and go to state 38
+    RPAREN          shift and go to state 40
     BACKSLASH       shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
+    TEXT            shift and go to state 8
+    OPERATOR        shift and go to state 9
 
-    expression                     shift and go to state 8
+    expression                     shift and go to state 10
 
-state 32
+state 34
 
     (7) expression -> BACKSLASH R LPAREN expression COMMA expression . RPAREN
     (2) expression -> expression . expression
@@ -574,15 +682,19 @@ state 32
     (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
     (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
     (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+    (13) expression -> . TEXT
+    (14) expression -> . OPERATOR
 
-    RPAREN          shift and go to state 39
+    RPAREN          shift and go to state 41
     BACKSLASH       shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
+    TEXT            shift and go to state 8
+    OPERATOR        shift and go to state 9
 
-    expression                     shift and go to state 8
+    expression                     shift and go to state 10
 
-state 33
+state 35
 
     (9) expression -> BACKSLASH S BACKSLASH UP LPAREN expression . RPAREN
     (2) expression -> expression . expression
@@ -597,15 +709,19 @@ state 33
     (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
     (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
     (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+    (13) expression -> . TEXT
+    (14) expression -> . OPERATOR
 
-    RPAREN          shift and go to state 40
+    RPAREN          shift and go to state 42
     BACKSLASH       shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
+    TEXT            shift and go to state 8
+    OPERATOR        shift and go to state 9
 
-    expression                     shift and go to state 8
+    expression                     shift and go to state 10
 
-state 34
+state 36
 
     (10) expression -> BACKSLASH S BACKSLASH DO LPAREN expression . RPAREN
     (2) expression -> expression . expression
@@ -620,15 +736,19 @@ state 34
     (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
     (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
     (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+    (13) expression -> . TEXT
+    (14) expression -> . OPERATOR
 
-    RPAREN          shift and go to state 41
+    RPAREN          shift and go to state 43
     BACKSLASH       shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
+    TEXT            shift and go to state 8
+    OPERATOR        shift and go to state 9
 
-    expression                     shift and go to state 8
+    expression                     shift and go to state 10
 
-state 35
+state 37
 
     (11) expression -> BACKSLASH S BACKSLASH AI LPAREN expression . RPAREN
     (2) expression -> expression . expression
@@ -643,15 +763,19 @@ state 35
     (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
     (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
     (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+    (13) expression -> . TEXT
+    (14) expression -> . OPERATOR
 
-    RPAREN          shift and go to state 42
+    RPAREN          shift and go to state 44
     BACKSLASH       shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
+    TEXT            shift and go to state 8
+    OPERATOR        shift and go to state 9
 
-    expression                     shift and go to state 8
+    expression                     shift and go to state 10
 
-state 36
+state 38
 
     (12) expression -> BACKSLASH S BACKSLASH DI LPAREN expression . RPAREN
     (2) expression -> expression . expression
@@ -666,15 +790,19 @@ state 36
     (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
     (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
     (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+    (13) expression -> . TEXT
+    (14) expression -> . OPERATOR
 
-    RPAREN          shift and go to state 43
+    RPAREN          shift and go to state 45
     BACKSLASH       shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
+    TEXT            shift and go to state 8
+    OPERATOR        shift and go to state 9
 
-    expression                     shift and go to state 8
+    expression                     shift and go to state 10
 
-state 37
+state 39
 
     (3) expression -> BACKSLASH F LPAREN expression COMMA expression RPAREN .
 
@@ -682,12 +810,14 @@ state 37
     BACKSLASH       reduce using rule 3 (expression -> BACKSLASH F LPAREN expression COMMA expression RPAREN .)
     IDENTIFIER      reduce using rule 3 (expression -> BACKSLASH F LPAREN expression COMMA expression RPAREN .)
     NUMBER          reduce using rule 3 (expression -> BACKSLASH F LPAREN expression COMMA expression RPAREN .)
+    TEXT            reduce using rule 3 (expression -> BACKSLASH F LPAREN expression COMMA expression RPAREN .)
+    OPERATOR        reduce using rule 3 (expression -> BACKSLASH F LPAREN expression COMMA expression RPAREN .)
     COMMA           reduce using rule 3 (expression -> BACKSLASH F LPAREN expression COMMA expression RPAREN .)
     SEMICOLON       reduce using rule 3 (expression -> BACKSLASH F LPAREN expression COMMA expression RPAREN .)
     RPAREN          reduce using rule 3 (expression -> BACKSLASH F LPAREN expression COMMA expression RPAREN .)
 
 
-state 38
+state 40
 
     (4) expression -> BACKSLASH F LPAREN expression SEMICOLON expression RPAREN .
 
@@ -695,12 +825,14 @@ state 38
     BACKSLASH       reduce using rule 4 (expression -> BACKSLASH F LPAREN expression SEMICOLON expression RPAREN .)
     IDENTIFIER      reduce using rule 4 (expression -> BACKSLASH F LPAREN expression SEMICOLON expression RPAREN .)
     NUMBER          reduce using rule 4 (expression -> BACKSLASH F LPAREN expression SEMICOLON expression RPAREN .)
+    TEXT            reduce using rule 4 (expression -> BACKSLASH F LPAREN expression SEMICOLON expression RPAREN .)
+    OPERATOR        reduce using rule 4 (expression -> BACKSLASH F LPAREN expression SEMICOLON expression RPAREN .)
     COMMA           reduce using rule 4 (expression -> BACKSLASH F LPAREN expression SEMICOLON expression RPAREN .)
     SEMICOLON       reduce using rule 4 (expression -> BACKSLASH F LPAREN expression SEMICOLON expression RPAREN .)
     RPAREN          reduce using rule 4 (expression -> BACKSLASH F LPAREN expression SEMICOLON expression RPAREN .)
 
 
-state 39
+state 41
 
     (7) expression -> BACKSLASH R LPAREN expression COMMA expression RPAREN .
 
@@ -708,12 +840,14 @@ state 39
     BACKSLASH       reduce using rule 7 (expression -> BACKSLASH R LPAREN expression COMMA expression RPAREN .)
     IDENTIFIER      reduce using rule 7 (expression -> BACKSLASH R LPAREN expression COMMA expression RPAREN .)
     NUMBER          reduce using rule 7 (expression -> BACKSLASH R LPAREN expression COMMA expression RPAREN .)
+    TEXT            reduce using rule 7 (expression -> BACKSLASH R LPAREN expression COMMA expression RPAREN .)
+    OPERATOR        reduce using rule 7 (expression -> BACKSLASH R LPAREN expression COMMA expression RPAREN .)
     COMMA           reduce using rule 7 (expression -> BACKSLASH R LPAREN expression COMMA expression RPAREN .)
     SEMICOLON       reduce using rule 7 (expression -> BACKSLASH R LPAREN expression COMMA expression RPAREN .)
     RPAREN          reduce using rule 7 (expression -> BACKSLASH R LPAREN expression COMMA expression RPAREN .)
 
 
-state 40
+state 42
 
     (9) expression -> BACKSLASH S BACKSLASH UP LPAREN expression RPAREN .
 
@@ -721,12 +855,14 @@ state 40
     BACKSLASH       reduce using rule 9 (expression -> BACKSLASH S BACKSLASH UP LPAREN expression RPAREN .)
     IDENTIFIER      reduce using rule 9 (expression -> BACKSLASH S BACKSLASH UP LPAREN expression RPAREN .)
     NUMBER          reduce using rule 9 (expression -> BACKSLASH S BACKSLASH UP LPAREN expression RPAREN .)
+    TEXT            reduce using rule 9 (expression -> BACKSLASH S BACKSLASH UP LPAREN expression RPAREN .)
+    OPERATOR        reduce using rule 9 (expression -> BACKSLASH S BACKSLASH UP LPAREN expression RPAREN .)
     COMMA           reduce using rule 9 (expression -> BACKSLASH S BACKSLASH UP LPAREN expression RPAREN .)
     SEMICOLON       reduce using rule 9 (expression -> BACKSLASH S BACKSLASH UP LPAREN expression RPAREN .)
     RPAREN          reduce using rule 9 (expression -> BACKSLASH S BACKSLASH UP LPAREN expression RPAREN .)
 
 
-state 41
+state 43
 
     (10) expression -> BACKSLASH S BACKSLASH DO LPAREN expression RPAREN .
 
@@ -734,12 +870,14 @@ state 41
     BACKSLASH       reduce using rule 10 (expression -> BACKSLASH S BACKSLASH DO LPAREN expression RPAREN .)
     IDENTIFIER      reduce using rule 10 (expression -> BACKSLASH S BACKSLASH DO LPAREN expression RPAREN .)
     NUMBER          reduce using rule 10 (expression -> BACKSLASH S BACKSLASH DO LPAREN expression RPAREN .)
+    TEXT            reduce using rule 10 (expression -> BACKSLASH S BACKSLASH DO LPAREN expression RPAREN .)
+    OPERATOR        reduce using rule 10 (expression -> BACKSLASH S BACKSLASH DO LPAREN expression RPAREN .)
     COMMA           reduce using rule 10 (expression -> BACKSLASH S BACKSLASH DO LPAREN expression RPAREN .)
     SEMICOLON       reduce using rule 10 (expression -> BACKSLASH S BACKSLASH DO LPAREN expression RPAREN .)
     RPAREN          reduce using rule 10 (expression -> BACKSLASH S BACKSLASH DO LPAREN expression RPAREN .)
 
 
-state 42
+state 44
 
     (11) expression -> BACKSLASH S BACKSLASH AI LPAREN expression RPAREN .
 
@@ -747,12 +885,14 @@ state 42
     BACKSLASH       reduce using rule 11 (expression -> BACKSLASH S BACKSLASH AI LPAREN expression RPAREN .)
     IDENTIFIER      reduce using rule 11 (expression -> BACKSLASH S BACKSLASH AI LPAREN expression RPAREN .)
     NUMBER          reduce using rule 11 (expression -> BACKSLASH S BACKSLASH AI LPAREN expression RPAREN .)
+    TEXT            reduce using rule 11 (expression -> BACKSLASH S BACKSLASH AI LPAREN expression RPAREN .)
+    OPERATOR        reduce using rule 11 (expression -> BACKSLASH S BACKSLASH AI LPAREN expression RPAREN .)
     COMMA           reduce using rule 11 (expression -> BACKSLASH S BACKSLASH AI LPAREN expression RPAREN .)
     SEMICOLON       reduce using rule 11 (expression -> BACKSLASH S BACKSLASH AI LPAREN expression RPAREN .)
     RPAREN          reduce using rule 11 (expression -> BACKSLASH S BACKSLASH AI LPAREN expression RPAREN .)
 
 
-state 43
+state 45
 
     (12) expression -> BACKSLASH S BACKSLASH DI LPAREN expression RPAREN .
 
@@ -760,6 +900,8 @@ state 43
     BACKSLASH       reduce using rule 12 (expression -> BACKSLASH S BACKSLASH DI LPAREN expression RPAREN .)
     IDENTIFIER      reduce using rule 12 (expression -> BACKSLASH S BACKSLASH DI LPAREN expression RPAREN .)
     NUMBER          reduce using rule 12 (expression -> BACKSLASH S BACKSLASH DI LPAREN expression RPAREN .)
+    TEXT            reduce using rule 12 (expression -> BACKSLASH S BACKSLASH DI LPAREN expression RPAREN .)
+    OPERATOR        reduce using rule 12 (expression -> BACKSLASH S BACKSLASH DI LPAREN expression RPAREN .)
     COMMA           reduce using rule 12 (expression -> BACKSLASH S BACKSLASH DI LPAREN expression RPAREN .)
     SEMICOLON       reduce using rule 12 (expression -> BACKSLASH S BACKSLASH DI LPAREN expression RPAREN .)
     RPAREN          reduce using rule 12 (expression -> BACKSLASH S BACKSLASH DI LPAREN expression RPAREN .)
@@ -767,6 +909,8 @@ state 43
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for BACKSLASH in state 8 resolved as shift
-WARNING: shift/reduce conflict for IDENTIFIER in state 8 resolved as shift
-WARNING: shift/reduce conflict for NUMBER in state 8 resolved as shift
+WARNING: shift/reduce conflict for BACKSLASH in state 10 resolved as shift
+WARNING: shift/reduce conflict for IDENTIFIER in state 10 resolved as shift
+WARNING: shift/reduce conflict for NUMBER in state 10 resolved as shift
+WARNING: shift/reduce conflict for TEXT in state 10 resolved as shift
+WARNING: shift/reduce conflict for OPERATOR in state 10 resolved as shift

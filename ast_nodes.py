@@ -123,11 +123,19 @@ class ExpressionSequence(ASTNode):
     def to_latex(self):
         result = ""
         for i, element in enumerate(self.elements):
-            if i > 0:
-                result += " "  # 元素之间添加空格
-            
-            if isinstance(element, ASTNode):
+            # 对于中文字符或特殊文本，在LaTeX中需要特殊处理
+            if isinstance(element, str) and any('\u4e00' <= char <= '\u9fff' for char in element):
+                # 中文字符用 \text{} 包围
+                result += f"\\text{{{element}}}"
+            elif isinstance(element, ASTNode):
                 result += element.to_latex()
             else:
                 result += str(element)
+            
+            # 在某些情况下添加空格
+            if i < len(self.elements) - 1:
+                next_element = self.elements[i + 1]
+                if not (isinstance(next_element, (Superscript, Subscript))):
+                    result += " "
+        
         return result

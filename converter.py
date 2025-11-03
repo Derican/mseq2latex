@@ -47,6 +47,7 @@ def main():
         "{ EQ \\s\\do3(a) }",
         "{ EQ \\f(\\r(2,x), 3 \\s\\up(y)) }",
         "{ EQ v \\s\\do(0 + \\r(2,x) - \\f(1,2)) }",
+        "{ EQ a + b + v \\s\\do(c) }",
     ]
     
     for test in test_cases:
