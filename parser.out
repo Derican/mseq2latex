@@ -5,40 +5,38 @@ Grammar
 Rule 0     S' -> eq_field
 Rule 1     eq_field -> LBRACE EQ expression RBRACE
 Rule 2     expression -> expression expression
-Rule 3     expression -> BACKSLASH F LPAREN expression COMMA expression RPAREN
-Rule 4     expression -> BACKSLASH F LPAREN expression SEMICOLON expression RPAREN
+Rule 3     expression -> CMD_FRACTION LPAREN expression COMMA expression RPAREN
+Rule 4     expression -> CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN
 Rule 5     expression -> IDENTIFIER
 Rule 6     expression -> NUMBER
-Rule 7     expression -> BACKSLASH R LPAREN expression COMMA expression RPAREN
-Rule 8     expression -> BACKSLASH R LPAREN expression RPAREN
-Rule 9     expression -> BACKSLASH S BACKSLASH UP LPAREN expression RPAREN
-Rule 10    expression -> BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
-Rule 11    expression -> BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
-Rule 12    expression -> BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+Rule 7     expression -> CMD_RADICAL LPAREN expression COMMA expression RPAREN
+Rule 8     expression -> CMD_RADICAL LPAREN expression RPAREN
+Rule 9     expression -> CMD_SUP LPAREN expression RPAREN
+Rule 10    expression -> CMD_SUB LPAREN expression RPAREN
+Rule 11    expression -> CMD_ALIGN_INC LPAREN expression RPAREN
+Rule 12    expression -> CMD_ALIGN_DEC LPAREN expression RPAREN
 Rule 13    expression -> TEXT
 Rule 14    expression -> OPERATOR
 
 Terminals, with rules where they appear
 
-AI                   : 11
-BACKSLASH            : 3 4 7 8 9 9 10 10 11 11 12 12
+CMD_ALIGN_DEC        : 12
+CMD_ALIGN_INC        : 11
+CMD_FRACTION         : 3 4
+CMD_RADICAL          : 7 8
+CMD_SUB              : 10
+CMD_SUP              : 9
 COMMA                : 3 7
-DI                   : 12
-DO                   : 10
 EQ                   : 1
-F                    : 3 4
 IDENTIFIER           : 5
 LBRACE               : 1
 LPAREN               : 3 4 7 8 9 10 11 12
 NUMBER               : 6
 OPERATOR             : 14
-R                    : 7 8
 RBRACE               : 1
 RPAREN               : 3 4 7 8 9 10 11 12
-S                    : 9 10 11 12
 SEMICOLON            : 4
 TEXT                 : 13
-UP                   : 9
 error                : 
 
 Nonterminals, with rules where they appear
@@ -74,24 +72,29 @@ state 3
 
     (1) eq_field -> LBRACE EQ . expression RBRACE
     (2) expression -> . expression expression
-    (3) expression -> . BACKSLASH F LPAREN expression COMMA expression RPAREN
-    (4) expression -> . BACKSLASH F LPAREN expression SEMICOLON expression RPAREN
+    (3) expression -> . CMD_FRACTION LPAREN expression COMMA expression RPAREN
+    (4) expression -> . CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN
     (5) expression -> . IDENTIFIER
     (6) expression -> . NUMBER
-    (7) expression -> . BACKSLASH R LPAREN expression COMMA expression RPAREN
-    (8) expression -> . BACKSLASH R LPAREN expression RPAREN
-    (9) expression -> . BACKSLASH S BACKSLASH UP LPAREN expression RPAREN
-    (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
-    (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
-    (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+    (7) expression -> . CMD_RADICAL LPAREN expression COMMA expression RPAREN
+    (8) expression -> . CMD_RADICAL LPAREN expression RPAREN
+    (9) expression -> . CMD_SUP LPAREN expression RPAREN
+    (10) expression -> . CMD_SUB LPAREN expression RPAREN
+    (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
+    (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
     (13) expression -> . TEXT
     (14) expression -> . OPERATOR
 
-    BACKSLASH       shift and go to state 5
+    CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
-    TEXT            shift and go to state 8
-    OPERATOR        shift and go to state 9
+    CMD_RADICAL     shift and go to state 8
+    CMD_SUP         shift and go to state 9
+    CMD_SUB         shift and go to state 10
+    CMD_ALIGN_INC   shift and go to state 11
+    CMD_ALIGN_DEC   shift and go to state 12
+    TEXT            shift and go to state 13
+    OPERATOR        shift and go to state 14
 
     expression                     shift and go to state 4
 
@@ -100,42 +103,39 @@ state 4
     (1) eq_field -> LBRACE EQ expression . RBRACE
     (2) expression -> expression . expression
     (2) expression -> . expression expression
-    (3) expression -> . BACKSLASH F LPAREN expression COMMA expression RPAREN
-    (4) expression -> . BACKSLASH F LPAREN expression SEMICOLON expression RPAREN
+    (3) expression -> . CMD_FRACTION LPAREN expression COMMA expression RPAREN
+    (4) expression -> . CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN
     (5) expression -> . IDENTIFIER
     (6) expression -> . NUMBER
-    (7) expression -> . BACKSLASH R LPAREN expression COMMA expression RPAREN
-    (8) expression -> . BACKSLASH R LPAREN expression RPAREN
-    (9) expression -> . BACKSLASH S BACKSLASH UP LPAREN expression RPAREN
-    (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
-    (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
-    (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+    (7) expression -> . CMD_RADICAL LPAREN expression COMMA expression RPAREN
+    (8) expression -> . CMD_RADICAL LPAREN expression RPAREN
+    (9) expression -> . CMD_SUP LPAREN expression RPAREN
+    (10) expression -> . CMD_SUB LPAREN expression RPAREN
+    (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
+    (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
     (13) expression -> . TEXT
     (14) expression -> . OPERATOR
 
-    RBRACE          shift and go to state 11
-    BACKSLASH       shift and go to state 5
+    RBRACE          shift and go to state 16
+    CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
-    TEXT            shift and go to state 8
-    OPERATOR        shift and go to state 9
+    CMD_RADICAL     shift and go to state 8
+    CMD_SUP         shift and go to state 9
+    CMD_SUB         shift and go to state 10
+    CMD_ALIGN_INC   shift and go to state 11
+    CMD_ALIGN_DEC   shift and go to state 12
+    TEXT            shift and go to state 13
+    OPERATOR        shift and go to state 14
 
-    expression                     shift and go to state 10
+    expression                     shift and go to state 15
 
 state 5
 
-    (3) expression -> BACKSLASH . F LPAREN expression COMMA expression RPAREN
-    (4) expression -> BACKSLASH . F LPAREN expression SEMICOLON expression RPAREN
-    (7) expression -> BACKSLASH . R LPAREN expression COMMA expression RPAREN
-    (8) expression -> BACKSLASH . R LPAREN expression RPAREN
-    (9) expression -> BACKSLASH . S BACKSLASH UP LPAREN expression RPAREN
-    (10) expression -> BACKSLASH . S BACKSLASH DO LPAREN expression RPAREN
-    (11) expression -> BACKSLASH . S BACKSLASH AI LPAREN expression RPAREN
-    (12) expression -> BACKSLASH . S BACKSLASH DI LPAREN expression RPAREN
+    (3) expression -> CMD_FRACTION . LPAREN expression COMMA expression RPAREN
+    (4) expression -> CMD_FRACTION . LPAREN expression SEMICOLON expression RPAREN
 
-    F               shift and go to state 12
-    R               shift and go to state 13
-    S               shift and go to state 14
+    LPAREN          shift and go to state 17
 
 
 state 6
@@ -143,9 +143,14 @@ state 6
     (5) expression -> IDENTIFIER .
 
     RBRACE          reduce using rule 5 (expression -> IDENTIFIER .)
-    BACKSLASH       reduce using rule 5 (expression -> IDENTIFIER .)
+    CMD_FRACTION    reduce using rule 5 (expression -> IDENTIFIER .)
     IDENTIFIER      reduce using rule 5 (expression -> IDENTIFIER .)
     NUMBER          reduce using rule 5 (expression -> IDENTIFIER .)
+    CMD_RADICAL     reduce using rule 5 (expression -> IDENTIFIER .)
+    CMD_SUP         reduce using rule 5 (expression -> IDENTIFIER .)
+    CMD_SUB         reduce using rule 5 (expression -> IDENTIFIER .)
+    CMD_ALIGN_INC   reduce using rule 5 (expression -> IDENTIFIER .)
+    CMD_ALIGN_DEC   reduce using rule 5 (expression -> IDENTIFIER .)
     TEXT            reduce using rule 5 (expression -> IDENTIFIER .)
     OPERATOR        reduce using rule 5 (expression -> IDENTIFIER .)
     COMMA           reduce using rule 5 (expression -> IDENTIFIER .)
@@ -158,9 +163,14 @@ state 7
     (6) expression -> NUMBER .
 
     RBRACE          reduce using rule 6 (expression -> NUMBER .)
-    BACKSLASH       reduce using rule 6 (expression -> NUMBER .)
+    CMD_FRACTION    reduce using rule 6 (expression -> NUMBER .)
     IDENTIFIER      reduce using rule 6 (expression -> NUMBER .)
     NUMBER          reduce using rule 6 (expression -> NUMBER .)
+    CMD_RADICAL     reduce using rule 6 (expression -> NUMBER .)
+    CMD_SUP         reduce using rule 6 (expression -> NUMBER .)
+    CMD_SUB         reduce using rule 6 (expression -> NUMBER .)
+    CMD_ALIGN_INC   reduce using rule 6 (expression -> NUMBER .)
+    CMD_ALIGN_DEC   reduce using rule 6 (expression -> NUMBER .)
     TEXT            reduce using rule 6 (expression -> NUMBER .)
     OPERATOR        reduce using rule 6 (expression -> NUMBER .)
     COMMA           reduce using rule 6 (expression -> NUMBER .)
@@ -170,12 +180,53 @@ state 7
 
 state 8
 
+    (7) expression -> CMD_RADICAL . LPAREN expression COMMA expression RPAREN
+    (8) expression -> CMD_RADICAL . LPAREN expression RPAREN
+
+    LPAREN          shift and go to state 18
+
+
+state 9
+
+    (9) expression -> CMD_SUP . LPAREN expression RPAREN
+
+    LPAREN          shift and go to state 19
+
+
+state 10
+
+    (10) expression -> CMD_SUB . LPAREN expression RPAREN
+
+    LPAREN          shift and go to state 20
+
+
+state 11
+
+    (11) expression -> CMD_ALIGN_INC . LPAREN expression RPAREN
+
+    LPAREN          shift and go to state 21
+
+
+state 12
+
+    (12) expression -> CMD_ALIGN_DEC . LPAREN expression RPAREN
+
+    LPAREN          shift and go to state 22
+
+
+state 13
+
     (13) expression -> TEXT .
 
     RBRACE          reduce using rule 13 (expression -> TEXT .)
-    BACKSLASH       reduce using rule 13 (expression -> TEXT .)
+    CMD_FRACTION    reduce using rule 13 (expression -> TEXT .)
     IDENTIFIER      reduce using rule 13 (expression -> TEXT .)
     NUMBER          reduce using rule 13 (expression -> TEXT .)
+    CMD_RADICAL     reduce using rule 13 (expression -> TEXT .)
+    CMD_SUP         reduce using rule 13 (expression -> TEXT .)
+    CMD_SUB         reduce using rule 13 (expression -> TEXT .)
+    CMD_ALIGN_INC   reduce using rule 13 (expression -> TEXT .)
+    CMD_ALIGN_DEC   reduce using rule 13 (expression -> TEXT .)
     TEXT            reduce using rule 13 (expression -> TEXT .)
     OPERATOR        reduce using rule 13 (expression -> TEXT .)
     COMMA           reduce using rule 13 (expression -> TEXT .)
@@ -183,14 +234,19 @@ state 8
     RPAREN          reduce using rule 13 (expression -> TEXT .)
 
 
-state 9
+state 14
 
     (14) expression -> OPERATOR .
 
     RBRACE          reduce using rule 14 (expression -> OPERATOR .)
-    BACKSLASH       reduce using rule 14 (expression -> OPERATOR .)
+    CMD_FRACTION    reduce using rule 14 (expression -> OPERATOR .)
     IDENTIFIER      reduce using rule 14 (expression -> OPERATOR .)
     NUMBER          reduce using rule 14 (expression -> OPERATOR .)
+    CMD_RADICAL     reduce using rule 14 (expression -> OPERATOR .)
+    CMD_SUP         reduce using rule 14 (expression -> OPERATOR .)
+    CMD_SUB         reduce using rule 14 (expression -> OPERATOR .)
+    CMD_ALIGN_INC   reduce using rule 14 (expression -> OPERATOR .)
+    CMD_ALIGN_DEC   reduce using rule 14 (expression -> OPERATOR .)
     TEXT            reduce using rule 14 (expression -> OPERATOR .)
     OPERATOR        reduce using rule 14 (expression -> OPERATOR .)
     COMMA           reduce using rule 14 (expression -> OPERATOR .)
@@ -198,719 +254,802 @@ state 9
     RPAREN          reduce using rule 14 (expression -> OPERATOR .)
 
 
-state 10
+state 15
 
     (2) expression -> expression expression .
     (2) expression -> expression . expression
     (2) expression -> . expression expression
-    (3) expression -> . BACKSLASH F LPAREN expression COMMA expression RPAREN
-    (4) expression -> . BACKSLASH F LPAREN expression SEMICOLON expression RPAREN
+    (3) expression -> . CMD_FRACTION LPAREN expression COMMA expression RPAREN
+    (4) expression -> . CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN
     (5) expression -> . IDENTIFIER
     (6) expression -> . NUMBER
-    (7) expression -> . BACKSLASH R LPAREN expression COMMA expression RPAREN
-    (8) expression -> . BACKSLASH R LPAREN expression RPAREN
-    (9) expression -> . BACKSLASH S BACKSLASH UP LPAREN expression RPAREN
-    (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
-    (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
-    (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+    (7) expression -> . CMD_RADICAL LPAREN expression COMMA expression RPAREN
+    (8) expression -> . CMD_RADICAL LPAREN expression RPAREN
+    (9) expression -> . CMD_SUP LPAREN expression RPAREN
+    (10) expression -> . CMD_SUB LPAREN expression RPAREN
+    (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
+    (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
     (13) expression -> . TEXT
     (14) expression -> . OPERATOR
 
-  ! shift/reduce conflict for BACKSLASH resolved as shift
+  ! shift/reduce conflict for CMD_FRACTION resolved as shift
   ! shift/reduce conflict for IDENTIFIER resolved as shift
   ! shift/reduce conflict for NUMBER resolved as shift
+  ! shift/reduce conflict for CMD_RADICAL resolved as shift
+  ! shift/reduce conflict for CMD_SUP resolved as shift
+  ! shift/reduce conflict for CMD_SUB resolved as shift
+  ! shift/reduce conflict for CMD_ALIGN_INC resolved as shift
+  ! shift/reduce conflict for CMD_ALIGN_DEC resolved as shift
   ! shift/reduce conflict for TEXT resolved as shift
   ! shift/reduce conflict for OPERATOR resolved as shift
     RBRACE          reduce using rule 2 (expression -> expression expression .)
     COMMA           reduce using rule 2 (expression -> expression expression .)
     SEMICOLON       reduce using rule 2 (expression -> expression expression .)
     RPAREN          reduce using rule 2 (expression -> expression expression .)
-    BACKSLASH       shift and go to state 5
+    CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
-    TEXT            shift and go to state 8
-    OPERATOR        shift and go to state 9
+    CMD_RADICAL     shift and go to state 8
+    CMD_SUP         shift and go to state 9
+    CMD_SUB         shift and go to state 10
+    CMD_ALIGN_INC   shift and go to state 11
+    CMD_ALIGN_DEC   shift and go to state 12
+    TEXT            shift and go to state 13
+    OPERATOR        shift and go to state 14
 
-  ! BACKSLASH       [ reduce using rule 2 (expression -> expression expression .) ]
+  ! CMD_FRACTION    [ reduce using rule 2 (expression -> expression expression .) ]
   ! IDENTIFIER      [ reduce using rule 2 (expression -> expression expression .) ]
   ! NUMBER          [ reduce using rule 2 (expression -> expression expression .) ]
+  ! CMD_RADICAL     [ reduce using rule 2 (expression -> expression expression .) ]
+  ! CMD_SUP         [ reduce using rule 2 (expression -> expression expression .) ]
+  ! CMD_SUB         [ reduce using rule 2 (expression -> expression expression .) ]
+  ! CMD_ALIGN_INC   [ reduce using rule 2 (expression -> expression expression .) ]
+  ! CMD_ALIGN_DEC   [ reduce using rule 2 (expression -> expression expression .) ]
   ! TEXT            [ reduce using rule 2 (expression -> expression expression .) ]
   ! OPERATOR        [ reduce using rule 2 (expression -> expression expression .) ]
 
-    expression                     shift and go to state 10
+    expression                     shift and go to state 15
 
-state 11
+state 16
 
     (1) eq_field -> LBRACE EQ expression RBRACE .
 
     $end            reduce using rule 1 (eq_field -> LBRACE EQ expression RBRACE .)
 
 
-state 12
-
-    (3) expression -> BACKSLASH F . LPAREN expression COMMA expression RPAREN
-    (4) expression -> BACKSLASH F . LPAREN expression SEMICOLON expression RPAREN
-
-    LPAREN          shift and go to state 15
-
-
-state 13
-
-    (7) expression -> BACKSLASH R . LPAREN expression COMMA expression RPAREN
-    (8) expression -> BACKSLASH R . LPAREN expression RPAREN
-
-    LPAREN          shift and go to state 16
-
-
-state 14
-
-    (9) expression -> BACKSLASH S . BACKSLASH UP LPAREN expression RPAREN
-    (10) expression -> BACKSLASH S . BACKSLASH DO LPAREN expression RPAREN
-    (11) expression -> BACKSLASH S . BACKSLASH AI LPAREN expression RPAREN
-    (12) expression -> BACKSLASH S . BACKSLASH DI LPAREN expression RPAREN
-
-    BACKSLASH       shift and go to state 17
-
-
-state 15
-
-    (3) expression -> BACKSLASH F LPAREN . expression COMMA expression RPAREN
-    (4) expression -> BACKSLASH F LPAREN . expression SEMICOLON expression RPAREN
-    (2) expression -> . expression expression
-    (3) expression -> . BACKSLASH F LPAREN expression COMMA expression RPAREN
-    (4) expression -> . BACKSLASH F LPAREN expression SEMICOLON expression RPAREN
-    (5) expression -> . IDENTIFIER
-    (6) expression -> . NUMBER
-    (7) expression -> . BACKSLASH R LPAREN expression COMMA expression RPAREN
-    (8) expression -> . BACKSLASH R LPAREN expression RPAREN
-    (9) expression -> . BACKSLASH S BACKSLASH UP LPAREN expression RPAREN
-    (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
-    (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
-    (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
-    (13) expression -> . TEXT
-    (14) expression -> . OPERATOR
-
-    BACKSLASH       shift and go to state 5
-    IDENTIFIER      shift and go to state 6
-    NUMBER          shift and go to state 7
-    TEXT            shift and go to state 8
-    OPERATOR        shift and go to state 9
-
-    expression                     shift and go to state 18
-
-state 16
-
-    (7) expression -> BACKSLASH R LPAREN . expression COMMA expression RPAREN
-    (8) expression -> BACKSLASH R LPAREN . expression RPAREN
-    (2) expression -> . expression expression
-    (3) expression -> . BACKSLASH F LPAREN expression COMMA expression RPAREN
-    (4) expression -> . BACKSLASH F LPAREN expression SEMICOLON expression RPAREN
-    (5) expression -> . IDENTIFIER
-    (6) expression -> . NUMBER
-    (7) expression -> . BACKSLASH R LPAREN expression COMMA expression RPAREN
-    (8) expression -> . BACKSLASH R LPAREN expression RPAREN
-    (9) expression -> . BACKSLASH S BACKSLASH UP LPAREN expression RPAREN
-    (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
-    (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
-    (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
-    (13) expression -> . TEXT
-    (14) expression -> . OPERATOR
-
-    BACKSLASH       shift and go to state 5
-    IDENTIFIER      shift and go to state 6
-    NUMBER          shift and go to state 7
-    TEXT            shift and go to state 8
-    OPERATOR        shift and go to state 9
-
-    expression                     shift and go to state 19
-
 state 17
 
-    (9) expression -> BACKSLASH S BACKSLASH . UP LPAREN expression RPAREN
-    (10) expression -> BACKSLASH S BACKSLASH . DO LPAREN expression RPAREN
-    (11) expression -> BACKSLASH S BACKSLASH . AI LPAREN expression RPAREN
-    (12) expression -> BACKSLASH S BACKSLASH . DI LPAREN expression RPAREN
+    (3) expression -> CMD_FRACTION LPAREN . expression COMMA expression RPAREN
+    (4) expression -> CMD_FRACTION LPAREN . expression SEMICOLON expression RPAREN
+    (2) expression -> . expression expression
+    (3) expression -> . CMD_FRACTION LPAREN expression COMMA expression RPAREN
+    (4) expression -> . CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN
+    (5) expression -> . IDENTIFIER
+    (6) expression -> . NUMBER
+    (7) expression -> . CMD_RADICAL LPAREN expression COMMA expression RPAREN
+    (8) expression -> . CMD_RADICAL LPAREN expression RPAREN
+    (9) expression -> . CMD_SUP LPAREN expression RPAREN
+    (10) expression -> . CMD_SUB LPAREN expression RPAREN
+    (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
+    (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
+    (13) expression -> . TEXT
+    (14) expression -> . OPERATOR
 
-    UP              shift and go to state 20
-    DO              shift and go to state 21
-    AI              shift and go to state 22
-    DI              shift and go to state 23
+    CMD_FRACTION    shift and go to state 5
+    IDENTIFIER      shift and go to state 6
+    NUMBER          shift and go to state 7
+    CMD_RADICAL     shift and go to state 8
+    CMD_SUP         shift and go to state 9
+    CMD_SUB         shift and go to state 10
+    CMD_ALIGN_INC   shift and go to state 11
+    CMD_ALIGN_DEC   shift and go to state 12
+    TEXT            shift and go to state 13
+    OPERATOR        shift and go to state 14
 
+    expression                     shift and go to state 23
 
 state 18
 
-    (3) expression -> BACKSLASH F LPAREN expression . COMMA expression RPAREN
-    (4) expression -> BACKSLASH F LPAREN expression . SEMICOLON expression RPAREN
-    (2) expression -> expression . expression
+    (7) expression -> CMD_RADICAL LPAREN . expression COMMA expression RPAREN
+    (8) expression -> CMD_RADICAL LPAREN . expression RPAREN
     (2) expression -> . expression expression
-    (3) expression -> . BACKSLASH F LPAREN expression COMMA expression RPAREN
-    (4) expression -> . BACKSLASH F LPAREN expression SEMICOLON expression RPAREN
+    (3) expression -> . CMD_FRACTION LPAREN expression COMMA expression RPAREN
+    (4) expression -> . CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN
     (5) expression -> . IDENTIFIER
     (6) expression -> . NUMBER
-    (7) expression -> . BACKSLASH R LPAREN expression COMMA expression RPAREN
-    (8) expression -> . BACKSLASH R LPAREN expression RPAREN
-    (9) expression -> . BACKSLASH S BACKSLASH UP LPAREN expression RPAREN
-    (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
-    (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
-    (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+    (7) expression -> . CMD_RADICAL LPAREN expression COMMA expression RPAREN
+    (8) expression -> . CMD_RADICAL LPAREN expression RPAREN
+    (9) expression -> . CMD_SUP LPAREN expression RPAREN
+    (10) expression -> . CMD_SUB LPAREN expression RPAREN
+    (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
+    (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
     (13) expression -> . TEXT
     (14) expression -> . OPERATOR
 
-    COMMA           shift and go to state 24
-    SEMICOLON       shift and go to state 25
-    BACKSLASH       shift and go to state 5
+    CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
-    TEXT            shift and go to state 8
-    OPERATOR        shift and go to state 9
+    CMD_RADICAL     shift and go to state 8
+    CMD_SUP         shift and go to state 9
+    CMD_SUB         shift and go to state 10
+    CMD_ALIGN_INC   shift and go to state 11
+    CMD_ALIGN_DEC   shift and go to state 12
+    TEXT            shift and go to state 13
+    OPERATOR        shift and go to state 14
 
-    expression                     shift and go to state 10
+    expression                     shift and go to state 24
 
 state 19
 
-    (7) expression -> BACKSLASH R LPAREN expression . COMMA expression RPAREN
-    (8) expression -> BACKSLASH R LPAREN expression . RPAREN
-    (2) expression -> expression . expression
+    (9) expression -> CMD_SUP LPAREN . expression RPAREN
     (2) expression -> . expression expression
-    (3) expression -> . BACKSLASH F LPAREN expression COMMA expression RPAREN
-    (4) expression -> . BACKSLASH F LPAREN expression SEMICOLON expression RPAREN
+    (3) expression -> . CMD_FRACTION LPAREN expression COMMA expression RPAREN
+    (4) expression -> . CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN
     (5) expression -> . IDENTIFIER
     (6) expression -> . NUMBER
-    (7) expression -> . BACKSLASH R LPAREN expression COMMA expression RPAREN
-    (8) expression -> . BACKSLASH R LPAREN expression RPAREN
-    (9) expression -> . BACKSLASH S BACKSLASH UP LPAREN expression RPAREN
-    (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
-    (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
-    (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+    (7) expression -> . CMD_RADICAL LPAREN expression COMMA expression RPAREN
+    (8) expression -> . CMD_RADICAL LPAREN expression RPAREN
+    (9) expression -> . CMD_SUP LPAREN expression RPAREN
+    (10) expression -> . CMD_SUB LPAREN expression RPAREN
+    (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
+    (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
     (13) expression -> . TEXT
     (14) expression -> . OPERATOR
 
-    COMMA           shift and go to state 26
-    RPAREN          shift and go to state 27
-    BACKSLASH       shift and go to state 5
+    CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
-    TEXT            shift and go to state 8
-    OPERATOR        shift and go to state 9
+    CMD_RADICAL     shift and go to state 8
+    CMD_SUP         shift and go to state 9
+    CMD_SUB         shift and go to state 10
+    CMD_ALIGN_INC   shift and go to state 11
+    CMD_ALIGN_DEC   shift and go to state 12
+    TEXT            shift and go to state 13
+    OPERATOR        shift and go to state 14
 
-    expression                     shift and go to state 10
+    expression                     shift and go to state 25
 
 state 20
 
-    (9) expression -> BACKSLASH S BACKSLASH UP . LPAREN expression RPAREN
+    (10) expression -> CMD_SUB LPAREN . expression RPAREN
+    (2) expression -> . expression expression
+    (3) expression -> . CMD_FRACTION LPAREN expression COMMA expression RPAREN
+    (4) expression -> . CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN
+    (5) expression -> . IDENTIFIER
+    (6) expression -> . NUMBER
+    (7) expression -> . CMD_RADICAL LPAREN expression COMMA expression RPAREN
+    (8) expression -> . CMD_RADICAL LPAREN expression RPAREN
+    (9) expression -> . CMD_SUP LPAREN expression RPAREN
+    (10) expression -> . CMD_SUB LPAREN expression RPAREN
+    (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
+    (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
+    (13) expression -> . TEXT
+    (14) expression -> . OPERATOR
 
-    LPAREN          shift and go to state 28
+    CMD_FRACTION    shift and go to state 5
+    IDENTIFIER      shift and go to state 6
+    NUMBER          shift and go to state 7
+    CMD_RADICAL     shift and go to state 8
+    CMD_SUP         shift and go to state 9
+    CMD_SUB         shift and go to state 10
+    CMD_ALIGN_INC   shift and go to state 11
+    CMD_ALIGN_DEC   shift and go to state 12
+    TEXT            shift and go to state 13
+    OPERATOR        shift and go to state 14
 
+    expression                     shift and go to state 26
 
 state 21
 
-    (10) expression -> BACKSLASH S BACKSLASH DO . LPAREN expression RPAREN
+    (11) expression -> CMD_ALIGN_INC LPAREN . expression RPAREN
+    (2) expression -> . expression expression
+    (3) expression -> . CMD_FRACTION LPAREN expression COMMA expression RPAREN
+    (4) expression -> . CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN
+    (5) expression -> . IDENTIFIER
+    (6) expression -> . NUMBER
+    (7) expression -> . CMD_RADICAL LPAREN expression COMMA expression RPAREN
+    (8) expression -> . CMD_RADICAL LPAREN expression RPAREN
+    (9) expression -> . CMD_SUP LPAREN expression RPAREN
+    (10) expression -> . CMD_SUB LPAREN expression RPAREN
+    (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
+    (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
+    (13) expression -> . TEXT
+    (14) expression -> . OPERATOR
 
-    LPAREN          shift and go to state 29
+    CMD_FRACTION    shift and go to state 5
+    IDENTIFIER      shift and go to state 6
+    NUMBER          shift and go to state 7
+    CMD_RADICAL     shift and go to state 8
+    CMD_SUP         shift and go to state 9
+    CMD_SUB         shift and go to state 10
+    CMD_ALIGN_INC   shift and go to state 11
+    CMD_ALIGN_DEC   shift and go to state 12
+    TEXT            shift and go to state 13
+    OPERATOR        shift and go to state 14
 
+    expression                     shift and go to state 27
 
 state 22
 
-    (11) expression -> BACKSLASH S BACKSLASH AI . LPAREN expression RPAREN
+    (12) expression -> CMD_ALIGN_DEC LPAREN . expression RPAREN
+    (2) expression -> . expression expression
+    (3) expression -> . CMD_FRACTION LPAREN expression COMMA expression RPAREN
+    (4) expression -> . CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN
+    (5) expression -> . IDENTIFIER
+    (6) expression -> . NUMBER
+    (7) expression -> . CMD_RADICAL LPAREN expression COMMA expression RPAREN
+    (8) expression -> . CMD_RADICAL LPAREN expression RPAREN
+    (9) expression -> . CMD_SUP LPAREN expression RPAREN
+    (10) expression -> . CMD_SUB LPAREN expression RPAREN
+    (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
+    (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
+    (13) expression -> . TEXT
+    (14) expression -> . OPERATOR
 
-    LPAREN          shift and go to state 30
+    CMD_FRACTION    shift and go to state 5
+    IDENTIFIER      shift and go to state 6
+    NUMBER          shift and go to state 7
+    CMD_RADICAL     shift and go to state 8
+    CMD_SUP         shift and go to state 9
+    CMD_SUB         shift and go to state 10
+    CMD_ALIGN_INC   shift and go to state 11
+    CMD_ALIGN_DEC   shift and go to state 12
+    TEXT            shift and go to state 13
+    OPERATOR        shift and go to state 14
 
+    expression                     shift and go to state 28
 
 state 23
 
-    (12) expression -> BACKSLASH S BACKSLASH DI . LPAREN expression RPAREN
+    (3) expression -> CMD_FRACTION LPAREN expression . COMMA expression RPAREN
+    (4) expression -> CMD_FRACTION LPAREN expression . SEMICOLON expression RPAREN
+    (2) expression -> expression . expression
+    (2) expression -> . expression expression
+    (3) expression -> . CMD_FRACTION LPAREN expression COMMA expression RPAREN
+    (4) expression -> . CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN
+    (5) expression -> . IDENTIFIER
+    (6) expression -> . NUMBER
+    (7) expression -> . CMD_RADICAL LPAREN expression COMMA expression RPAREN
+    (8) expression -> . CMD_RADICAL LPAREN expression RPAREN
+    (9) expression -> . CMD_SUP LPAREN expression RPAREN
+    (10) expression -> . CMD_SUB LPAREN expression RPAREN
+    (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
+    (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
+    (13) expression -> . TEXT
+    (14) expression -> . OPERATOR
 
-    LPAREN          shift and go to state 31
+    COMMA           shift and go to state 29
+    SEMICOLON       shift and go to state 30
+    CMD_FRACTION    shift and go to state 5
+    IDENTIFIER      shift and go to state 6
+    NUMBER          shift and go to state 7
+    CMD_RADICAL     shift and go to state 8
+    CMD_SUP         shift and go to state 9
+    CMD_SUB         shift and go to state 10
+    CMD_ALIGN_INC   shift and go to state 11
+    CMD_ALIGN_DEC   shift and go to state 12
+    TEXT            shift and go to state 13
+    OPERATOR        shift and go to state 14
 
+    expression                     shift and go to state 15
 
 state 24
 
-    (3) expression -> BACKSLASH F LPAREN expression COMMA . expression RPAREN
+    (7) expression -> CMD_RADICAL LPAREN expression . COMMA expression RPAREN
+    (8) expression -> CMD_RADICAL LPAREN expression . RPAREN
+    (2) expression -> expression . expression
     (2) expression -> . expression expression
-    (3) expression -> . BACKSLASH F LPAREN expression COMMA expression RPAREN
-    (4) expression -> . BACKSLASH F LPAREN expression SEMICOLON expression RPAREN
+    (3) expression -> . CMD_FRACTION LPAREN expression COMMA expression RPAREN
+    (4) expression -> . CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN
     (5) expression -> . IDENTIFIER
     (6) expression -> . NUMBER
-    (7) expression -> . BACKSLASH R LPAREN expression COMMA expression RPAREN
-    (8) expression -> . BACKSLASH R LPAREN expression RPAREN
-    (9) expression -> . BACKSLASH S BACKSLASH UP LPAREN expression RPAREN
-    (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
-    (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
-    (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+    (7) expression -> . CMD_RADICAL LPAREN expression COMMA expression RPAREN
+    (8) expression -> . CMD_RADICAL LPAREN expression RPAREN
+    (9) expression -> . CMD_SUP LPAREN expression RPAREN
+    (10) expression -> . CMD_SUB LPAREN expression RPAREN
+    (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
+    (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
     (13) expression -> . TEXT
     (14) expression -> . OPERATOR
 
-    BACKSLASH       shift and go to state 5
+    COMMA           shift and go to state 31
+    RPAREN          shift and go to state 32
+    CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
-    TEXT            shift and go to state 8
-    OPERATOR        shift and go to state 9
+    CMD_RADICAL     shift and go to state 8
+    CMD_SUP         shift and go to state 9
+    CMD_SUB         shift and go to state 10
+    CMD_ALIGN_INC   shift and go to state 11
+    CMD_ALIGN_DEC   shift and go to state 12
+    TEXT            shift and go to state 13
+    OPERATOR        shift and go to state 14
 
-    expression                     shift and go to state 32
+    expression                     shift and go to state 15
 
 state 25
 
-    (4) expression -> BACKSLASH F LPAREN expression SEMICOLON . expression RPAREN
+    (9) expression -> CMD_SUP LPAREN expression . RPAREN
+    (2) expression -> expression . expression
     (2) expression -> . expression expression
-    (3) expression -> . BACKSLASH F LPAREN expression COMMA expression RPAREN
-    (4) expression -> . BACKSLASH F LPAREN expression SEMICOLON expression RPAREN
+    (3) expression -> . CMD_FRACTION LPAREN expression COMMA expression RPAREN
+    (4) expression -> . CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN
     (5) expression -> . IDENTIFIER
     (6) expression -> . NUMBER
-    (7) expression -> . BACKSLASH R LPAREN expression COMMA expression RPAREN
-    (8) expression -> . BACKSLASH R LPAREN expression RPAREN
-    (9) expression -> . BACKSLASH S BACKSLASH UP LPAREN expression RPAREN
-    (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
-    (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
-    (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+    (7) expression -> . CMD_RADICAL LPAREN expression COMMA expression RPAREN
+    (8) expression -> . CMD_RADICAL LPAREN expression RPAREN
+    (9) expression -> . CMD_SUP LPAREN expression RPAREN
+    (10) expression -> . CMD_SUB LPAREN expression RPAREN
+    (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
+    (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
     (13) expression -> . TEXT
     (14) expression -> . OPERATOR
 
-    BACKSLASH       shift and go to state 5
+    RPAREN          shift and go to state 33
+    CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
-    TEXT            shift and go to state 8
-    OPERATOR        shift and go to state 9
+    CMD_RADICAL     shift and go to state 8
+    CMD_SUP         shift and go to state 9
+    CMD_SUB         shift and go to state 10
+    CMD_ALIGN_INC   shift and go to state 11
+    CMD_ALIGN_DEC   shift and go to state 12
+    TEXT            shift and go to state 13
+    OPERATOR        shift and go to state 14
 
-    expression                     shift and go to state 33
+    expression                     shift and go to state 15
 
 state 26
 
-    (7) expression -> BACKSLASH R LPAREN expression COMMA . expression RPAREN
+    (10) expression -> CMD_SUB LPAREN expression . RPAREN
+    (2) expression -> expression . expression
     (2) expression -> . expression expression
-    (3) expression -> . BACKSLASH F LPAREN expression COMMA expression RPAREN
-    (4) expression -> . BACKSLASH F LPAREN expression SEMICOLON expression RPAREN
+    (3) expression -> . CMD_FRACTION LPAREN expression COMMA expression RPAREN
+    (4) expression -> . CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN
     (5) expression -> . IDENTIFIER
     (6) expression -> . NUMBER
-    (7) expression -> . BACKSLASH R LPAREN expression COMMA expression RPAREN
-    (8) expression -> . BACKSLASH R LPAREN expression RPAREN
-    (9) expression -> . BACKSLASH S BACKSLASH UP LPAREN expression RPAREN
-    (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
-    (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
-    (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+    (7) expression -> . CMD_RADICAL LPAREN expression COMMA expression RPAREN
+    (8) expression -> . CMD_RADICAL LPAREN expression RPAREN
+    (9) expression -> . CMD_SUP LPAREN expression RPAREN
+    (10) expression -> . CMD_SUB LPAREN expression RPAREN
+    (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
+    (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
     (13) expression -> . TEXT
     (14) expression -> . OPERATOR
 
-    BACKSLASH       shift and go to state 5
+    RPAREN          shift and go to state 34
+    CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
-    TEXT            shift and go to state 8
-    OPERATOR        shift and go to state 9
+    CMD_RADICAL     shift and go to state 8
+    CMD_SUP         shift and go to state 9
+    CMD_SUB         shift and go to state 10
+    CMD_ALIGN_INC   shift and go to state 11
+    CMD_ALIGN_DEC   shift and go to state 12
+    TEXT            shift and go to state 13
+    OPERATOR        shift and go to state 14
 
-    expression                     shift and go to state 34
+    expression                     shift and go to state 15
 
 state 27
 
-    (8) expression -> BACKSLASH R LPAREN expression RPAREN .
+    (11) expression -> CMD_ALIGN_INC LPAREN expression . RPAREN
+    (2) expression -> expression . expression
+    (2) expression -> . expression expression
+    (3) expression -> . CMD_FRACTION LPAREN expression COMMA expression RPAREN
+    (4) expression -> . CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN
+    (5) expression -> . IDENTIFIER
+    (6) expression -> . NUMBER
+    (7) expression -> . CMD_RADICAL LPAREN expression COMMA expression RPAREN
+    (8) expression -> . CMD_RADICAL LPAREN expression RPAREN
+    (9) expression -> . CMD_SUP LPAREN expression RPAREN
+    (10) expression -> . CMD_SUB LPAREN expression RPAREN
+    (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
+    (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
+    (13) expression -> . TEXT
+    (14) expression -> . OPERATOR
 
-    RBRACE          reduce using rule 8 (expression -> BACKSLASH R LPAREN expression RPAREN .)
-    BACKSLASH       reduce using rule 8 (expression -> BACKSLASH R LPAREN expression RPAREN .)
-    IDENTIFIER      reduce using rule 8 (expression -> BACKSLASH R LPAREN expression RPAREN .)
-    NUMBER          reduce using rule 8 (expression -> BACKSLASH R LPAREN expression RPAREN .)
-    TEXT            reduce using rule 8 (expression -> BACKSLASH R LPAREN expression RPAREN .)
-    OPERATOR        reduce using rule 8 (expression -> BACKSLASH R LPAREN expression RPAREN .)
-    COMMA           reduce using rule 8 (expression -> BACKSLASH R LPAREN expression RPAREN .)
-    SEMICOLON       reduce using rule 8 (expression -> BACKSLASH R LPAREN expression RPAREN .)
-    RPAREN          reduce using rule 8 (expression -> BACKSLASH R LPAREN expression RPAREN .)
+    RPAREN          shift and go to state 35
+    CMD_FRACTION    shift and go to state 5
+    IDENTIFIER      shift and go to state 6
+    NUMBER          shift and go to state 7
+    CMD_RADICAL     shift and go to state 8
+    CMD_SUP         shift and go to state 9
+    CMD_SUB         shift and go to state 10
+    CMD_ALIGN_INC   shift and go to state 11
+    CMD_ALIGN_DEC   shift and go to state 12
+    TEXT            shift and go to state 13
+    OPERATOR        shift and go to state 14
 
+    expression                     shift and go to state 15
 
 state 28
 
-    (9) expression -> BACKSLASH S BACKSLASH UP LPAREN . expression RPAREN
+    (12) expression -> CMD_ALIGN_DEC LPAREN expression . RPAREN
+    (2) expression -> expression . expression
     (2) expression -> . expression expression
-    (3) expression -> . BACKSLASH F LPAREN expression COMMA expression RPAREN
-    (4) expression -> . BACKSLASH F LPAREN expression SEMICOLON expression RPAREN
+    (3) expression -> . CMD_FRACTION LPAREN expression COMMA expression RPAREN
+    (4) expression -> . CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN
     (5) expression -> . IDENTIFIER
     (6) expression -> . NUMBER
-    (7) expression -> . BACKSLASH R LPAREN expression COMMA expression RPAREN
-    (8) expression -> . BACKSLASH R LPAREN expression RPAREN
-    (9) expression -> . BACKSLASH S BACKSLASH UP LPAREN expression RPAREN
-    (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
-    (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
-    (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+    (7) expression -> . CMD_RADICAL LPAREN expression COMMA expression RPAREN
+    (8) expression -> . CMD_RADICAL LPAREN expression RPAREN
+    (9) expression -> . CMD_SUP LPAREN expression RPAREN
+    (10) expression -> . CMD_SUB LPAREN expression RPAREN
+    (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
+    (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
     (13) expression -> . TEXT
     (14) expression -> . OPERATOR
 
-    BACKSLASH       shift and go to state 5
+    RPAREN          shift and go to state 36
+    CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
-    TEXT            shift and go to state 8
-    OPERATOR        shift and go to state 9
+    CMD_RADICAL     shift and go to state 8
+    CMD_SUP         shift and go to state 9
+    CMD_SUB         shift and go to state 10
+    CMD_ALIGN_INC   shift and go to state 11
+    CMD_ALIGN_DEC   shift and go to state 12
+    TEXT            shift and go to state 13
+    OPERATOR        shift and go to state 14
 
-    expression                     shift and go to state 35
+    expression                     shift and go to state 15
 
 state 29
 
-    (10) expression -> BACKSLASH S BACKSLASH DO LPAREN . expression RPAREN
+    (3) expression -> CMD_FRACTION LPAREN expression COMMA . expression RPAREN
     (2) expression -> . expression expression
-    (3) expression -> . BACKSLASH F LPAREN expression COMMA expression RPAREN
-    (4) expression -> . BACKSLASH F LPAREN expression SEMICOLON expression RPAREN
+    (3) expression -> . CMD_FRACTION LPAREN expression COMMA expression RPAREN
+    (4) expression -> . CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN
     (5) expression -> . IDENTIFIER
     (6) expression -> . NUMBER
-    (7) expression -> . BACKSLASH R LPAREN expression COMMA expression RPAREN
-    (8) expression -> . BACKSLASH R LPAREN expression RPAREN
-    (9) expression -> . BACKSLASH S BACKSLASH UP LPAREN expression RPAREN
-    (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
-    (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
-    (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+    (7) expression -> . CMD_RADICAL LPAREN expression COMMA expression RPAREN
+    (8) expression -> . CMD_RADICAL LPAREN expression RPAREN
+    (9) expression -> . CMD_SUP LPAREN expression RPAREN
+    (10) expression -> . CMD_SUB LPAREN expression RPAREN
+    (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
+    (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
     (13) expression -> . TEXT
     (14) expression -> . OPERATOR
 
-    BACKSLASH       shift and go to state 5
+    CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
-    TEXT            shift and go to state 8
-    OPERATOR        shift and go to state 9
-
-    expression                     shift and go to state 36
-
-state 30
-
-    (11) expression -> BACKSLASH S BACKSLASH AI LPAREN . expression RPAREN
-    (2) expression -> . expression expression
-    (3) expression -> . BACKSLASH F LPAREN expression COMMA expression RPAREN
-    (4) expression -> . BACKSLASH F LPAREN expression SEMICOLON expression RPAREN
-    (5) expression -> . IDENTIFIER
-    (6) expression -> . NUMBER
-    (7) expression -> . BACKSLASH R LPAREN expression COMMA expression RPAREN
-    (8) expression -> . BACKSLASH R LPAREN expression RPAREN
-    (9) expression -> . BACKSLASH S BACKSLASH UP LPAREN expression RPAREN
-    (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
-    (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
-    (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
-    (13) expression -> . TEXT
-    (14) expression -> . OPERATOR
-
-    BACKSLASH       shift and go to state 5
-    IDENTIFIER      shift and go to state 6
-    NUMBER          shift and go to state 7
-    TEXT            shift and go to state 8
-    OPERATOR        shift and go to state 9
+    CMD_RADICAL     shift and go to state 8
+    CMD_SUP         shift and go to state 9
+    CMD_SUB         shift and go to state 10
+    CMD_ALIGN_INC   shift and go to state 11
+    CMD_ALIGN_DEC   shift and go to state 12
+    TEXT            shift and go to state 13
+    OPERATOR        shift and go to state 14
 
     expression                     shift and go to state 37
 
-state 31
+state 30
 
-    (12) expression -> BACKSLASH S BACKSLASH DI LPAREN . expression RPAREN
+    (4) expression -> CMD_FRACTION LPAREN expression SEMICOLON . expression RPAREN
     (2) expression -> . expression expression
-    (3) expression -> . BACKSLASH F LPAREN expression COMMA expression RPAREN
-    (4) expression -> . BACKSLASH F LPAREN expression SEMICOLON expression RPAREN
+    (3) expression -> . CMD_FRACTION LPAREN expression COMMA expression RPAREN
+    (4) expression -> . CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN
     (5) expression -> . IDENTIFIER
     (6) expression -> . NUMBER
-    (7) expression -> . BACKSLASH R LPAREN expression COMMA expression RPAREN
-    (8) expression -> . BACKSLASH R LPAREN expression RPAREN
-    (9) expression -> . BACKSLASH S BACKSLASH UP LPAREN expression RPAREN
-    (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
-    (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
-    (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+    (7) expression -> . CMD_RADICAL LPAREN expression COMMA expression RPAREN
+    (8) expression -> . CMD_RADICAL LPAREN expression RPAREN
+    (9) expression -> . CMD_SUP LPAREN expression RPAREN
+    (10) expression -> . CMD_SUB LPAREN expression RPAREN
+    (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
+    (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
     (13) expression -> . TEXT
     (14) expression -> . OPERATOR
 
-    BACKSLASH       shift and go to state 5
+    CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
-    TEXT            shift and go to state 8
-    OPERATOR        shift and go to state 9
+    CMD_RADICAL     shift and go to state 8
+    CMD_SUP         shift and go to state 9
+    CMD_SUB         shift and go to state 10
+    CMD_ALIGN_INC   shift and go to state 11
+    CMD_ALIGN_DEC   shift and go to state 12
+    TEXT            shift and go to state 13
+    OPERATOR        shift and go to state 14
 
     expression                     shift and go to state 38
 
-state 32
+state 31
 
-    (3) expression -> BACKSLASH F LPAREN expression COMMA expression . RPAREN
-    (2) expression -> expression . expression
+    (7) expression -> CMD_RADICAL LPAREN expression COMMA . expression RPAREN
     (2) expression -> . expression expression
-    (3) expression -> . BACKSLASH F LPAREN expression COMMA expression RPAREN
-    (4) expression -> . BACKSLASH F LPAREN expression SEMICOLON expression RPAREN
+    (3) expression -> . CMD_FRACTION LPAREN expression COMMA expression RPAREN
+    (4) expression -> . CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN
     (5) expression -> . IDENTIFIER
     (6) expression -> . NUMBER
-    (7) expression -> . BACKSLASH R LPAREN expression COMMA expression RPAREN
-    (8) expression -> . BACKSLASH R LPAREN expression RPAREN
-    (9) expression -> . BACKSLASH S BACKSLASH UP LPAREN expression RPAREN
-    (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
-    (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
-    (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+    (7) expression -> . CMD_RADICAL LPAREN expression COMMA expression RPAREN
+    (8) expression -> . CMD_RADICAL LPAREN expression RPAREN
+    (9) expression -> . CMD_SUP LPAREN expression RPAREN
+    (10) expression -> . CMD_SUB LPAREN expression RPAREN
+    (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
+    (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
     (13) expression -> . TEXT
     (14) expression -> . OPERATOR
 
-    RPAREN          shift and go to state 39
-    BACKSLASH       shift and go to state 5
+    CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
-    TEXT            shift and go to state 8
-    OPERATOR        shift and go to state 9
+    CMD_RADICAL     shift and go to state 8
+    CMD_SUP         shift and go to state 9
+    CMD_SUB         shift and go to state 10
+    CMD_ALIGN_INC   shift and go to state 11
+    CMD_ALIGN_DEC   shift and go to state 12
+    TEXT            shift and go to state 13
+    OPERATOR        shift and go to state 14
 
-    expression                     shift and go to state 10
+    expression                     shift and go to state 39
+
+state 32
+
+    (8) expression -> CMD_RADICAL LPAREN expression RPAREN .
+
+    RBRACE          reduce using rule 8 (expression -> CMD_RADICAL LPAREN expression RPAREN .)
+    CMD_FRACTION    reduce using rule 8 (expression -> CMD_RADICAL LPAREN expression RPAREN .)
+    IDENTIFIER      reduce using rule 8 (expression -> CMD_RADICAL LPAREN expression RPAREN .)
+    NUMBER          reduce using rule 8 (expression -> CMD_RADICAL LPAREN expression RPAREN .)
+    CMD_RADICAL     reduce using rule 8 (expression -> CMD_RADICAL LPAREN expression RPAREN .)
+    CMD_SUP         reduce using rule 8 (expression -> CMD_RADICAL LPAREN expression RPAREN .)
+    CMD_SUB         reduce using rule 8 (expression -> CMD_RADICAL LPAREN expression RPAREN .)
+    CMD_ALIGN_INC   reduce using rule 8 (expression -> CMD_RADICAL LPAREN expression RPAREN .)
+    CMD_ALIGN_DEC   reduce using rule 8 (expression -> CMD_RADICAL LPAREN expression RPAREN .)
+    TEXT            reduce using rule 8 (expression -> CMD_RADICAL LPAREN expression RPAREN .)
+    OPERATOR        reduce using rule 8 (expression -> CMD_RADICAL LPAREN expression RPAREN .)
+    COMMA           reduce using rule 8 (expression -> CMD_RADICAL LPAREN expression RPAREN .)
+    SEMICOLON       reduce using rule 8 (expression -> CMD_RADICAL LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 8 (expression -> CMD_RADICAL LPAREN expression RPAREN .)
+
 
 state 33
 
-    (4) expression -> BACKSLASH F LPAREN expression SEMICOLON expression . RPAREN
+    (9) expression -> CMD_SUP LPAREN expression RPAREN .
+
+    RBRACE          reduce using rule 9 (expression -> CMD_SUP LPAREN expression RPAREN .)
+    CMD_FRACTION    reduce using rule 9 (expression -> CMD_SUP LPAREN expression RPAREN .)
+    IDENTIFIER      reduce using rule 9 (expression -> CMD_SUP LPAREN expression RPAREN .)
+    NUMBER          reduce using rule 9 (expression -> CMD_SUP LPAREN expression RPAREN .)
+    CMD_RADICAL     reduce using rule 9 (expression -> CMD_SUP LPAREN expression RPAREN .)
+    CMD_SUP         reduce using rule 9 (expression -> CMD_SUP LPAREN expression RPAREN .)
+    CMD_SUB         reduce using rule 9 (expression -> CMD_SUP LPAREN expression RPAREN .)
+    CMD_ALIGN_INC   reduce using rule 9 (expression -> CMD_SUP LPAREN expression RPAREN .)
+    CMD_ALIGN_DEC   reduce using rule 9 (expression -> CMD_SUP LPAREN expression RPAREN .)
+    TEXT            reduce using rule 9 (expression -> CMD_SUP LPAREN expression RPAREN .)
+    OPERATOR        reduce using rule 9 (expression -> CMD_SUP LPAREN expression RPAREN .)
+    COMMA           reduce using rule 9 (expression -> CMD_SUP LPAREN expression RPAREN .)
+    SEMICOLON       reduce using rule 9 (expression -> CMD_SUP LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 9 (expression -> CMD_SUP LPAREN expression RPAREN .)
+
+
+state 34
+
+    (10) expression -> CMD_SUB LPAREN expression RPAREN .
+
+    RBRACE          reduce using rule 10 (expression -> CMD_SUB LPAREN expression RPAREN .)
+    CMD_FRACTION    reduce using rule 10 (expression -> CMD_SUB LPAREN expression RPAREN .)
+    IDENTIFIER      reduce using rule 10 (expression -> CMD_SUB LPAREN expression RPAREN .)
+    NUMBER          reduce using rule 10 (expression -> CMD_SUB LPAREN expression RPAREN .)
+    CMD_RADICAL     reduce using rule 10 (expression -> CMD_SUB LPAREN expression RPAREN .)
+    CMD_SUP         reduce using rule 10 (expression -> CMD_SUB LPAREN expression RPAREN .)
+    CMD_SUB         reduce using rule 10 (expression -> CMD_SUB LPAREN expression RPAREN .)
+    CMD_ALIGN_INC   reduce using rule 10 (expression -> CMD_SUB LPAREN expression RPAREN .)
+    CMD_ALIGN_DEC   reduce using rule 10 (expression -> CMD_SUB LPAREN expression RPAREN .)
+    TEXT            reduce using rule 10 (expression -> CMD_SUB LPAREN expression RPAREN .)
+    OPERATOR        reduce using rule 10 (expression -> CMD_SUB LPAREN expression RPAREN .)
+    COMMA           reduce using rule 10 (expression -> CMD_SUB LPAREN expression RPAREN .)
+    SEMICOLON       reduce using rule 10 (expression -> CMD_SUB LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 10 (expression -> CMD_SUB LPAREN expression RPAREN .)
+
+
+state 35
+
+    (11) expression -> CMD_ALIGN_INC LPAREN expression RPAREN .
+
+    RBRACE          reduce using rule 11 (expression -> CMD_ALIGN_INC LPAREN expression RPAREN .)
+    CMD_FRACTION    reduce using rule 11 (expression -> CMD_ALIGN_INC LPAREN expression RPAREN .)
+    IDENTIFIER      reduce using rule 11 (expression -> CMD_ALIGN_INC LPAREN expression RPAREN .)
+    NUMBER          reduce using rule 11 (expression -> CMD_ALIGN_INC LPAREN expression RPAREN .)
+    CMD_RADICAL     reduce using rule 11 (expression -> CMD_ALIGN_INC LPAREN expression RPAREN .)
+    CMD_SUP         reduce using rule 11 (expression -> CMD_ALIGN_INC LPAREN expression RPAREN .)
+    CMD_SUB         reduce using rule 11 (expression -> CMD_ALIGN_INC LPAREN expression RPAREN .)
+    CMD_ALIGN_INC   reduce using rule 11 (expression -> CMD_ALIGN_INC LPAREN expression RPAREN .)
+    CMD_ALIGN_DEC   reduce using rule 11 (expression -> CMD_ALIGN_INC LPAREN expression RPAREN .)
+    TEXT            reduce using rule 11 (expression -> CMD_ALIGN_INC LPAREN expression RPAREN .)
+    OPERATOR        reduce using rule 11 (expression -> CMD_ALIGN_INC LPAREN expression RPAREN .)
+    COMMA           reduce using rule 11 (expression -> CMD_ALIGN_INC LPAREN expression RPAREN .)
+    SEMICOLON       reduce using rule 11 (expression -> CMD_ALIGN_INC LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 11 (expression -> CMD_ALIGN_INC LPAREN expression RPAREN .)
+
+
+state 36
+
+    (12) expression -> CMD_ALIGN_DEC LPAREN expression RPAREN .
+
+    RBRACE          reduce using rule 12 (expression -> CMD_ALIGN_DEC LPAREN expression RPAREN .)
+    CMD_FRACTION    reduce using rule 12 (expression -> CMD_ALIGN_DEC LPAREN expression RPAREN .)
+    IDENTIFIER      reduce using rule 12 (expression -> CMD_ALIGN_DEC LPAREN expression RPAREN .)
+    NUMBER          reduce using rule 12 (expression -> CMD_ALIGN_DEC LPAREN expression RPAREN .)
+    CMD_RADICAL     reduce using rule 12 (expression -> CMD_ALIGN_DEC LPAREN expression RPAREN .)
+    CMD_SUP         reduce using rule 12 (expression -> CMD_ALIGN_DEC LPAREN expression RPAREN .)
+    CMD_SUB         reduce using rule 12 (expression -> CMD_ALIGN_DEC LPAREN expression RPAREN .)
+    CMD_ALIGN_INC   reduce using rule 12 (expression -> CMD_ALIGN_DEC LPAREN expression RPAREN .)
+    CMD_ALIGN_DEC   reduce using rule 12 (expression -> CMD_ALIGN_DEC LPAREN expression RPAREN .)
+    TEXT            reduce using rule 12 (expression -> CMD_ALIGN_DEC LPAREN expression RPAREN .)
+    OPERATOR        reduce using rule 12 (expression -> CMD_ALIGN_DEC LPAREN expression RPAREN .)
+    COMMA           reduce using rule 12 (expression -> CMD_ALIGN_DEC LPAREN expression RPAREN .)
+    SEMICOLON       reduce using rule 12 (expression -> CMD_ALIGN_DEC LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 12 (expression -> CMD_ALIGN_DEC LPAREN expression RPAREN .)
+
+
+state 37
+
+    (3) expression -> CMD_FRACTION LPAREN expression COMMA expression . RPAREN
     (2) expression -> expression . expression
     (2) expression -> . expression expression
-    (3) expression -> . BACKSLASH F LPAREN expression COMMA expression RPAREN
-    (4) expression -> . BACKSLASH F LPAREN expression SEMICOLON expression RPAREN
+    (3) expression -> . CMD_FRACTION LPAREN expression COMMA expression RPAREN
+    (4) expression -> . CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN
     (5) expression -> . IDENTIFIER
     (6) expression -> . NUMBER
-    (7) expression -> . BACKSLASH R LPAREN expression COMMA expression RPAREN
-    (8) expression -> . BACKSLASH R LPAREN expression RPAREN
-    (9) expression -> . BACKSLASH S BACKSLASH UP LPAREN expression RPAREN
-    (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
-    (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
-    (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+    (7) expression -> . CMD_RADICAL LPAREN expression COMMA expression RPAREN
+    (8) expression -> . CMD_RADICAL LPAREN expression RPAREN
+    (9) expression -> . CMD_SUP LPAREN expression RPAREN
+    (10) expression -> . CMD_SUB LPAREN expression RPAREN
+    (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
+    (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
     (13) expression -> . TEXT
     (14) expression -> . OPERATOR
 
     RPAREN          shift and go to state 40
-    BACKSLASH       shift and go to state 5
+    CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
-    TEXT            shift and go to state 8
-    OPERATOR        shift and go to state 9
+    CMD_RADICAL     shift and go to state 8
+    CMD_SUP         shift and go to state 9
+    CMD_SUB         shift and go to state 10
+    CMD_ALIGN_INC   shift and go to state 11
+    CMD_ALIGN_DEC   shift and go to state 12
+    TEXT            shift and go to state 13
+    OPERATOR        shift and go to state 14
 
-    expression                     shift and go to state 10
+    expression                     shift and go to state 15
 
-state 34
+state 38
 
-    (7) expression -> BACKSLASH R LPAREN expression COMMA expression . RPAREN
+    (4) expression -> CMD_FRACTION LPAREN expression SEMICOLON expression . RPAREN
     (2) expression -> expression . expression
     (2) expression -> . expression expression
-    (3) expression -> . BACKSLASH F LPAREN expression COMMA expression RPAREN
-    (4) expression -> . BACKSLASH F LPAREN expression SEMICOLON expression RPAREN
+    (3) expression -> . CMD_FRACTION LPAREN expression COMMA expression RPAREN
+    (4) expression -> . CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN
     (5) expression -> . IDENTIFIER
     (6) expression -> . NUMBER
-    (7) expression -> . BACKSLASH R LPAREN expression COMMA expression RPAREN
-    (8) expression -> . BACKSLASH R LPAREN expression RPAREN
-    (9) expression -> . BACKSLASH S BACKSLASH UP LPAREN expression RPAREN
-    (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
-    (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
-    (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+    (7) expression -> . CMD_RADICAL LPAREN expression COMMA expression RPAREN
+    (8) expression -> . CMD_RADICAL LPAREN expression RPAREN
+    (9) expression -> . CMD_SUP LPAREN expression RPAREN
+    (10) expression -> . CMD_SUB LPAREN expression RPAREN
+    (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
+    (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
     (13) expression -> . TEXT
     (14) expression -> . OPERATOR
 
     RPAREN          shift and go to state 41
-    BACKSLASH       shift and go to state 5
+    CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
-    TEXT            shift and go to state 8
-    OPERATOR        shift and go to state 9
+    CMD_RADICAL     shift and go to state 8
+    CMD_SUP         shift and go to state 9
+    CMD_SUB         shift and go to state 10
+    CMD_ALIGN_INC   shift and go to state 11
+    CMD_ALIGN_DEC   shift and go to state 12
+    TEXT            shift and go to state 13
+    OPERATOR        shift and go to state 14
 
-    expression                     shift and go to state 10
+    expression                     shift and go to state 15
 
-state 35
+state 39
 
-    (9) expression -> BACKSLASH S BACKSLASH UP LPAREN expression . RPAREN
+    (7) expression -> CMD_RADICAL LPAREN expression COMMA expression . RPAREN
     (2) expression -> expression . expression
     (2) expression -> . expression expression
-    (3) expression -> . BACKSLASH F LPAREN expression COMMA expression RPAREN
-    (4) expression -> . BACKSLASH F LPAREN expression SEMICOLON expression RPAREN
+    (3) expression -> . CMD_FRACTION LPAREN expression COMMA expression RPAREN
+    (4) expression -> . CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN
     (5) expression -> . IDENTIFIER
     (6) expression -> . NUMBER
-    (7) expression -> . BACKSLASH R LPAREN expression COMMA expression RPAREN
-    (8) expression -> . BACKSLASH R LPAREN expression RPAREN
-    (9) expression -> . BACKSLASH S BACKSLASH UP LPAREN expression RPAREN
-    (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
-    (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
-    (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
+    (7) expression -> . CMD_RADICAL LPAREN expression COMMA expression RPAREN
+    (8) expression -> . CMD_RADICAL LPAREN expression RPAREN
+    (9) expression -> . CMD_SUP LPAREN expression RPAREN
+    (10) expression -> . CMD_SUB LPAREN expression RPAREN
+    (11) expression -> . CMD_ALIGN_INC LPAREN expression RPAREN
+    (12) expression -> . CMD_ALIGN_DEC LPAREN expression RPAREN
     (13) expression -> . TEXT
     (14) expression -> . OPERATOR
 
     RPAREN          shift and go to state 42
-    BACKSLASH       shift and go to state 5
+    CMD_FRACTION    shift and go to state 5
     IDENTIFIER      shift and go to state 6
     NUMBER          shift and go to state 7
-    TEXT            shift and go to state 8
-    OPERATOR        shift and go to state 9
+    CMD_RADICAL     shift and go to state 8
+    CMD_SUP         shift and go to state 9
+    CMD_SUB         shift and go to state 10
+    CMD_ALIGN_INC   shift and go to state 11
+    CMD_ALIGN_DEC   shift and go to state 12
+    TEXT            shift and go to state 13
+    OPERATOR        shift and go to state 14
 
-    expression                     shift and go to state 10
-
-state 36
-
-    (10) expression -> BACKSLASH S BACKSLASH DO LPAREN expression . RPAREN
-    (2) expression -> expression . expression
-    (2) expression -> . expression expression
-    (3) expression -> . BACKSLASH F LPAREN expression COMMA expression RPAREN
-    (4) expression -> . BACKSLASH F LPAREN expression SEMICOLON expression RPAREN
-    (5) expression -> . IDENTIFIER
-    (6) expression -> . NUMBER
-    (7) expression -> . BACKSLASH R LPAREN expression COMMA expression RPAREN
-    (8) expression -> . BACKSLASH R LPAREN expression RPAREN
-    (9) expression -> . BACKSLASH S BACKSLASH UP LPAREN expression RPAREN
-    (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
-    (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
-    (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
-    (13) expression -> . TEXT
-    (14) expression -> . OPERATOR
-
-    RPAREN          shift and go to state 43
-    BACKSLASH       shift and go to state 5
-    IDENTIFIER      shift and go to state 6
-    NUMBER          shift and go to state 7
-    TEXT            shift and go to state 8
-    OPERATOR        shift and go to state 9
-
-    expression                     shift and go to state 10
-
-state 37
-
-    (11) expression -> BACKSLASH S BACKSLASH AI LPAREN expression . RPAREN
-    (2) expression -> expression . expression
-    (2) expression -> . expression expression
-    (3) expression -> . BACKSLASH F LPAREN expression COMMA expression RPAREN
-    (4) expression -> . BACKSLASH F LPAREN expression SEMICOLON expression RPAREN
-    (5) expression -> . IDENTIFIER
-    (6) expression -> . NUMBER
-    (7) expression -> . BACKSLASH R LPAREN expression COMMA expression RPAREN
-    (8) expression -> . BACKSLASH R LPAREN expression RPAREN
-    (9) expression -> . BACKSLASH S BACKSLASH UP LPAREN expression RPAREN
-    (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
-    (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
-    (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
-    (13) expression -> . TEXT
-    (14) expression -> . OPERATOR
-
-    RPAREN          shift and go to state 44
-    BACKSLASH       shift and go to state 5
-    IDENTIFIER      shift and go to state 6
-    NUMBER          shift and go to state 7
-    TEXT            shift and go to state 8
-    OPERATOR        shift and go to state 9
-
-    expression                     shift and go to state 10
-
-state 38
-
-    (12) expression -> BACKSLASH S BACKSLASH DI LPAREN expression . RPAREN
-    (2) expression -> expression . expression
-    (2) expression -> . expression expression
-    (3) expression -> . BACKSLASH F LPAREN expression COMMA expression RPAREN
-    (4) expression -> . BACKSLASH F LPAREN expression SEMICOLON expression RPAREN
-    (5) expression -> . IDENTIFIER
-    (6) expression -> . NUMBER
-    (7) expression -> . BACKSLASH R LPAREN expression COMMA expression RPAREN
-    (8) expression -> . BACKSLASH R LPAREN expression RPAREN
-    (9) expression -> . BACKSLASH S BACKSLASH UP LPAREN expression RPAREN
-    (10) expression -> . BACKSLASH S BACKSLASH DO LPAREN expression RPAREN
-    (11) expression -> . BACKSLASH S BACKSLASH AI LPAREN expression RPAREN
-    (12) expression -> . BACKSLASH S BACKSLASH DI LPAREN expression RPAREN
-    (13) expression -> . TEXT
-    (14) expression -> . OPERATOR
-
-    RPAREN          shift and go to state 45
-    BACKSLASH       shift and go to state 5
-    IDENTIFIER      shift and go to state 6
-    NUMBER          shift and go to state 7
-    TEXT            shift and go to state 8
-    OPERATOR        shift and go to state 9
-
-    expression                     shift and go to state 10
-
-state 39
-
-    (3) expression -> BACKSLASH F LPAREN expression COMMA expression RPAREN .
-
-    RBRACE          reduce using rule 3 (expression -> BACKSLASH F LPAREN expression COMMA expression RPAREN .)
-    BACKSLASH       reduce using rule 3 (expression -> BACKSLASH F LPAREN expression COMMA expression RPAREN .)
-    IDENTIFIER      reduce using rule 3 (expression -> BACKSLASH F LPAREN expression COMMA expression RPAREN .)
-    NUMBER          reduce using rule 3 (expression -> BACKSLASH F LPAREN expression COMMA expression RPAREN .)
-    TEXT            reduce using rule 3 (expression -> BACKSLASH F LPAREN expression COMMA expression RPAREN .)
-    OPERATOR        reduce using rule 3 (expression -> BACKSLASH F LPAREN expression COMMA expression RPAREN .)
-    COMMA           reduce using rule 3 (expression -> BACKSLASH F LPAREN expression COMMA expression RPAREN .)
-    SEMICOLON       reduce using rule 3 (expression -> BACKSLASH F LPAREN expression COMMA expression RPAREN .)
-    RPAREN          reduce using rule 3 (expression -> BACKSLASH F LPAREN expression COMMA expression RPAREN .)
-
+    expression                     shift and go to state 15
 
 state 40
 
-    (4) expression -> BACKSLASH F LPAREN expression SEMICOLON expression RPAREN .
+    (3) expression -> CMD_FRACTION LPAREN expression COMMA expression RPAREN .
 
-    RBRACE          reduce using rule 4 (expression -> BACKSLASH F LPAREN expression SEMICOLON expression RPAREN .)
-    BACKSLASH       reduce using rule 4 (expression -> BACKSLASH F LPAREN expression SEMICOLON expression RPAREN .)
-    IDENTIFIER      reduce using rule 4 (expression -> BACKSLASH F LPAREN expression SEMICOLON expression RPAREN .)
-    NUMBER          reduce using rule 4 (expression -> BACKSLASH F LPAREN expression SEMICOLON expression RPAREN .)
-    TEXT            reduce using rule 4 (expression -> BACKSLASH F LPAREN expression SEMICOLON expression RPAREN .)
-    OPERATOR        reduce using rule 4 (expression -> BACKSLASH F LPAREN expression SEMICOLON expression RPAREN .)
-    COMMA           reduce using rule 4 (expression -> BACKSLASH F LPAREN expression SEMICOLON expression RPAREN .)
-    SEMICOLON       reduce using rule 4 (expression -> BACKSLASH F LPAREN expression SEMICOLON expression RPAREN .)
-    RPAREN          reduce using rule 4 (expression -> BACKSLASH F LPAREN expression SEMICOLON expression RPAREN .)
+    RBRACE          reduce using rule 3 (expression -> CMD_FRACTION LPAREN expression COMMA expression RPAREN .)
+    CMD_FRACTION    reduce using rule 3 (expression -> CMD_FRACTION LPAREN expression COMMA expression RPAREN .)
+    IDENTIFIER      reduce using rule 3 (expression -> CMD_FRACTION LPAREN expression COMMA expression RPAREN .)
+    NUMBER          reduce using rule 3 (expression -> CMD_FRACTION LPAREN expression COMMA expression RPAREN .)
+    CMD_RADICAL     reduce using rule 3 (expression -> CMD_FRACTION LPAREN expression COMMA expression RPAREN .)
+    CMD_SUP         reduce using rule 3 (expression -> CMD_FRACTION LPAREN expression COMMA expression RPAREN .)
+    CMD_SUB         reduce using rule 3 (expression -> CMD_FRACTION LPAREN expression COMMA expression RPAREN .)
+    CMD_ALIGN_INC   reduce using rule 3 (expression -> CMD_FRACTION LPAREN expression COMMA expression RPAREN .)
+    CMD_ALIGN_DEC   reduce using rule 3 (expression -> CMD_FRACTION LPAREN expression COMMA expression RPAREN .)
+    TEXT            reduce using rule 3 (expression -> CMD_FRACTION LPAREN expression COMMA expression RPAREN .)
+    OPERATOR        reduce using rule 3 (expression -> CMD_FRACTION LPAREN expression COMMA expression RPAREN .)
+    COMMA           reduce using rule 3 (expression -> CMD_FRACTION LPAREN expression COMMA expression RPAREN .)
+    SEMICOLON       reduce using rule 3 (expression -> CMD_FRACTION LPAREN expression COMMA expression RPAREN .)
+    RPAREN          reduce using rule 3 (expression -> CMD_FRACTION LPAREN expression COMMA expression RPAREN .)
 
 
 state 41
 
-    (7) expression -> BACKSLASH R LPAREN expression COMMA expression RPAREN .
+    (4) expression -> CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN .
 
-    RBRACE          reduce using rule 7 (expression -> BACKSLASH R LPAREN expression COMMA expression RPAREN .)
-    BACKSLASH       reduce using rule 7 (expression -> BACKSLASH R LPAREN expression COMMA expression RPAREN .)
-    IDENTIFIER      reduce using rule 7 (expression -> BACKSLASH R LPAREN expression COMMA expression RPAREN .)
-    NUMBER          reduce using rule 7 (expression -> BACKSLASH R LPAREN expression COMMA expression RPAREN .)
-    TEXT            reduce using rule 7 (expression -> BACKSLASH R LPAREN expression COMMA expression RPAREN .)
-    OPERATOR        reduce using rule 7 (expression -> BACKSLASH R LPAREN expression COMMA expression RPAREN .)
-    COMMA           reduce using rule 7 (expression -> BACKSLASH R LPAREN expression COMMA expression RPAREN .)
-    SEMICOLON       reduce using rule 7 (expression -> BACKSLASH R LPAREN expression COMMA expression RPAREN .)
-    RPAREN          reduce using rule 7 (expression -> BACKSLASH R LPAREN expression COMMA expression RPAREN .)
+    RBRACE          reduce using rule 4 (expression -> CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN .)
+    CMD_FRACTION    reduce using rule 4 (expression -> CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN .)
+    IDENTIFIER      reduce using rule 4 (expression -> CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN .)
+    NUMBER          reduce using rule 4 (expression -> CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN .)
+    CMD_RADICAL     reduce using rule 4 (expression -> CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN .)
+    CMD_SUP         reduce using rule 4 (expression -> CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN .)
+    CMD_SUB         reduce using rule 4 (expression -> CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN .)
+    CMD_ALIGN_INC   reduce using rule 4 (expression -> CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN .)
+    CMD_ALIGN_DEC   reduce using rule 4 (expression -> CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN .)
+    TEXT            reduce using rule 4 (expression -> CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN .)
+    OPERATOR        reduce using rule 4 (expression -> CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN .)
+    COMMA           reduce using rule 4 (expression -> CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN .)
+    SEMICOLON       reduce using rule 4 (expression -> CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN .)
+    RPAREN          reduce using rule 4 (expression -> CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN .)
 
 
 state 42
 
-    (9) expression -> BACKSLASH S BACKSLASH UP LPAREN expression RPAREN .
+    (7) expression -> CMD_RADICAL LPAREN expression COMMA expression RPAREN .
 
-    RBRACE          reduce using rule 9 (expression -> BACKSLASH S BACKSLASH UP LPAREN expression RPAREN .)
-    BACKSLASH       reduce using rule 9 (expression -> BACKSLASH S BACKSLASH UP LPAREN expression RPAREN .)
-    IDENTIFIER      reduce using rule 9 (expression -> BACKSLASH S BACKSLASH UP LPAREN expression RPAREN .)
-    NUMBER          reduce using rule 9 (expression -> BACKSLASH S BACKSLASH UP LPAREN expression RPAREN .)
-    TEXT            reduce using rule 9 (expression -> BACKSLASH S BACKSLASH UP LPAREN expression RPAREN .)
-    OPERATOR        reduce using rule 9 (expression -> BACKSLASH S BACKSLASH UP LPAREN expression RPAREN .)
-    COMMA           reduce using rule 9 (expression -> BACKSLASH S BACKSLASH UP LPAREN expression RPAREN .)
-    SEMICOLON       reduce using rule 9 (expression -> BACKSLASH S BACKSLASH UP LPAREN expression RPAREN .)
-    RPAREN          reduce using rule 9 (expression -> BACKSLASH S BACKSLASH UP LPAREN expression RPAREN .)
-
-
-state 43
-
-    (10) expression -> BACKSLASH S BACKSLASH DO LPAREN expression RPAREN .
-
-    RBRACE          reduce using rule 10 (expression -> BACKSLASH S BACKSLASH DO LPAREN expression RPAREN .)
-    BACKSLASH       reduce using rule 10 (expression -> BACKSLASH S BACKSLASH DO LPAREN expression RPAREN .)
-    IDENTIFIER      reduce using rule 10 (expression -> BACKSLASH S BACKSLASH DO LPAREN expression RPAREN .)
-    NUMBER          reduce using rule 10 (expression -> BACKSLASH S BACKSLASH DO LPAREN expression RPAREN .)
-    TEXT            reduce using rule 10 (expression -> BACKSLASH S BACKSLASH DO LPAREN expression RPAREN .)
-    OPERATOR        reduce using rule 10 (expression -> BACKSLASH S BACKSLASH DO LPAREN expression RPAREN .)
-    COMMA           reduce using rule 10 (expression -> BACKSLASH S BACKSLASH DO LPAREN expression RPAREN .)
-    SEMICOLON       reduce using rule 10 (expression -> BACKSLASH S BACKSLASH DO LPAREN expression RPAREN .)
-    RPAREN          reduce using rule 10 (expression -> BACKSLASH S BACKSLASH DO LPAREN expression RPAREN .)
-
-
-state 44
-
-    (11) expression -> BACKSLASH S BACKSLASH AI LPAREN expression RPAREN .
-
-    RBRACE          reduce using rule 11 (expression -> BACKSLASH S BACKSLASH AI LPAREN expression RPAREN .)
-    BACKSLASH       reduce using rule 11 (expression -> BACKSLASH S BACKSLASH AI LPAREN expression RPAREN .)
-    IDENTIFIER      reduce using rule 11 (expression -> BACKSLASH S BACKSLASH AI LPAREN expression RPAREN .)
-    NUMBER          reduce using rule 11 (expression -> BACKSLASH S BACKSLASH AI LPAREN expression RPAREN .)
-    TEXT            reduce using rule 11 (expression -> BACKSLASH S BACKSLASH AI LPAREN expression RPAREN .)
-    OPERATOR        reduce using rule 11 (expression -> BACKSLASH S BACKSLASH AI LPAREN expression RPAREN .)
-    COMMA           reduce using rule 11 (expression -> BACKSLASH S BACKSLASH AI LPAREN expression RPAREN .)
-    SEMICOLON       reduce using rule 11 (expression -> BACKSLASH S BACKSLASH AI LPAREN expression RPAREN .)
-    RPAREN          reduce using rule 11 (expression -> BACKSLASH S BACKSLASH AI LPAREN expression RPAREN .)
-
-
-state 45
-
-    (12) expression -> BACKSLASH S BACKSLASH DI LPAREN expression RPAREN .
-
-    RBRACE          reduce using rule 12 (expression -> BACKSLASH S BACKSLASH DI LPAREN expression RPAREN .)
-    BACKSLASH       reduce using rule 12 (expression -> BACKSLASH S BACKSLASH DI LPAREN expression RPAREN .)
-    IDENTIFIER      reduce using rule 12 (expression -> BACKSLASH S BACKSLASH DI LPAREN expression RPAREN .)
-    NUMBER          reduce using rule 12 (expression -> BACKSLASH S BACKSLASH DI LPAREN expression RPAREN .)
-    TEXT            reduce using rule 12 (expression -> BACKSLASH S BACKSLASH DI LPAREN expression RPAREN .)
-    OPERATOR        reduce using rule 12 (expression -> BACKSLASH S BACKSLASH DI LPAREN expression RPAREN .)
-    COMMA           reduce using rule 12 (expression -> BACKSLASH S BACKSLASH DI LPAREN expression RPAREN .)
-    SEMICOLON       reduce using rule 12 (expression -> BACKSLASH S BACKSLASH DI LPAREN expression RPAREN .)
-    RPAREN          reduce using rule 12 (expression -> BACKSLASH S BACKSLASH DI LPAREN expression RPAREN .)
+    RBRACE          reduce using rule 7 (expression -> CMD_RADICAL LPAREN expression COMMA expression RPAREN .)
+    CMD_FRACTION    reduce using rule 7 (expression -> CMD_RADICAL LPAREN expression COMMA expression RPAREN .)
+    IDENTIFIER      reduce using rule 7 (expression -> CMD_RADICAL LPAREN expression COMMA expression RPAREN .)
+    NUMBER          reduce using rule 7 (expression -> CMD_RADICAL LPAREN expression COMMA expression RPAREN .)
+    CMD_RADICAL     reduce using rule 7 (expression -> CMD_RADICAL LPAREN expression COMMA expression RPAREN .)
+    CMD_SUP         reduce using rule 7 (expression -> CMD_RADICAL LPAREN expression COMMA expression RPAREN .)
+    CMD_SUB         reduce using rule 7 (expression -> CMD_RADICAL LPAREN expression COMMA expression RPAREN .)
+    CMD_ALIGN_INC   reduce using rule 7 (expression -> CMD_RADICAL LPAREN expression COMMA expression RPAREN .)
+    CMD_ALIGN_DEC   reduce using rule 7 (expression -> CMD_RADICAL LPAREN expression COMMA expression RPAREN .)
+    TEXT            reduce using rule 7 (expression -> CMD_RADICAL LPAREN expression COMMA expression RPAREN .)
+    OPERATOR        reduce using rule 7 (expression -> CMD_RADICAL LPAREN expression COMMA expression RPAREN .)
+    COMMA           reduce using rule 7 (expression -> CMD_RADICAL LPAREN expression COMMA expression RPAREN .)
+    SEMICOLON       reduce using rule 7 (expression -> CMD_RADICAL LPAREN expression COMMA expression RPAREN .)
+    RPAREN          reduce using rule 7 (expression -> CMD_RADICAL LPAREN expression COMMA expression RPAREN .)
 
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for BACKSLASH in state 10 resolved as shift
-WARNING: shift/reduce conflict for IDENTIFIER in state 10 resolved as shift
-WARNING: shift/reduce conflict for NUMBER in state 10 resolved as shift
-WARNING: shift/reduce conflict for TEXT in state 10 resolved as shift
-WARNING: shift/reduce conflict for OPERATOR in state 10 resolved as shift
+WARNING: shift/reduce conflict for CMD_FRACTION in state 15 resolved as shift
+WARNING: shift/reduce conflict for IDENTIFIER in state 15 resolved as shift
+WARNING: shift/reduce conflict for NUMBER in state 15 resolved as shift
+WARNING: shift/reduce conflict for CMD_RADICAL in state 15 resolved as shift
+WARNING: shift/reduce conflict for CMD_SUP in state 15 resolved as shift
+WARNING: shift/reduce conflict for CMD_SUB in state 15 resolved as shift
+WARNING: shift/reduce conflict for CMD_ALIGN_INC in state 15 resolved as shift
+WARNING: shift/reduce conflict for CMD_ALIGN_DEC in state 15 resolved as shift
+WARNING: shift/reduce conflict for TEXT in state 15 resolved as shift
+WARNING: shift/reduce conflict for OPERATOR in state 15 resolved as shift

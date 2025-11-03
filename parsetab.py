@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'AI BACKSLASH COMMA DI DO EQ F IDENTIFIER LBRACE LPAREN NUMBER OPERATOR R RBRACE RPAREN S SEMICOLON TEXT UPeq_field : LBRACE EQ expression RBRACEexpression : expression expressionexpression : BACKSLASH F LPAREN expression COMMA expression RPAREN\n| BACKSLASH F LPAREN expression SEMICOLON expression RPARENexpression : IDENTIFIERexpression : NUMBERexpression : BACKSLASH R LPAREN expression COMMA expression RPAREN\n| BACKSLASH R LPAREN expression RPARENexpression : BACKSLASH S BACKSLASH UP LPAREN expression RPARENexpression : BACKSLASH S BACKSLASH DO LPAREN expression RPARENexpression : BACKSLASH S BACKSLASH AI LPAREN expression RPARENexpression : BACKSLASH S BACKSLASH DI LPAREN expression RPARENexpression : TEXTexpression : OPERATOR'
+_lr_signature = 'CMD_ALIGN_DEC CMD_ALIGN_INC CMD_FRACTION CMD_RADICAL CMD_SUB CMD_SUP COMMA EQ IDENTIFIER LBRACE LPAREN NUMBER OPERATOR RBRACE RPAREN SEMICOLON TEXTeq_field : LBRACE EQ expression RBRACEexpression : expression expressionexpression : CMD_FRACTION LPAREN expression COMMA expression RPAREN\n| CMD_FRACTION LPAREN expression SEMICOLON expression RPARENexpression : IDENTIFIERexpression : NUMBERexpression : CMD_RADICAL LPAREN expression COMMA expression RPAREN\n| CMD_RADICAL LPAREN expression RPARENexpression : CMD_SUP LPAREN expression RPARENexpression : CMD_SUB LPAREN expression RPARENexpression : CMD_ALIGN_INC LPAREN expression RPARENexpression : CMD_ALIGN_DEC LPAREN expression RPARENexpression : TEXTexpression : OPERATOR'
     
-_lr_action_items = {'LBRACE':([0,],[2,]),'$end':([1,11,],[0,-1,]),'EQ':([2,],[3,]),'BACKSLASH':([3,4,6,7,8,9,10,14,15,16,18,19,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,],[5,5,-5,-6,-13,-14,5,17,5,5,5,5,5,5,5,-8,5,5,5,5,5,5,5,5,5,5,5,-3,-4,-7,-9,-10,-11,-12,]),'IDENTIFIER':([3,4,6,7,8,9,10,15,16,18,19,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,],[6,6,-5,-6,-13,-14,6,6,6,6,6,6,6,6,-8,6,6,6,6,6,6,6,6,6,6,6,-3,-4,-7,-9,-10,-11,-12,]),'NUMBER':([3,4,6,7,8,9,10,15,16,18,19,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,],[7,7,-5,-6,-13,-14,7,7,7,7,7,7,7,7,-8,7,7,7,7,7,7,7,7,7,7,7,-3,-4,-7,-9,-10,-11,-12,]),'TEXT':([3,4,6,7,8,9,10,15,16,18,19,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,],[8,8,-5,-6,-13,-14,8,8,8,8,8,8,8,8,-8,8,8,8,8,8,8,8,8,8,8,8,-3,-4,-7,-9,-10,-11,-12,]),'OPERATOR':([3,4,6,7,8,9,10,15,16,18,19,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,],[9,9,-5,-6,-13,-14,9,9,9,9,9,9,9,9,-8,9,9,9,9,9,9,9,9,9,9,9,-3,-4,-7,-9,-10,-11,-12,]),'RBRACE':([4,6,7,8,9,10,27,39,40,41,42,43,44,45,],[11,-5,-6,-13,-14,-2,-8,-3,-4,-7,-9,-10,-11,-12,]),'F':([5,],[12,]),'R':([5,],[13,]),'S':([5,],[14,]),'COMMA':([6,7,8,9,10,18,19,27,39,40,41,42,43,44,45,],[-5,-6,-13,-14,-2,24,26,-8,-3,-4,-7,-9,-10,-11,-12,]),'SEMICOLON':([6,7,8,9,10,18,27,39,40,41,42,43,44,45,],[-5,-6,-13,-14,-2,25,-8,-3,-4,-7,-9,-10,-11,-12,]),'RPAREN':([6,7,8,9,10,19,27,32,33,34,35,36,37,38,39,40,41,42,43,44,45,],[-5,-6,-13,-14,-2,27,-8,39,40,41,42,43,44,45,-3,-4,-7,-9,-10,-11,-12,]),'LPAREN':([12,13,20,21,22,23,],[15,16,28,29,30,31,]),'UP':([17,],[20,]),'DO':([17,],[21,]),'AI':([17,],[22,]),'DI':([17,],[23,]),}
+_lr_action_items = {'LBRACE':([0,],[2,]),'$end':([1,16,],[0,-1,]),'EQ':([2,],[3,]),'CMD_FRACTION':([3,4,6,7,13,14,15,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,],[5,5,-5,-6,-13,-14,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,-8,-9,-10,-11,-12,5,5,5,-3,-4,-7,]),'IDENTIFIER':([3,4,6,7,13,14,15,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,],[6,6,-5,-6,-13,-14,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,-8,-9,-10,-11,-12,6,6,6,-3,-4,-7,]),'NUMBER':([3,4,6,7,13,14,15,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,],[7,7,-5,-6,-13,-14,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,-8,-9,-10,-11,-12,7,7,7,-3,-4,-7,]),'CMD_RADICAL':([3,4,6,7,13,14,15,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,],[8,8,-5,-6,-13,-14,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,-8,-9,-10,-11,-12,8,8,8,-3,-4,-7,]),'CMD_SUP':([3,4,6,7,13,14,15,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,],[9,9,-5,-6,-13,-14,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,-8,-9,-10,-11,-12,9,9,9,-3,-4,-7,]),'CMD_SUB':([3,4,6,7,13,14,15,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,],[10,10,-5,-6,-13,-14,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,-8,-9,-10,-11,-12,10,10,10,-3,-4,-7,]),'CMD_ALIGN_INC':([3,4,6,7,13,14,15,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,],[11,11,-5,-6,-13,-14,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,-8,-9,-10,-11,-12,11,11,11,-3,-4,-7,]),'CMD_ALIGN_DEC':([3,4,6,7,13,14,15,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,],[12,12,-5,-6,-13,-14,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,-8,-9,-10,-11,-12,12,12,12,-3,-4,-7,]),'TEXT':([3,4,6,7,13,14,15,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,],[13,13,-5,-6,-13,-14,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,-8,-9,-10,-11,-12,13,13,13,-3,-4,-7,]),'OPERATOR':([3,4,6,7,13,14,15,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,],[14,14,-5,-6,-13,-14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,-8,-9,-10,-11,-12,14,14,14,-3,-4,-7,]),'RBRACE':([4,6,7,13,14,15,32,33,34,35,36,40,41,42,],[16,-5,-6,-13,-14,-2,-8,-9,-10,-11,-12,-3,-4,-7,]),'LPAREN':([5,8,9,10,11,12,],[17,18,19,20,21,22,]),'COMMA':([6,7,13,14,15,23,24,32,33,34,35,36,40,41,42,],[-5,-6,-13,-14,-2,29,31,-8,-9,-10,-11,-12,-3,-4,-7,]),'SEMICOLON':([6,7,13,14,15,23,32,33,34,35,36,40,41,42,],[-5,-6,-13,-14,-2,30,-8,-9,-10,-11,-12,-3,-4,-7,]),'RPAREN':([6,7,13,14,15,24,25,26,27,28,32,33,34,35,36,37,38,39,40,41,42,],[-5,-6,-13,-14,-2,32,33,34,35,36,-8,-9,-10,-11,-12,40,41,42,-3,-4,-7,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'eq_field':([0,],[1,]),'expression':([3,4,10,15,16,18,19,24,25,26,28,29,30,31,32,33,34,35,36,37,38,],[4,10,10,18,19,10,10,32,33,34,35,36,37,38,10,10,10,10,10,10,10,]),}
+_lr_goto_items = {'eq_field':([0,],[1,]),'expression':([3,4,15,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,37,38,39,],[4,15,15,23,24,25,26,27,28,15,15,15,15,15,15,37,38,39,15,15,15,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -29,16 +29,16 @@ _lr_productions = [
   ("S' -> eq_field","S'",1,None,None,None),
   ('eq_field -> LBRACE EQ expression RBRACE','eq_field',4,'p_eq_field','parser.py',7),
   ('expression -> expression expression','expression',2,'p_expression_sequence','parser.py',11),
-  ('expression -> BACKSLASH F LPAREN expression COMMA expression RPAREN','expression',7,'p_expression_fraction','parser.py',20),
-  ('expression -> BACKSLASH F LPAREN expression SEMICOLON expression RPAREN','expression',7,'p_expression_fraction','parser.py',21),
+  ('expression -> CMD_FRACTION LPAREN expression COMMA expression RPAREN','expression',6,'p_expression_fraction','parser.py',20),
+  ('expression -> CMD_FRACTION LPAREN expression SEMICOLON expression RPAREN','expression',6,'p_expression_fraction','parser.py',21),
   ('expression -> IDENTIFIER','expression',1,'p_expression_identifier','parser.py',25),
   ('expression -> NUMBER','expression',1,'p_expression_number','parser.py',29),
-  ('expression -> BACKSLASH R LPAREN expression COMMA expression RPAREN','expression',7,'p_expression_radical','parser.py',33),
-  ('expression -> BACKSLASH R LPAREN expression RPAREN','expression',5,'p_expression_radical','parser.py',34),
-  ('expression -> BACKSLASH S BACKSLASH UP LPAREN expression RPAREN','expression',7,'p_expression_superscript','parser.py',41),
-  ('expression -> BACKSLASH S BACKSLASH DO LPAREN expression RPAREN','expression',7,'p_expression_subscript','parser.py',45),
-  ('expression -> BACKSLASH S BACKSLASH AI LPAREN expression RPAREN','expression',7,'p_expression_space_ai','parser.py',49),
-  ('expression -> BACKSLASH S BACKSLASH DI LPAREN expression RPAREN','expression',7,'p_expression_space_di','parser.py',53),
+  ('expression -> CMD_RADICAL LPAREN expression COMMA expression RPAREN','expression',6,'p_expression_radical','parser.py',33),
+  ('expression -> CMD_RADICAL LPAREN expression RPAREN','expression',4,'p_expression_radical','parser.py',34),
+  ('expression -> CMD_SUP LPAREN expression RPAREN','expression',4,'p_expression_superscript','parser.py',41),
+  ('expression -> CMD_SUB LPAREN expression RPAREN','expression',4,'p_expression_subscript','parser.py',45),
+  ('expression -> CMD_ALIGN_INC LPAREN expression RPAREN','expression',4,'p_expression_space_ai','parser.py',49),
+  ('expression -> CMD_ALIGN_DEC LPAREN expression RPAREN','expression',4,'p_expression_space_di','parser.py',53),
   ('expression -> TEXT','expression',1,'p_expression_text','parser.py',57),
   ('expression -> OPERATOR','expression',1,'p_expression_operator','parser.py',61),
 ]

@@ -2,31 +2,28 @@ import ply.lex as lex
 
 # 定义标记
 tokens = (
-    'LBRACE',      # {
-    'RBRACE',      # }
-    'EQ',          # EQ
-    'BACKSLASH',   # \
-    'F',           # f
-    'R',           # r
-    'S',           # s
-    'UP',          # up
-    'DO',          # do
-    'AI',          # ai
-    'DI',          # di
-    'LPAREN',      # (
-    'RPAREN',      # )
-    'COMMA',       # ,
-    'SEMICOLON',   # ;
-    'IDENTIFIER',  # 标识符
-    'NUMBER',      # 数字
-    'TEXT',        # 其他文本字符（包括中文）
-    'OPERATOR',    # 操作符（+, -, 等）
+    'LBRACE',          # {
+    'RBRACE',          # }
+    'EQ',              # EQ
+    'CMD_FRACTION',    # \f
+    'CMD_RADICAL',     # \r
+    'CMD_SUP',         # \s\up 或 \s\up数字
+    'CMD_SUB',         # \s\do 或 \s\do数字
+    'CMD_ALIGN_INC',   # \s\ai 或 \s\ai数字
+    'CMD_ALIGN_DEC',   # \s\di 或 \s\di数字
+    'LPAREN',          # (
+    'RPAREN',          # )
+    'COMMA',           # ,
+    'SEMICOLON',       # ;
+    'IDENTIFIER',      # 标识符
+    'NUMBER',          # 数字
+    'TEXT',            # 其他文本字符（包括中文）
+    'OPERATOR',        # 操作符（+, -, 等）
 )
 
 # 标记规则
 t_LBRACE = r'\{'
 t_RBRACE = r'\}'
-t_BACKSLASH = r'\\'
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
 t_COMMA = r','
@@ -39,32 +36,29 @@ def t_EQ(t):
     r'EQ'
     return t
 
-def t_F(t):
-    r'f'
+# 命令 token 规则 - 必须在普通标识符之前定义
+def t_CMD_FRACTION(t):
+    r'\\f'
     return t
 
-def t_R(t):
-    r'r'
+def t_CMD_RADICAL(t):
+    r'\\r'
     return t
 
-def t_S(t):
-    r's'
+def t_CMD_SUP(t):
+    r'\\s\\up\d*'
     return t
 
-def t_UP(t):
-    r'up\d*'
+def t_CMD_SUB(t):
+    r'\\s\\do\d*'
     return t
 
-def t_DO(t):
-    r'do\d*'
+def t_CMD_ALIGN_INC(t):
+    r'\\s\\ai\d*'
     return t
 
-def t_AI(t):
-    r'ai\d*'
-    return t
-
-def t_DI(t):
-    r'di\d*'
+def t_CMD_ALIGN_DEC(t):
+    r'\\s\\di\d*'
     return t
 
 def t_NUMBER(t):
@@ -77,12 +71,6 @@ def t_IDENTIFIER(t):
     # 检查是否是保留字
     if t.value == 'EQ':
         t.type = 'EQ'
-    elif t.value == 'f':
-        t.type = 'F'
-    elif t.value == 'r':
-        t.type = 'R'
-    elif t.value == 's':
-        t.type = 'S'
     return t
 
 def t_OPERATOR(t):
