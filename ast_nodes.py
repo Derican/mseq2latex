@@ -500,9 +500,9 @@ class Array(ASTNode):
         self.vertical_spacing = 0  # 默认垂直间距
         self.horizontal_spacing = 0  # 默认水平间距
 
-        for element in self.elements:
-            if isinstance(element, ASTNode):
-                self.is_block = element.is_block or self.is_block
+        # for element in self.elements:
+        #     if isinstance(element, ASTNode):
+        #         self.is_block = element.is_block or self.is_block
 
     def add_element(self, element):
         """添加新元素到数组"""
@@ -584,7 +584,7 @@ class Array(ASTNode):
             rows.append(" & ".join(row_elements))
         
         # 生成matrix环境
-        matrix_content = " \\\\\\\\ ".join(rows)
+        matrix_content = " \\\\ ".join(rows)
         return f"\\begin{{matrix}}{matrix_content}\\end{{matrix}}"
 
     def _format_expression(self, expr):

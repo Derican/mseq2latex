@@ -157,8 +157,8 @@ def p_expression_overstrike_with_options(p):
     p[0] = overstrike
 
 def p_overstrike_options(p):
-    '''overstrike_options : OVERSTRIKE_OPTION
-                         | overstrike_options OVERSTRIKE_OPTION'''
+    '''overstrike_options : ALIGNMENT_OPTION
+                         | overstrike_options ALIGNMENT_OPTION'''
     if len(p) == 2:
         p[0] = [p[1]]
     else:
@@ -189,7 +189,9 @@ def p_expression_array_with_options(p):
     p[0] = array
 
 def p_array_options(p):
-    '''array_options : ARRAY_OPTION
+    '''array_options : ALIGNMENT_OPTION
+                    | ARRAY_OPTION
+                    | array_options ALIGNMENT_OPTION
                     | array_options ARRAY_OPTION'''
     if len(p) == 2:
         p[0] = [p[1]]

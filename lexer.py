@@ -21,9 +21,9 @@ tokens = (
     'BRACKET_OPTION',  # \lc\字符、\rc\字符、\bc\字符
     'DISPLACE_OPTION', # \fon、\ba、\li等置换选项
     'INTEGRAL_OPTION', # \su、\pr、\in、\fc\字符、\vc\字符等积分选项
-    'OVERSTRIKE_OPTION', # \al、\ac、\ar等重叠选项
+    'ALIGNMENT_OPTION', # \al、\ac、\ar等对齐选项（共享）
     'BOX_OPTION',      # \to、\bo、\le、\ri等边框选项
-    'ARRAY_OPTION',    # \al、\ac、\ar、\con、\vsn、\hsn等数组选项
+    'ARRAY_OPTION',    # \con、\vsn、\hsn等数组特有选项
     'LPAREN',          # (
     'RPAREN',          # )
     'COMMA',           # ,
@@ -50,19 +50,19 @@ def t_EQ(t):
     return t
 
 # 命令 token 规则 - 必须在普通标识符之前定义
+def t_ALIGNMENT_OPTION(t):
+    r'\\al|\\ac|\\ar'
+    # 匹配 \al、\ac、\ar（数组和重叠共享的对齐选项）
+    return t
+
 def t_ARRAY_OPTION(t):
-    r'\\al|\\ac|\\ar|\\co\d+|\\vs\d+|\\hs\d+'
-    # 匹配 \al、\ac、\ar、\con、\vsn、\hsn
+    r'\\co\d+|\\vs\d+|\\hs\d+'
+    # 匹配 \con、\vsn、\hsn（数组特有选项）
     return t
 
 def t_BOX_OPTION(t):
     r'\\to|\\bo|\\le|\\ri'
     # 匹配 \to、\bo、\le、\ri
-    return t
-
-def t_OVERSTRIKE_OPTION(t):
-    r'\\al|\\ac|\\ar'
-    # 匹配 \al、\ac、\ar
     return t
 
 def t_INTEGRAL_OPTION(t):
