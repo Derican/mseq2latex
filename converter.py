@@ -18,7 +18,11 @@ class MSEQToLatexConverter:
             result = self.parser.parse(eq_text, lexer=self.lexer)
 
             if result:
-                return result.to_latex()
+                res = result.to_latex()
+                if result.is_block:
+                    return f"\\[ {res} \\]"
+                else:
+                    return f"$ {res} $"
             else:
                 return None
 
