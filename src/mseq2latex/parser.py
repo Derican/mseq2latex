@@ -1,6 +1,6 @@
 import ply.yacc as yacc
-from src.mseq2latex.lexer import tokens
-from src.mseq2latex.ast_nodes import EQField, Fraction, Radical, Superscript, Subscript, SpaceCommand, ExpressionSequence, Bracket, Displace, Integral, List, Overstrike, Box, Array
+from .lexer import tokens
+from .ast_nodes import EQField, Fraction, Radical, Superscript, Subscript, SpaceCommand, ExpressionSequence, Bracket, Displace, Integral, List, Overstrike, Box, Array
 
 # 语法规则
 def p_eq_field(p):
