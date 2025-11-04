@@ -489,6 +489,110 @@ class Overstrike(ASTNode):
         else:
             return str(expr)
 
+class Array(ASTNode):
+    """数组指令节点"""
+    def __init__(self, elements):
+        super().__init__(is_block=True)  # 强制设置为块级元素
+        self.elements = elements if isinstance(elements, list) else [elements]
+        self.options = {}  # 存储选项值：{al: True, ac: True, ar: True, co: n, vs: n, hs: n}
+        self.alignment = 'ac'  # 默认居中对齐
+        self.columns = 1  # 默认1列
+        self.vertical_spacing = 0  # 默认垂直间距
+        self.horizontal_spacing = 0  # 默认水平间距
+
+        for element in self.elements:
+            if isinstance(element, ASTNode):
+                self.is_block = element.is_block or self.is_block
+
+    def add_element(self, element):
+        """添加新元素到数组"""
+        self.elements.append(element)
+
+    def set_array_options(self, options):
+        """根据数组选项设置参数"""
+        # 从左到右处理选项，后面的会覆盖前面的
+        for option in options:
+            option_type, value = self._parse_array_option(option)
+            if option_type:
+                self.options[option_type] = value
+                # 根据选项设置参数
+                if option_type == 'al':
+                    self.alignment = 'al'  # 左对齐
+                elif option_type == 'ac':
+                    self.alignment = 'ac'  # 居中对齐
+                elif option_type == 'ar':
+                    self.alignment = 'ar'  # 右对齐
+                elif option_type == 'co':
+                    self.columns = value  # 列数
+                elif option_type == 'vs':
+                    self.vertical_spacing = value  # 垂直间距（存储但不使用）
+                elif option_type == 'hs':
+                    self.horizontal_spacing = value  # 水平间距（存储但不使用）
+
+    def _parse_array_option(self, option):
+        """解析数组选项"""
+        # option格式：\al、\ac、\ar、\con、\vsn、\hsn
+        if option == '\\al':
+            return 'al', True
+        elif option == '\\ac':
+            return 'ac', True
+        elif option == '\\ar':
+            return 'ar', True
+        elif option.startswith('\\co'):
+            # 提取数字
+            try:
+                value = int(option[3:])
+                return 'co', value
+            except ValueError:
+                return None, None
+        elif option.startswith('\\vs'):
+            # 提取数字
+            try:
+                value = int(option[3:])
+                return 'vs', value
+            except ValueError:
+                return None, None
+        elif option.startswith('\\hs'):
+            # 提取数字
+            try:
+                value = int(option[3:])
+                return 'hs', value
+            except ValueError:
+                return None, None
+        return None, None
+
+    def to_latex(self):
+        """将数组转换为LaTeX的matrix环境格式"""
+        if not self.elements:
+            return "\\begin{matrix}\\end{matrix}"
+        
+        # 格式化元素
+        formatted_elements = []
+        for element in self.elements:
+            if isinstance(element, ASTNode):
+                formatted_elements.append(element.to_latex())
+            else:
+                formatted_elements.append(str(element))
+        
+        # 按列数排列元素
+        rows = []
+        for i in range(0, len(formatted_elements), self.columns):
+            row_elements = formatted_elements[i:i + self.columns]
+            # 如果行不满，用空字符串填充
+            while len(row_elements) < self.columns:
+                row_elements.append("")
+            rows.append(" & ".join(row_elements))
+        
+        # 生成matrix环境
+        matrix_content = " \\\\\\\\ ".join(rows)
+        return f"\\begin{{matrix}}{matrix_content}\\end{{matrix}}"
+
+    def _format_expression(self, expr):
+        if isinstance(expr, ASTNode):
+            return expr.to_latex()
+        else:
+            return str(expr)
+
 class Box(ASTNode):
     """边框指令节点"""
     def __init__(self, content):

@@ -25,6 +25,7 @@ def main():
     print("  \\s\\do(内容) - 下标")
     print("  \\s\\ai(内容) - 对齐增量")
     print("  \\s\\di(内容) - 对齐减量")
+    print("  \\a(元素列表) - 数组")
     print()
     
     # 测试示例
@@ -35,6 +36,9 @@ def main():
         "{EQ x\\s\\up(2)}",
         "{EQ a\\s\\do(i)}",
         "{EQ \\f(x+1,y-2) + \\r(3,a+b)}",
+        "{EQ \\a \\al \\co2 \\vs3 \\hs3(Axy,Bxy,A,B)}",
+        "{EQ \\a(A,B,C,D)}",
+        "{EQ \\a \\co3(1,2,3,4,5,6)}",
     ]
     
     print("测试示例:")

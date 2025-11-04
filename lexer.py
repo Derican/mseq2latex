@@ -13,6 +13,7 @@ tokens = (
     'CMD_LIST',        # \l
     'CMD_OVERSTRIKE',  # \o
     'CMD_BOX',         # \x
+    'CMD_ARRAY',       # \a
     'CMD_SUP',         # \s\up 或 \s\up数字
     'CMD_SUB',         # \s\do 或 \s\do数字
     'CMD_ALIGN_INC',   # \s\ai 或 \s\ai数字
@@ -22,6 +23,7 @@ tokens = (
     'INTEGRAL_OPTION', # \su、\pr、\in、\fc\字符、\vc\字符等积分选项
     'OVERSTRIKE_OPTION', # \al、\ac、\ar等重叠选项
     'BOX_OPTION',      # \to、\bo、\le、\ri等边框选项
+    'ARRAY_OPTION',    # \al、\ac、\ar、\con、\vsn、\hsn等数组选项
     'LPAREN',          # (
     'RPAREN',          # )
     'COMMA',           # ,
@@ -48,6 +50,11 @@ def t_EQ(t):
     return t
 
 # 命令 token 规则 - 必须在普通标识符之前定义
+def t_ARRAY_OPTION(t):
+    r'\\al|\\ac|\\ar|\\co\d+|\\vs\d+|\\hs\d+'
+    # 匹配 \al、\ac、\ar、\con、\vsn、\hsn
+    return t
+
 def t_BOX_OPTION(t):
     r'\\to|\\bo|\\le|\\ri'
     # 匹配 \to、\bo、\le、\ri
@@ -71,6 +78,10 @@ def t_DISPLACE_OPTION(t):
 def t_BRACKET_OPTION(t):
     r'\\[lr]c\\.|\\bc\\.'
     # 匹配 \lc\字符、\rc\字符、\bc\字符
+    return t
+
+def t_CMD_ARRAY(t):
+    r'\\a'
     return t
 
 def t_CMD_BOX(t):

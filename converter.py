@@ -90,6 +90,9 @@ def main():
         "{ EQ \\x \\ri(right) }",              # 右边框
         "{ EQ \\x \\to \\bo \\le \\ri(full) }", # 完整边框
         "{ EQ \\x \\to(\\f(1,2)) }",           # 边框包含分式
+        # Array功能测试用例
+        "{ EQ \\a \\al \\co2 \\vs3 \\hs3(Axy,Bxy,A,B) }",  # 带选项的数组
+        "{ EQ \\a(A,B,C,D) }",  # 简单数组
     ]
 
     for test in test_cases:

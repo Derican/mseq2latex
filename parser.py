@@ -1,6 +1,6 @@
 import ply.yacc as yacc
 from lexer import tokens
-from ast_nodes import EQField, Fraction, Radical, Superscript, Subscript, SpaceCommand, ExpressionSequence, Bracket, Displace, Integral, List, Overstrike, Box
+from ast_nodes import EQField, Fraction, Radical, Superscript, Subscript, SpaceCommand, ExpressionSequence, Bracket, Displace, Integral, List, Overstrike, Box, Array
 
 # 语法规则
 def p_eq_field(p):
@@ -173,6 +173,38 @@ def p_overstrike_elements(p):
         p[0] = [p[1]]
     else:
         # 添加新元素到重叠列表
+        p[1].append(p[3])
+        p[0] = p[1]
+
+def p_expression_array_simple(p):
+    '''expression : CMD_ARRAY LPAREN array_elements RPAREN'''
+    # 简单数组 \a(A,B,C,D)
+    p[0] = Array(p[3])
+
+def p_expression_array_with_options(p):
+    '''expression : CMD_ARRAY array_options LPAREN array_elements RPAREN'''
+    # 带选项的数组 \a \al \co2 \vs3 \hs3(Axy,Bxy,A,B)
+    array = Array(p[4])
+    array.set_array_options(p[2])
+    p[0] = array
+
+def p_array_options(p):
+    '''array_options : ARRAY_OPTION
+                    | array_options ARRAY_OPTION'''
+    if len(p) == 2:
+        p[0] = [p[1]]
+    else:
+        p[1].append(p[2])
+        p[0] = p[1]
+
+def p_array_elements(p):
+    '''array_elements : expression
+                     | array_elements COMMA expression'''
+    if len(p) == 2:
+        # 第一个元素
+        p[0] = [p[1]]
+    else:
+        # 添加新元素到数组
         p[1].append(p[3])
         p[0] = p[1]
 
