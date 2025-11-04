@@ -46,7 +46,7 @@ t_SEMICOLON = r';'
 t_ignore = ' \t'
 
 def t_EQ(t):
-    r'EQ'
+    r'EQ|eq'
     return t
 
 # 命令 token 规则 - 必须在普通标识符之前定义

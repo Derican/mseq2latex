@@ -17,6 +17,7 @@ def main():
 
     # 测试示例
     test_cases = [
+        "{ eq \\f(2,RateChange) }",
         "{ EQ \\f(2,RateChange) }",
         "{ EQ \\f(x,y) }",
         "{ EQ \\f(1,2) }",
